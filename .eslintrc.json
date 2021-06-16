@@ -1,0 +1,73 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "prettier/@typescript-eslint"
+  ],
+  "env": {
+    "es6": true,
+    "browser": true,
+    "jest": true,
+    "node": true
+  },
+  "rules": {
+    "react/react-in-jsx-scope": 0,
+    "react/display-name": 0,
+    "react/prop-types": 0,
+    "strict" : "off",
+    "no-console": [
+      2,
+      {
+        "allow": ["warn", "error"]
+      }
+    ],
+    "indent": [
+      "warn",
+      2
+    ],
+    "linebreak-style": [
+      "warn",
+      "unix"
+    ],
+    "quotes": [
+      "warn",
+      "single"
+    ],
+    "semi": [
+      "warn",
+      "never"
+    ],
+    "react/jsx-uses-vars": 1,
+    "react/jsx-uses-react": 1,
+    "no-var": "error",
+    "no-console": "off",
+    "no-extra-semi": "warn",
+    "no-undef": "warn",
+    "quotes": ["warn", "single"],
+    "space-before-blocks": ["warn", { 
+      "functions": "always",
+      "keywords": "always",
+      "classes": "always"
+    }],
+    "key-spacing" : ["warn", {
+      "beforeColon" : false,
+      "afterColon" : true
+    }],
+    "no-unused-vars": ["off"],
+    "@typescript-eslint/no-unused-vars": ["warn",
+      { "varsIgnorePattern": "^_" }
+    ],
+    "@typescript-eslint/no-var-requires": 0,
+    "react/prop-types": [0],
+    "prettier/prettier": [
+      "error", {
+        "singleQuote": true,
+        "semi": false
+      }
+    ]
+  }
+}
