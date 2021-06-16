@@ -1,10 +1,10 @@
 import { FC } from 'react'
 import { GetServerSideProps } from 'next'
 import useSWR from 'swr'
-import { gql, request } from 'graphql-request'
+import { gql } from 'graphql-request'
 import { Layout } from 'components/layout'
-import { ProjectsPage } from 'components/project'
-import { API, fetcher } from 'core/client'
+import { TasksPage } from 'components/task'
+import { fetcher } from 'core/client'
 
 import { ProjectSchema } from 'schema/model/types'
 
@@ -15,13 +15,11 @@ type Props = {
   }
 }
 
-export const queryAllProjects = gql`
+export const queryAllProjectsForTasks = gql`
   query {
     projects(orderBy: { id: asc }) {
       id
       name
-      startAt
-      endAt
       users(orderBy: { id: asc }) {
         id
         name
@@ -31,10 +29,13 @@ export const queryAllProjects = gql`
       tasks(orderBy: { id: asc }) {
         id
         name
-        rank
         status
-        plannedDuration
-        actualDuration
+        manHour
+        startAt
+        endAt
+        manHourResult
+        startedAt
+        endedAt
         user {
           id
           name
@@ -46,20 +47,16 @@ export const queryAllProjects = gql`
 `
 
 const IndexPage: FC<Props> = (props) => {
-  const { data, error } = useSWR<{ projects: ProjectSchema[] }>(
-    queryAllProjects,
-    (query) => request(API, query),
-    {
-      initialData: props.data,
-    }
-  )
+  const { data, error } = useSWR(queryAllProjectsForTasks, fetcher, {
+    initialData: props.data,
+  })
 
   if (error && !data) return <div>error</div>
   //if (!data) return <div>loading...</div>
 
   return (
-    <Layout currentPageName="Home">
-      <ProjectsPage projects={data?.projects ?? []} />
+    <Layout currentPageName="Tasks">
+      <TasksPage projects={data?.projects ?? []} />
     </Layout>
   )
 }
@@ -67,6 +64,6 @@ const IndexPage: FC<Props> = (props) => {
 export default IndexPage
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const data = await fetcher(queryAllProjects)
+  const data = await fetcher(queryAllProjectsForTasks)
   return { props: { data } }
 }
