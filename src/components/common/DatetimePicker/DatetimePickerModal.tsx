@@ -8,7 +8,7 @@ type Props = {
   children?: ReactNode | ReactNode[]
 }
 
-export const Modal: FC<Props> = ({
+export const DatetimePickerModal: FC<Props> = ({
   show,
   setShow,
   onClose,

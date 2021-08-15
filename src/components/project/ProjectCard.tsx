@@ -1,6 +1,6 @@
 import { FC, useState, useReducer, useEffect, useRef } from 'react'
 import useSWR from 'swr'
-import { ProjectCardHeader, ProjectContent, BlankCard } from './'
+import { ProjectCardHeader, ProjectCardBody, BlankCard } from './'
 import {
   requestCreateOneProject,
   requestUpdateOneProject,
@@ -70,7 +70,7 @@ export const ProjectCard: FC<Props> = ({ project }) => {
   }
 
   return (
-    <div className="flex flex-col items-stretch font-mono text-sm text-center text-bluegray-700 bg-bluegray-100 shadow-sm hover:shadow-lg rounded-xl h-72 my-2 px-5 py-3">
+    <div className="flex flex-col items-stretch font-mono text-sm text-center text-bluegray-700 bg-bluegray-200 shadow-sm hover:shadow-md rounded-xl h-56 my-2 px-5 py-3">
       <ProjectCardHeader
         mode={mode}
         projectEndDate={projectEndDate}
@@ -78,7 +78,7 @@ export const ProjectCard: FC<Props> = ({ project }) => {
         setMutationType={setMutationType}
         isNew={isNew}
       />
-      <ProjectContent
+      <ProjectCardBody
         project={project}
         projectEndDate={projectEndDate}
         isLoading={!project}

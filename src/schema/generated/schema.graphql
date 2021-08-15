@@ -502,9 +502,8 @@ enum SortOrder {
 
 enum Status {
   DONE
-  NEW
   PENDING
-  WIP
+  READY
 }
 
 input StringFieldUpdateOperationsInput {

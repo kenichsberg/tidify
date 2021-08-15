@@ -2,8 +2,10 @@ import { FC } from 'react'
 import { Users } from 'react-feather'
 import { ProgressBar, RemainingTime, AddTaskButton } from './'
 //ToDo move to proper directory
-import { ToggleableFormText } from 'components/task'
-import { ToggleableFormSelectMultiple } from 'components/common'
+import {
+  ToggleableFormText,
+  ToggleableFormSelectMultiple,
+} from 'components/common'
 import { ProjectFormRef } from './types'
 import { diffDate } from 'utils/date'
 import { getOptionTagObjects } from 'utils/functions'
@@ -19,7 +21,7 @@ type Props = {
   formRef: ProjectFormRef
 }
 
-export const ProjectContent: FC<Props> = ({
+export const ProjectCardBody: FC<Props> = ({
   project,
   projectEndDate,
   isLoading,

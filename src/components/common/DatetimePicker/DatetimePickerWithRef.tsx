@@ -1,6 +1,6 @@
 import { FC, useState, useRef, useEffect, MutableRefObject } from 'react'
-import { Calendar, ClockHour, ClockMinute } from './'
-import { Modal, InputField, TextInput } from 'components/common'
+import { Calendar, ClockHour, ClockMinute, DatetimePickerModal } from './'
+import { InputField, TextInput } from 'components/common'
 import { formatDatetimeDisplay } from 'utils/date'
 
 export type DatetimeYMDHm = {
@@ -88,44 +88,46 @@ export const DatetimePickerWithRef: FC<Props> = ({
           onInput={(event) => event?.preventDefault}
         />
       </InputField>
-      <Modal show={show} setShow={setShow} onClose={onClose}>
+      <DatetimePickerModal show={show} setShow={setShow} onClose={onClose}>
         {getContentByPage(page)(date, datetimeRef, setNextPage(page))}
-      </Modal>
+      </DatetimePickerModal>
     </>
   )
 }
 
-const getContentByPage = (page: number) => (
-  date: Date | undefined,
-  datetimeRef: MutableRefObject<DatetimeYMDHm>,
-  setNextPage: () => void
-) => {
-  switch (page) {
-    case 0:
-      return (
-        <Calendar
-          date={date}
-          datetimeRef={datetimeRef}
-          setNextPage={setNextPage}
-        />
-      )
-    case 1:
-      return (
-        <ClockHour
-          date={date}
-          datetimeRef={datetimeRef}
-          setNextPage={setNextPage}
-        />
-      )
-    case 2:
-      return (
-        <ClockMinute
-          date={date}
-          datetimeRef={datetimeRef}
-          setNextPage={setNextPage}
-        />
-      )
-    default:
-      return <div>something wrong</div>
+const getContentByPage =
+  (page: number) =>
+  (
+    date: Date | undefined,
+    datetimeRef: MutableRefObject<DatetimeYMDHm>,
+    setNextPage: () => void
+  ) => {
+    switch (page) {
+      case 0:
+        return (
+          <Calendar
+            date={date}
+            datetimeRef={datetimeRef}
+            setNextPage={setNextPage}
+          />
+        )
+      case 1:
+        return (
+          <ClockHour
+            date={date}
+            datetimeRef={datetimeRef}
+            setNextPage={setNextPage}
+          />
+        )
+      case 2:
+        return (
+          <ClockMinute
+            date={date}
+            datetimeRef={datetimeRef}
+            setNextPage={setNextPage}
+          />
+        )
+      default:
+        return <div>something wrong</div>
+    }
   }
-}
