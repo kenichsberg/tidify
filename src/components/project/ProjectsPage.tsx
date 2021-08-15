@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { ProjectCard } from 'components/project'
+import { ProjectSection, CurrentTaskSection } from 'components/project'
 
 import { ProjectSchema } from 'schema/model/types'
 
@@ -8,17 +8,23 @@ type Props = {
 }
 
 export const ProjectsPage: FC<Props> = ({ projects }) => (
-  <>
-    <h2 className="font-mono text-2xl font-bold text-bluegray-500 mt-1 mb-7 ml-4 md:ml-2 md:mb-9">
-      Projects
-    </h2>
-    <div className="bg-bluegray-200 shadow rounded-3xl my-3 px-5 md:px-10 py-4 md:py-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-        {projects?.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
-        <ProjectCard project={null} />
+  <div className="flex flex-col lg:flex-row min-h-85vh">
+    <div className="lg:w-3/5 p-3">
+      <ProjectSection projects={projects} />
+    </div>
+    <div className="lg:w-2/5 flex flex-col">
+      <div className="p-3">
+        <CurrentTaskSection
+          currentTask={projects[0]?.tasks.length ? projects[0].tasks[0] : null}
+        />
+      </div>
+      <div className="lg:flex-1 p-3">
+        <section className="lg:h-full bg-gray-100 rounded-3xl overflow-auto px-2 sm:px-4 py-8 lg:py-6">
+          <h2 className="font-mono text-lg font-bold text-bluegray-500 mt-1 mb-7 ml-4">
+            Pending
+          </h2>
+        </section>
       </div>
     </div>
-  </>
+  </div>
 )
