@@ -1,13 +1,15 @@
 import { FC } from 'react'
 import { useCache } from 'hooks/index'
 import { RoundRect } from './'
-import { NexusGenFieldTypes } from 'schema/generated/nexusTypes'
+
+import { TaskSchema } from 'schema/model/types'
 
 type Props = {
-  tasks: NexusGenFieldTypes['Task'][]
+  tasks: Partial<TaskSchema>[]
+  projectName: string
 }
 
-export const LabelField: FC<Props> = ({ tasks }) => {
+export const LabelField: FC<Props> = ({ tasks, projectName }) => {
   const { data: _chartHeight } = useCache<number>('chartHeight')
   const { data: _headerHeight } = useCache<number>('headerHeight')
   const { data: _rowHeight } = useCache<number>('rowHeight')
@@ -17,7 +19,7 @@ export const LabelField: FC<Props> = ({ tasks }) => {
   const rowHeight = _rowHeight ?? 0
 
   return (
-    <svg width={LABEL_FIELD_WIDTH} height={LABEL_FIELD_HEIGHT}>
+    <svg width={LABEL_FIELD_WIDTH} height={chartHeight}>
       <g>
         <RoundRect
           className="fill-current text-gray-50"
@@ -35,6 +37,14 @@ export const LabelField: FC<Props> = ({ tasks }) => {
             radius: 20,
           }}
         />
+        <text
+          className="fill-current text-gray-700 font-bold"
+          x={TEXT_OFFSET_X}
+          y={PROJECT_TEXT_OFFSET_Y}
+          fontSize="16px"
+        >
+          {projectName}
+        </text>
       </g>
       {tasks.map((task, index) => {
         const color = index % 2 === 0 ? ' text-bluegray-100' : ' text-gray-50'
@@ -55,14 +65,19 @@ export const LabelField: FC<Props> = ({ tasks }) => {
               width={LABEL_FIELD_WIDTH}
               height={rowHeight}
             ></rect>
+            {/*
             <text
               className={`fill-current${projectTextColor}`}
               x={TEXT_OFFSET_X}
               y={headerHeight + rowHeight * index + PROJECT_TEXT_OFFSET_Y}
               fontSize="14px"
             >
-              {task.project.name}
+              {
+                //task.project.name
+              }
+              {projectName}
             </text>
+*/}
             <text
               className={`fill-current${taskTextColor}`}
               x={TEXT_OFFSET_X}
@@ -76,7 +91,7 @@ export const LabelField: FC<Props> = ({ tasks }) => {
               y={headerHeight + rowHeight * index + USER_TEXT_OFFSET_Y}
               fontSize="14px"
             >
-              {`@${task.user.name}`}
+              {`@${task.user?.name}`}
             </text>
           </g>
         )
@@ -105,9 +120,11 @@ export const LabelField: FC<Props> = ({ tasks }) => {
 }
 
 const LABEL_FIELD_WIDTH = 250
-const LABEL_FIELD_HEIGHT = 800
 
 const TEXT_OFFSET_X = 15
-const PROJECT_TEXT_OFFSET_Y = 20
-const TASK_TEXT_OFFSET_Y = 45
-const USER_TEXT_OFFSET_Y = 65
+//const PROJECT_TEXT_OFFSET_Y = 20
+//const TASK_TEXT_OFFSET_Y = 45
+//const USER_TEXT_OFFSET_Y = 65
+const PROJECT_TEXT_OFFSET_Y = 30
+const TASK_TEXT_OFFSET_Y = 35
+const USER_TEXT_OFFSET_Y = 55

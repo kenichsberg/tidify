@@ -14,12 +14,12 @@ export const getGrossDays = (
   const dayEndBeforeEndDate = new Date(endDatetime)
   dayEndBeforeEndDate.setHours(0, 0)
 
-  const fistDayDecimal = diffDecimalDay(startDatetime, dayStartAfterStartDate)
+  const firstDayDecimal = diffDecimalDay(startDatetime, dayStartAfterStartDate)
   const inBetweenDays = diffIntDays(dayStartAfterStartDate, dayEndBeforeEndDate)
   const endDayDecimal = diffDecimalDay(dayEndBeforeEndDate, endDatetime)
-  console.log(manHourPerDay, fistDayDecimal, inBetweenDays, endDayDecimal)
+  console.log(manHourPerDay, firstDayDecimal, inBetweenDays, endDayDecimal)
 
-  return fistDayDecimal + inBetweenDays + endDayDecimal
+  return firstDayDecimal + inBetweenDays + endDayDecimal
 }
 
 const abstractStartTime = new Date('1900-01-01')

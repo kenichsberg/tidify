@@ -1,13 +1,13 @@
-import { FC } from 'react'
 import { useCache } from 'hooks/index'
 import { RoundRect } from './'
-import { NexusGenFieldTypes } from 'schema/generated/nexusTypes'
+
+import { TaskSchema } from 'schema/model/types'
 
 type Props = {
-  tasks: NexusGenFieldTypes['Task'][]
+  tasks: Partial<TaskSchema>[]
 }
 
-export const ChartRow: FC<Props> = ({ tasks }) => {
+export function ChartRow({ tasks }: Props): JSX.Element {
   const { data: _ganttFieldWidth } = useCache<number>('ganttFieldWidth')
   const { data: _chartHeight } = useCache<number>('chartHeight')
   const { data: _headerHeight } = useCache<number>('headerHeight')
