@@ -13,10 +13,8 @@ export const Layout: FC<Props> = ({ children, currentPageName }) => (
       <div className="hidden xl:block">
         <Sidebar currentPageName={currentPageName} />
       </div>
-      <main className="flex flex-col flex-grow overflow-auto px-4 sm:px-8 xl:pl-32 xl:pr-20">
-        <div className="bg-gray-100 min-h-80vh rounded-3xl overflow-auto px-2 sm:px-6 md:px-8 lg:px-14 py-8 md:py-12">
-          {children}
-        </div>
+      <main className="flex flex-col flex-grow overflow-auto px-4 sm:px-8 xl:pl-32">
+        {children}
       </main>
     </div>
   </div>

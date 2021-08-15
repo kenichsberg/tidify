@@ -41,7 +41,7 @@ model Task {
   updatedAt       DateTime @default(now())
   rank            Int
   name            String
-  status          Status   @default(WIP)
+  status          Status   @default(READY)
   plannedDuration Int      @default(0)
   actualDuration  Int      @default(0)
   user            User     @relation(fields: [userId], references: [id])
@@ -66,8 +66,7 @@ enum Role {
 }
 
 enum Status {
-  NEW
-  WIP
+  READY
   PENDING
   DONE
 }

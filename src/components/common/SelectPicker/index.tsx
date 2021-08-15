@@ -1,5 +1,6 @@
 export * from './DropdownListMultiselect'
 export * from './ListItemForMultiselect'
 export * from './SelectOption'
+export * from './SelectPicker'
 export * from './SelectPickerWithRef'
 export * from './SelectPickerMultipleWithRef'
