@@ -26,7 +26,7 @@ export const ChartColumn: FC<Props> = ({ weekCount, chartStartDate }) => {
           weekday: 'short',
           day: 'numeric',
           month: 'short',
-        }
+        } as Partial<Intl.DateTimeFormatOptions>
         const dateString = date.toLocaleString('en-us', options)
         const partialDates = dateString.split(',')
         const weekday = partialDates[0]

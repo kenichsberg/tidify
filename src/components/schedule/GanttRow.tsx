@@ -1,14 +1,15 @@
-import { FC } from 'react'
 import { useCache } from 'hooks/index'
-import { NexusGenFieldTypes } from 'schema/generated/nexusTypes'
-import { getGrossDays } from 'utils/date'
+import { diffDate } from 'utils/date'
+
+import { TaskSchema } from 'schema/model/types'
 
 type Props = {
-  tasks: NexusGenFieldTypes['Task'][]
+  tasks: Partial<TaskSchema>[]
   chartStartDate: Date
+  projectStartDate: Date
 }
 
-export const GanttRow: FC<Props> = ({ tasks, chartStartDate }) => {
+export function GanttRow({ tasks, chartStartDate, projectStartDate }: Props) {
   const { data: _headerHeight } = useCache<number>('headerHeight')
   const { data: _rowHeight } = useCache<number>('rowHeight')
   const { data: _columnWidth } = useCache<number>('columnWidth')
@@ -21,29 +22,40 @@ export const GanttRow: FC<Props> = ({ tasks, chartStartDate }) => {
   const resultGanttOffsetY = rowHeight - planGanttOffsetY - RESULT_GANTT_HEIGHT
   const getGanttRowWidth = getFuncGanttRowWidth(columnWidth)
 
+  let tmpEndAt: Date | undefined
+  let tmpEndedAt: Date | undefined
+  const workPerDay = 8
+  const totalPerDay = 24
+  const ratio = totalPerDay / workPerDay
+
   return (
     <g>
       {tasks.map((task, index) => {
-        const startAt = new Date(task.startAt)
-        const endAt = new Date(task.endAt)
+        // 1st time --> startAt = project.startAt
+        // from 2nd time --> startAt = endAt of predecessor task
+        const startAt = tmpEndAt ?? projectStartDate
+        const endAt = addHours(startAt, (task.plannedDuration ?? 0) * ratio)
+        //console.log(startAt, endAt)
+        tmpEndAt = endAt
+
         const planGanttOffsetX = getGanttRowWidth(chartStartDate, startAt)
         const planWidth = getGanttRowWidth(startAt, endAt)
         const planGanttColor =
           index % 2 === 0 ? ' text-blue-300' : ' text-emerald-300'
-        console.log(chartStartDate, startAt, planGanttOffsetX, planWidth)
 
-        const startedAt = new Date(task.startedAt)
-        const endedAt = new Date(task.endedAt)
+        const startedAt = tmpEndedAt ?? projectStartDate
+        const endedAt = addHours(startedAt, (task.actualDuration ?? 0) * ratio)
+        tmpEndedAt = endedAt
+
         const resultGanttOffsetX = getGanttRowWidth(chartStartDate, startedAt)
         const resultWidth = getGanttRowWidth(startedAt, endedAt)
         const resultGanttColor =
           index % 2 === 0 ? ' text-blue-700' : ' text-emerald-700'
-        console.log(chartStartDate, startedAt, resultGanttOffsetX, resultWidth)
 
         return (
           <g key={task.id}>
             <rect
-              className={`fill-current${planGanttColor}`}
+              className={`fill-current ${planGanttColor}`}
               x={planGanttOffsetX}
               y={headerHeight + rowHeight * index + planGanttOffsetY}
               rx="5"
@@ -51,10 +63,10 @@ export const GanttRow: FC<Props> = ({ tasks, chartStartDate }) => {
               width={planWidth}
               height={PLAN_GANTT_HEIGHT}
               stroke="#e0e0e0"
-              fillOpacity="50%"
+              fillOpacity="60%"
             ></rect>
             <rect
-              className={`fill-current${resultGanttColor}`}
+              className={`fill-current ${resultGanttColor}`}
               x={resultGanttOffsetX}
               y={headerHeight + rowHeight * index + resultGanttOffsetY}
               rx="5"
@@ -62,7 +74,7 @@ export const GanttRow: FC<Props> = ({ tasks, chartStartDate }) => {
               width={resultWidth}
               height={RESULT_GANTT_HEIGHT}
               //stroke="#e0e0e0"
-              fillOpacity="50%"
+              fillOpacity="80%"
             ></rect>
           </g>
         )
@@ -71,13 +83,18 @@ export const GanttRow: FC<Props> = ({ tasks, chartStartDate }) => {
   )
 }
 
-const getFuncGanttRowWidth = (columnWidth: number) => (
-  startDatetime: Date,
-  endDatetime: Date
-): number => {
-  const diffDays = getGrossDays(startDatetime, endDatetime)
-  return diffDays * columnWidth
-}
-
 const PLAN_GANTT_HEIGHT = 40
 const RESULT_GANTT_HEIGHT = 20
+
+function addHours(_date: Date, hours: number): Date {
+  const date = new Date(_date.getTime())
+  date.setHours(date.getHours() + hours)
+  return date
+}
+
+function getFuncGanttRowWidth(columnWidth: number) {
+  return function (startDatetime: Date, endDatetime: Date): number {
+    const diffDays = diffDate(startDatetime, endDatetime, 'day')
+    return diffDays * columnWidth
+  }
+}
