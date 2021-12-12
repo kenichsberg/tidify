@@ -1,38 +1,38 @@
-import { FC } from 'react'
 import { Users } from 'react-feather'
-import { ProgressBar, RemainingTime, AddTaskButton } from './'
+import { ProgressBar, RemainingTime, AddTaskButton } from '@/components/project'
 //ToDo move to proper directory
 import {
   ToggleableFormText,
   ToggleableFormSelectMultiple,
-} from 'components/common'
-import { ProjectFormRef } from './types'
-import { diffDate } from 'utils/date'
-import { getOptionTagObjects } from 'utils/functions'
-import { useAllUsers } from 'hooks/index'
+} from '@/components/common'
+import { useProject } from '@/contexts/project'
 
-import { ProjectSchema, UserSchema } from 'schema/model/types'
+import {
+  ProjectFormRef,
+  UserWithoutTechnicalColmuns,
+  TaskWithoutTechnicalColmuns,
+} from '@/components/project/types'
+import { getOptionTagObjects } from '@/utils/functions'
+//import { useAllUsers } from 'hooks/index'
 
 type Props = {
-  project: ProjectSchema | null
-  projectEndDate: Date | undefined
   isLoading: boolean
   isEditing: boolean
   formRef: ProjectFormRef
 }
 
-export const ProjectCardBody: FC<Props> = ({
-  project,
-  projectEndDate,
+export function ProjectCardBody({
   isLoading,
   isEditing,
   formRef,
-}) => {
-  const allUsers = useAllUsers()
-  const selectedUserOptions = getOptionTagObjects<UserSchema>(
+}: Props): JSX.Element {
+  const { state: project } = useProject()
+  //const allUsers = useAllUsers()
+  const allUsers = project?.users ?? []
+  const selectedUserOptions = getOptionTagObjects<UserWithoutTechnicalColmuns>(
     project?.users ?? [],
     'name',
-    'id'
+    'uuid'
   )
 
   const projectPercentage = getProgressPercentage(project?.tasks ?? [])
@@ -64,7 +64,10 @@ export const ProjectCardBody: FC<Props> = ({
           <Users className="self-center mr-2" size={16} />
           <ToggleableFormSelectMultiple
             isEditing={isEditing}
-            options={allUsers}
+            options={allUsers.map((user) => ({
+              label: user.name,
+              value: user.uuid,
+            }))}
             initialValues={selectedUserOptions}
             label="Users"
             name="users"
@@ -73,15 +76,10 @@ export const ProjectCardBody: FC<Props> = ({
             wrapperClassName="w-full"
           />
         </div>
-        {isEditing || projectPercentage === 100 ? null : projectEndDate ===
-          undefined ? (
-          <div className="w-1/2">
-            <AddTaskButton />
-          </div>
-        ) : (
-          <div className="w-1/2">
-            <RemainingTime remainingHours={getRemainingHours(projectEndDate)} />
-          </div>
+        {getElement(
+          isEditing,
+          projectPercentage ?? 0,
+          project?.endAt ?? undefined
         )}
       </div>
     </>
@@ -89,7 +87,7 @@ export const ProjectCardBody: FC<Props> = ({
 }
 
 function getProgressPercentage(
-  tasks: ProjectSchema['tasks']
+  tasks: TaskWithoutTechnicalColmuns[]
 ): number | undefined {
   if (!tasks?.length) return undefined
 
@@ -106,9 +104,27 @@ function getProgressPercentage(
   return Math.trunc((done / total) * 100)
 }
 
-function getRemainingHours(endDate: Date | undefined): number | undefined {
-  if (!endDate) return undefined
-
-  const now = new Date()
-  return diffDate(now, endDate, 'hour')
+function getElement(
+  isEditing: boolean,
+  projectPercentage: number,
+  projectEndDate: Date | undefined
+): JSX.Element | null {
+  switch (true) {
+    case isEditing:
+      return null
+    case projectPercentage === 100:
+      return null
+    case projectEndDate === undefined:
+      return (
+        <div className="w-1/2">
+          <AddTaskButton />
+        </div>
+      )
+    default:
+      return (
+        <div className="w-1/2">
+          <RemainingTime targetDate={projectEndDate} />
+        </div>
+      )
+  }
 }

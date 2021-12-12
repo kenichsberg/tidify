@@ -19,7 +19,7 @@ export const DayButton: FC<Props> = ({
 
   return (
     <button
-      className={`flex-shrink-0 rounded-full h-12 w-12 flex items-center justify-center${color} mx-auto`}
+      className={`flex-shrink-0 rounded-full h-12 w-12 flex items-center justify-center ${color} mx-auto focus:outline-none`}
       disabled={disabled}
       onClick={() => onClick()}
     >

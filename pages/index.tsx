@@ -1,72 +1,71 @@
-import { FC } from 'react'
-import { GetServerSideProps } from 'next'
+import { useEffect } from 'react'
+import { GetServerSidePropsResult } from 'next'
+import { PrismaClient } from '@prisma/client'
 import useSWR from 'swr'
-import { gql, request } from 'graphql-request'
 import { Layout } from 'components/layout'
 import { ProjectsPage } from 'components/project'
-import { API, fetcher } from 'core/client'
+import { useProjects } from '@/contexts/project'
+import { strToDate } from 'utils/date'
+import { fetcher, patchPropertyValues } from 'utils/functions'
 
-import { ProjectSchema } from 'schema/model/types'
+import { ProjectWithoutTechnicalColmuns } from '@/components/project/types'
 
 type Props = {
-  data: {
-    projects: ProjectSchema[]
-    status: number
-  }
+  data: ProjectWithoutTechnicalColmuns[]
 }
 
-export const queryAllProjects = gql`
-  query {
-    projects(orderBy: { id: asc }) {
-      id
-      name
-      startAt
-      endAt
-      users(orderBy: { id: asc }) {
-        id
-        name
-        email
-        role
-      }
-      tasks(orderBy: { id: asc }) {
-        id
-        name
-        rank
-        status
-        plannedDuration
-        actualDuration
-        user {
-          id
-          name
-        }
-        projectId
-      }
-    }
-  }
-`
+const prisma = new PrismaClient()
 
-const IndexPage: FC<Props> = (props) => {
-  const { data, error } = useSWR<{ projects: ProjectSchema[] }>(
-    queryAllProjects,
-    (query) => request(API, query),
-    {
-      initialData: props.data,
-    }
+export default function IndexPage(props: Props): JSX.Element {
+  const { data, error } = useSWR<ProjectWithoutTechnicalColmuns[]>(
+    '/api/projects',
+    fetcher,
+    { fallbackData: props.data }
   )
+  const { setState: setProjects } = useProjects()
+
+  useEffect(() => {
+    const formattedData = data?.map((datum) => {
+      if (
+        typeof datum.startAt === 'string' ||
+        typeof datum.endAt === 'string'
+      ) {
+        return patchPropertyValues<ProjectWithoutTechnicalColmuns>(
+          datum,
+          strToDate,
+          'startAt',
+          'endAt'
+        )
+      }
+
+      return datum
+    })
+    setProjects && setProjects(formattedData ?? [])
+  }, [data])
 
   if (error && !data) return <div>error</div>
-  //if (!data) return <div>loading...</div>
 
   return (
     <Layout currentPageName="Home">
-      <ProjectsPage projects={data?.projects ?? []} />
+      <ProjectsPage />
     </Layout>
   )
 }
 
-export default IndexPage
+export async function getServerSideProps(): Promise<
+  GetServerSidePropsResult<Props>
+> {
+  const res = await prisma.project.findMany({
+    select: {
+      uuid: true,
+      name: true,
+      startAt: true,
+      endAt: true,
+      users: true,
+      tasks: true,
+    },
+  })
+  const data = JSON.parse(JSON.stringify(res))
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const data = await fetcher(queryAllProjects)
   return { props: { data } }
 }

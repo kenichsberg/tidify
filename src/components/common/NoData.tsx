@@ -4,5 +4,5 @@ type Props = {
 }
 
 export function NoData({ dataType }: Props): JSX.Element {
-  return <div className="font-mono">There is no {dataType}.</div>
+  return <div className="font-mono">There are no {dataType}.</div>
 }

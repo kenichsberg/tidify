@@ -1,15 +1,19 @@
-import { FC } from 'react'
-import { useCache } from 'hooks/index'
-import { RoundRect } from './'
+import { RoundRect } from '@/components/schedule'
+import { useCache } from '@/hooks/index'
 
-import { TaskSchema } from 'schema/model/types'
+import {
+  TaskWithoutTechnicalColmuns,
+  UserWithoutTechnicalColmuns,
+} from '@/components/project/types'
 
 type Props = {
-  tasks: Partial<TaskSchema>[]
+  tasks: Partial<
+    TaskWithoutTechnicalColmuns & { user: UserWithoutTechnicalColmuns }
+  >[]
   projectName: string
 }
 
-export const LabelField: FC<Props> = ({ tasks, projectName }) => {
+export function LabelField({ tasks, projectName }: Props): JSX.Element {
   const { data: _chartHeight } = useCache<number>('chartHeight')
   const { data: _headerHeight } = useCache<number>('headerHeight')
   const { data: _rowHeight } = useCache<number>('rowHeight')
@@ -56,10 +60,10 @@ export const LabelField: FC<Props> = ({ tasks, projectName }) => {
           index % 2 === 0 ? ' text-bluegray-400' : ' text-gray-400'
 
         return (
-          <g key={task.id}>
+          <g key={task.uuid}>
             <rect
               className={`fill-current${color}`}
-              key={task.id}
+              key={task.uuid}
               x="0"
               y={headerHeight + rowHeight * index}
               width={LABEL_FIELD_WIDTH}

@@ -1,25 +1,34 @@
-import { FC, Dispatch } from 'react'
+import { Dispatch } from 'react'
 import { Edit, Check, Clock, Trash2, Plus } from 'react-feather'
-import { Spinner } from 'components/common'
-import { formatDatetimeDisplay } from 'utils/date'
+import { Spinner } from '@/components/common'
+import { useProjectModal, useProject } from '@/contexts/project'
+import { formatDatetimeDisplay } from '@/utils/date'
 
-import { Mode, Action, SetMutationType } from 'components/types'
+import { Mode, Action, SetMutationType } from '@/components/types'
 
 type Props = {
   mode: Mode
-  projectEndDate: Date | undefined
   dispatch: Dispatch<Action>
   setMutationType: SetMutationType
   isNew: boolean
 }
 
-export const ProjectCardHeader: FC<Props> = ({
+export function ProjectCardHeader({
   mode,
-  projectEndDate,
   dispatch,
   setMutationType,
   isNew,
-}) => {
+}: Props): JSX.Element {
+  const { state: modalState, dispatch: dispatchModalState } = useProjectModal()
+  if (!modalState || !dispatchModalState) {
+    throw new Error('context value undefined')
+  }
+
+  const { state: project } = useProject()
+  if (!project) {
+    throw new Error('context value undefined')
+  }
+
   const rightElementClass =
     mode === 'processing' ? '' : ' transform hover:scale-110 cursor-pointer'
 
@@ -29,15 +38,18 @@ export const ProjectCardHeader: FC<Props> = ({
       {getCenterElement(
         mode,
         isNew,
-        formatDatetimeDisplay(projectEndDate?.toISOString())
+        formatDatetimeDisplay(project.endAt?.toISOString())
       )}
       <div
         className={`w-16 flex-shrink self-stretch flex justify-end min-w-max truncate group ${rightElementClass}`}
         onClick={() =>
+          /*
           dispatch({
             type: isNew ? 'create' : 'update',
             setMutationType: setMutationType,
           })
+*/
+          dispatchModalState({ type: 'open', data: { ...project } })
         }
       >
         {getRightButton(mode)}

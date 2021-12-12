@@ -19,7 +19,6 @@ export const MinuteButton: FC<Props> = ({
   isSelected,
   onClick,
 }) => {
-  console.log(minute, isSelected)
   // for button
   const buttonRadius = isSmaller ? _buttonRadius * 0.5 : _buttonRadius
   const radian = (polarAngle * Math.PI) / 180

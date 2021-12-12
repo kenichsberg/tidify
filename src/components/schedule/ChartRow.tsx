@@ -1,10 +1,10 @@
-import { useCache } from 'hooks/index'
-import { RoundRect } from './'
+import { RoundRect } from '@/components/schedule'
+import { useCache } from '@/hooks/index'
 
-import { TaskSchema } from 'schema/model/types'
+import { TaskWithoutTechnicalColmuns } from '@/components/project/types'
 
 type Props = {
-  tasks: Partial<TaskSchema>[]
+  tasks: TaskWithoutTechnicalColmuns[]
 }
 
 export function ChartRow({ tasks }: Props): JSX.Element {
@@ -41,7 +41,7 @@ export function ChartRow({ tasks }: Props): JSX.Element {
         return (
           <rect
             className={`fill-current${color}`}
-            key={task.id}
+            key={task.uuid}
             x="0"
             y={rowHeight * index + (headerHeight ?? 0)}
             width={ganttFieldWidth}

@@ -1,13 +1,21 @@
-import { NoData } from 'components/common'
-import { useCache } from 'hooks/index'
-import { GanttField, LabelField } from './'
-import { ProjectSchema } from 'schema/model/types'
+import { NoData } from '@/components/common'
+import { GanttField, LabelField } from '@/components/schedule'
+import { useCache } from '@/hooks/index'
+
+import {
+  ProjectWithoutTechnicalColmuns,
+  TaskWithoutTechnicalColmuns,
+} from '@/components/project/types'
 
 type Props = {
-  project: Partial<ProjectSchema>
+  project: ProjectWithoutTechnicalColmuns
   chartStartDate: Date
-  chartEndDate: Date
+  chartEndDate: Date | undefined
 }
+
+const HEADER_HEIGHT = 50
+const ROW_HEIGHT = 80
+const FOOTER_HEIGHT = 10
 
 export function Chart({
   project,
@@ -18,7 +26,7 @@ export function Chart({
   useCache<number>('rowHeight', ROW_HEIGHT)
 
   const tasks = project.tasks
-  if (tasks === undefined) {
+  if (!tasks) {
     return <NoData dataType="tasks" />
   }
   const taskCount = tasks.length
@@ -43,7 +51,3 @@ export function Chart({
     </div>
   )
 }
-
-const HEADER_HEIGHT = 50
-const ROW_HEIGHT = 80
-const FOOTER_HEIGHT = 10

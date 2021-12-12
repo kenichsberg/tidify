@@ -1,10 +1,10 @@
-import { useCache } from 'hooks/index'
-import { diffDate } from 'utils/date'
+import { useCache } from '@/hooks/index'
+import { diffDate } from '@/utils/date'
 
-import { TaskSchema } from 'schema/model/types'
+import { TaskWithoutTechnicalColmuns } from '@/components/project/types'
 
 type Props = {
-  tasks: Partial<TaskSchema>[]
+  tasks: TaskWithoutTechnicalColmuns[]
   chartStartDate: Date
   projectStartDate: Date
 }
@@ -53,7 +53,7 @@ export function GanttRow({ tasks, chartStartDate, projectStartDate }: Props) {
           index % 2 === 0 ? ' text-blue-700' : ' text-emerald-700'
 
         return (
-          <g key={task.id}>
+          <g key={task.uuid}>
             <rect
               className={`fill-current ${planGanttColor}`}
               x={planGanttOffsetX}

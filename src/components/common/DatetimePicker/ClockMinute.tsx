@@ -9,7 +9,6 @@ type Props = {
 
 export const ClockMinute: FC<Props> = ({ date, datetimeRef, setNextPage }) => {
   const selectedMinute = date?.getMinutes()
-  console.log(selectedMinute)
   const getOnClick = (minute: number) => () => {
     datetimeRef.current.minute = minute
     setNextPage()
