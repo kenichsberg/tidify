@@ -19,7 +19,7 @@ interface CountOperation {
 // 2. from the above array, create actual sets of durations
 //    to calulate sum of durations
 // 3. sum durations up
-export const getManHour = (startDatetime: Date, endDatetime: Date): number => {
+export function getManHour(startDatetime: Date, endDatetime: Date): number {
   const operations = getCountOperations(startDatetime, endDatetime)
   debugOperations(operations)
   const durations = getDurationsByOperations(operations)
@@ -38,10 +38,10 @@ export const getManHour = (startDatetime: Date, endDatetime: Date): number => {
   return totalManHour / (1000 * 60 * 60)
 }
 
-const getCountOperations = (
+function getCountOperations(
   startDatetime: Date,
   endDatetime: Date
-): CountOperation[] => {
+): CountOperation[] {
   const targetDate = new Date(startDatetime)
   const operations: CountOperation[] = []
 
@@ -111,9 +111,11 @@ const getCountOperations = (
   return filterOperations(operations)
 }
 
-const isClosedDay = (date: Date) => date.getDay() === 0 || date.getDay() === 6
+function isClosedDay(date: Date): boolean {
+  return date.getDay() === 0 || date.getDay() === 6
+}
 
-const getDurationsByOperations = (operations: CountOperation[]): Duration[] => {
+function getDurationsByOperations(operations: CountOperation[]): Duration[] {
   const milliseconds = [...new Set(operations.map((op) => op.millisec))].sort(
     (a, b) => a - b
   )
@@ -143,7 +145,7 @@ const getDurationsByOperations = (operations: CountOperation[]): Duration[] => {
       continue
     }
 
-    // assignment of values to duration object is
+    // assign values to duration object
     // only after count started & work started
     if (!isCountReady || !isWorkReady) continue
 
@@ -195,7 +197,7 @@ const getDurationsByOperations = (operations: CountOperation[]): Duration[] => {
   return durations
 }
 
-const filterOperations = (operations: CountOperation[]) => {
+function filterOperations(operations: CountOperation[]): CountOperation[] {
   const startMsArr =
     operations
       .filter(
@@ -217,7 +219,7 @@ const filterOperations = (operations: CountOperation[]) => {
 }
 
 // for debug use only
-const debugOperations = (_operations: CountOperation[]) => {
+function debugOperations(_operations: CountOperation[]) {
   const operations = [..._operations]
   operations.sort((a, b) => a.millisec - b.millisec)
   const operationFormatted = operations.map((op) => ({

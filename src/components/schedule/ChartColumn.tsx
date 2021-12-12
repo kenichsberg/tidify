@@ -1,13 +1,12 @@
-import { FC } from 'react'
-import { useCache } from 'hooks/index'
-import { RoundRect } from './'
+import { useCache } from '@/hooks/index'
+import { RoundRect } from '@/components/schedule'
 
 type Props = {
   weekCount: number
   chartStartDate: Date
 }
 
-export const ChartColumn: FC<Props> = ({ weekCount, chartStartDate }) => {
+export function ChartColumn({ weekCount, chartStartDate }: Props): JSX.Element {
   const { data: _columnWidth } = useCache<number>('columnWidth')
   const { data: _chartHeight } = useCache<number>('chartHeight')
 
@@ -26,7 +25,7 @@ export const ChartColumn: FC<Props> = ({ weekCount, chartStartDate }) => {
           weekday: 'short',
           day: 'numeric',
           month: 'short',
-        } as Partial<Intl.DateTimeFormatOptions>
+        } as Intl.DateTimeFormatOptions
         const dateString = date.toLocaleString('en-us', options)
         const partialDates = dateString.split(',')
         const weekday = partialDates[0]

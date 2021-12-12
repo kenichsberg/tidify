@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { GetServerSideProps } from 'next'
 import useSWR from 'swr'
-import { gql } from 'graphql-request'
+//import { gql } from 'graphql-request'
 import { Layout } from 'components/layout'
 import { Chart } from 'components/schedule'
 import { fetcher } from 'core/client'
@@ -15,6 +15,7 @@ type Props = {
   }
 }
 
+/*
 const tasks = gql`
   query {
     tasks(orderBy: [{ projectId: asc }, { startAt: asc }, { id: asc }]) {
@@ -36,6 +37,7 @@ const tasks = gql`
     }
   }
 `
+*/
 
 const IndexPage: FC<Props> = (props) => {
   const { data, error } = useSWR(tasks, fetcher, {

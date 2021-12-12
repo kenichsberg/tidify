@@ -1,18 +1,37 @@
-import { NoData } from 'components/common'
-import { Chart } from 'components/schedule'
-import { getMaxDate, getMinDate } from 'utils/date'
+import { NoData } from '@/components/common'
+import { Chart } from '@/components/schedule'
+import { getMaxDate, getMinDate } from '@/utils/date'
 
-import { ProjectSchema } from 'schema/model/types'
+import { ProjectWithoutTechnicalColmuns } from '@/components/project/types'
+import { useProjects } from '@/contexts/project'
 
-type Props = {
-  projects: ProjectSchema[]
+type ProjectWithNotNullEndAt = Omit<ProjectWithoutTechnicalColmuns, 'endAt'> & {
+  endAt: Date
 }
 
-export function ChartView({ projects }: Props): JSX.Element {
-  const projectStartDates = projects.map((project) => new Date(project.startAt))
+export function ChartView(): JSX.Element {
+  const { state: projects } = useProjects()
+  if (!projects) {
+    throw new Error('context value undefined')
+  }
+
+  const projectStartDates = projects
+    .filter((project) => !!project.startAt)
+    .map((project) => new Date(project.startAt))
   const chartStartDate = getMinDate(projectStartDates)
-  const projectEndDates = projects.map((project) => new Date(project.endAt))
+
+  if (projects.length && !chartStartDate) {
+    throw new Error(
+      `project.startAt should not be undefined\n` +
+        `projects uuids:\n ${projects.map((p) => p.uuid).join('\n')}`
+    )
+  }
+
+  const projectEndDates = projects
+    .filter((project): project is ProjectWithNotNullEndAt => !!project.endAt)
+    .map((project) => new Date(project.endAt))
   const chartEndDate = getMaxDate(projectEndDates)
+  console.log(chartStartDate, chartEndDate)
 
   if (!projects.length) {
     return (
@@ -26,7 +45,7 @@ export function ChartView({ projects }: Props): JSX.Element {
       <div className="">
         {projects.map((project) => (
           <Chart
-            key={project.id}
+            key={project.uuid}
             project={project}
             chartStartDate={chartStartDate}
             chartEndDate={chartEndDate}

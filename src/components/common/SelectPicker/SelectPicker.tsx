@@ -1,4 +1,4 @@
-import { useState, FocusEvent } from 'react'
+import { useState, FocusEvent, Ref } from 'react'
 import { ChevronDown } from 'react-feather'
 
 import { OptionTagObject } from './types'
@@ -6,49 +6,50 @@ import { OptionTagObject } from './types'
 type Props = {
   name: string
   className?: string
-  options?: OptionTagObject[] | readonly OptionTagObject[]
-  initialValue?: number | string | undefined
-  isNullable?: boolean
+  size?: 'sm' | 'md' | 'lg'
+  options?: OptionTagObject[] | ReadonlyArray<OptionTagObject>
+  value?: number | string | undefined
+  withBlankOption?: boolean
   onFocus?: (arg0?: FocusEvent<HTMLSelectElement>) => void
-}
-
-const getOptionTagObjectByValue = (
-  _value: number | string | undefined,
-  options: OptionTagObject[] | readonly OptionTagObject[]
-): OptionTagObject | undefined => {
-  if (_value === undefined) return undefined
-  // cast numeric string to number
-  const value = !isNaN(+_value) ? +_value : _value
-
-  return options?.find((option) => option.value === value)
+  onBlur?: (arg0?: FocusEvent<HTMLSelectElement>) => void
+  onChange?: (arg0?: string) => void
+  inputRef?: Ref<HTMLSelectElement>
 }
 
 export function SelectPicker({
   name,
   className = '',
+  size = 'md',
   options = [],
-  initialValue,
-  isNullable = true,
+  value,
+  withBlankOption = true,
   onFocus,
+  onBlur,
+  onChange,
+  inputRef,
 }: Props): JSX.Element {
-  const [value, setValue] = useState<number | string | undefined>(initialValue)
-  const onChange = (newValueObj: OptionTagObject | undefined) =>
-    setValue(newValueObj?.value)
+  //const [value, setValue] = useState<number | string | undefined>(initialValue)
+  //const onChange = (newValueObj: OptionTagObject | undefined) =>
+  //setValue(newValueObj?.value)
 
+  const sizeClass = getSizeClass(size)
   return (
     <div className="flex w-full relative">
       <select
         className={`appearance-none focus:outline-none w-full ${
           className === '' ? '' : ' ' + className
-        }`}
+        } ${sizeClass}`}
         name={name}
         value={value}
-        onChange={(event) =>
-          onChange(getOptionTagObjectByValue(event.target.value, options))
-        }
         onFocus={(event) => !!onFocus && onFocus(event)}
+        onBlur={(event) => !!onBlur && onBlur(event)}
+        onChange={(event) =>
+          //onChange(getOptionTagObjectByValue(event.target.value, options))
+          !!onChange && onChange(event.target.value)
+        }
+        ref={inputRef ? inputRef : undefined}
       >
-        {isNullable ? <option value="">-----</option> : null}
+        {withBlankOption ? <option value="">-----</option> : null}
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -60,4 +61,27 @@ export function SelectPicker({
       </div>
     </div>
   )
+}
+
+/*
+const getOptionTagObjectByValue = (
+  _value: number | string | undefined,
+  options: OptionTagObject[] | ReadonlyArray<OptionTagObject>
+): OptionTagObject | undefined => {
+  if (_value === undefined) return undefined
+  // cast numeric string to number
+  const value = !isNaN(+_value) ? +_value : _value
+
+  return options?.find((option) => option.value === value)
+}
+*/
+function getSizeClass(size: 'sm' | 'md' | 'lg'): string {
+  switch (size) {
+    case 'sm':
+      return 'text-xs h-3'
+    case 'md':
+      return ''
+    case 'lg':
+      return 'text-lg h-10'
+  }
 }

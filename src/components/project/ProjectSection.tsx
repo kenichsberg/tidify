@@ -1,23 +1,21 @@
 import { useState } from 'react'
-import {
-  GridView,
-  ChartView,
-  ProjectFormModal,
-  ProjectForm,
-} from 'components/project'
 import { Plus, Grid, Calendar } from 'react-feather'
 
-import { ProjectSchema } from 'schema/model/types'
+import { GridView, ChartView, ProjectFormModal } from '@/components/project'
+import { useProjectModal } from '@/contexts/project'
 
 type View = 'grid' | 'chart'
 
-type Props = {
-  projects: ProjectSchema[]
-}
+export function ProjectSection(): JSX.Element {
+  const { state: modalState, dispatch: dispatchModalState } = useProjectModal()
+  if (!modalState || !dispatchModalState) {
+    throw new Error('context value undefined')
+  }
 
-export function ProjectSection({ projects }: Props): JSX.Element {
   const [view, setView] = useState<View>('grid')
-  const [showModal, setShowModal] = useState<boolean>(false)
+
+  const setClose = () => dispatchModalState({ type: 'close' })
+
   return (
     <section className="h-full bg-gray-100 rounded-3xl overflow-auto px-2 sm:px-4 py-8 lg:py-6">
       <div className="flex flex-row justify-stretch items-center mt-1 mb-7">
@@ -55,33 +53,31 @@ export function ProjectSection({ projects }: Props): JSX.Element {
           </label>
         </div>
       </div>
-      {getView(view, projects)}
+      {getView(view)}
       <button
         type="button"
         title="Create New Project"
-        className="z-10 fixed right-6 lg:right-2/5 lg:transform lg:-translate-x-1/2 xl:translate-x-0 bottom-6 lg:bottom-10 flex-shrink-0 rounded-full h-16 w-16 flex items-center justify-center bg-cyan-500 text-bluegray-100 hover:bg-cyan-400 hover:text-bluegray-200 focus:outline-none"
-        onClick={() => setShowModal(true)}
+        className="z-10 fixed right-10 lg:right-2/5 lg:transform lg:-translate-x-1/2 xl:translate-x-0 bottom-10 lg:bottom-20 flex-shrink-0 rounded-full shadow-xl h-20 w-20 flex items-center justify-center bg-cyan-500 bg-opacity-90 text-bluegray-100 hover:bg-cyan-400 hover:text-bluegray-200 focus:outline-none"
+        onClick={() => dispatchModalState({ type: 'open', data: null })}
       >
         <Plus size={32} />
       </button>
       <ProjectFormModal
-        show={showModal}
-        setShow={setShowModal}
-        title="Create New Project"
-      >
-        <ProjectForm project={null} />
-      </ProjectFormModal>
+        //project={null}
+        show={modalState.showModal}
+        setClose={setClose}
+      />
     </section>
   )
 }
 
-function getView(view: View, projects: ProjectSchema[]) {
+function getView(view: View) {
   switch (view) {
     case 'grid':
-      return <GridView projects={projects} />
+      return <GridView />
     case 'chart':
-      return <ChartView projects={projects} />
+      return <ChartView />
     default:
-      throw new Error('view not found')
+      throw new Error(`view ${view} not found`)
   }
 }

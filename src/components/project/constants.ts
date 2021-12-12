@@ -7,3 +7,11 @@ export const statusList = [
 ] as const
 
 export type Status = typeof statusList[number]
+
+type DndTypes = {
+  TASK: 'task'
+}
+
+export const dndTypes: Readonly<DndTypes> = {
+  TASK: 'task',
+}

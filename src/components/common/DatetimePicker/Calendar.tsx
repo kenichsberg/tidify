@@ -21,8 +21,6 @@ export const Calendar: FC<Props> = ({ date, datetimeRef, setNextPage }) => {
   const [firstDay, setFirstDay] = useState<Date>(initialFirstDay)
   const dates = getCalendarDates(firstDay)
 
-  console.log('date: ', date)
-
   return (
     <>
       <YearMonthControler firstDay={firstDay} setFirstDay={setFirstDay} />
