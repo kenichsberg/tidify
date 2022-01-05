@@ -1,31 +1,44 @@
+import { useEffect } from 'react'
 import { useDrag } from 'react-dnd'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, Controller } from 'react-hook-form'
 import { Move, Plus } from 'react-feather'
-//import { DevTool } from '@hookform/devtools'
+import { v4 as uuidv4 } from 'uuid'
+import { DevTool } from '@hookform/devtools'
 
 import { InputField, SelectPicker } from '@/components/common'
 import { RhfInput, RhfSelect } from '@/components/rhf-wrapper'
 import { dndTypes } from '@/components/project/constants'
-import { TaskFormProps } from '@/components/project/types'
+import { useTasks, useTaskUuids } from '@/contexts/project'
+
+//import { TaskFormProps } from '@/components/project/types'
 
 type Props = {
   isDummy?: boolean
-  task: TaskFormProps
   index: number
-  callback?: () => void
 }
 
 export function ProjectFormTaskBlock({
   isDummy = false,
-  task,
   index,
-  callback,
 }: Props): JSX.Element {
+  const { state: tasks, setState: setTasks } = useTasks()
+  const { state: taskUuids, setState: setTaskUuids } = useTaskUuids()
+  if (!tasks || !setTasks) {
+    throw new Error('Tasks context undefined')
+  }
+  if (!taskUuids || !setTaskUuids) {
+    throw new Error('TaskUuids context undefined')
+  }
+
+  const task = tasks?.[index]
+  if (!task) {
+    throw new Error('task undefined')
+  }
+  console.log(index, task.uuid, taskUuids.indexOf(task.uuid))
+
   const [{ isDragging }, drag] = useDrag(() => ({
     type: dndTypes.TASK,
-    item: {
-      task: task,
-    },
+    item: { task },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -34,9 +47,27 @@ export function ProjectFormTaskBlock({
   const {
     control,
     formState: { errors },
+    register,
+    setValue,
   } = useFormContext()
 
-  const onFocus = () => isDummy && callback && callback()
+  const onFocus = isDummy
+    ? () => {
+        const newUuid = uuidv4()
+        setTasks([
+          ...tasks,
+          { uuid: newUuid, name: '', plannedDuration: 0, userId: undefined },
+        ])
+        setTaskUuids([...taskUuids, newUuid])
+      }
+    : undefined
+
+  const immutableIndex = taskUuids.indexOf(task.uuid)
+  const fieldName = `tasks[${immutableIndex}]`
+
+  useEffect(() => {
+    setValue(`${fieldName}.rank`, index)
+  }, [index])
 
   return (
     <div className="flex flex-row justify-between items-center font-mono text-sm text-bluegray-700">
@@ -45,7 +76,8 @@ export function ProjectFormTaskBlock({
           {getIndexElement(isDummy, index)}
         </div>
       </div>
-      <div
+      <fieldset
+        name={fieldName}
         ref={isDummy ? undefined : drag}
         className={`flex-glow w-11/12 pt-6 flex justify-evenly bg-bluegray-50 shadow hover:shadow-lg rounded-xl text-center pr-4 py-3 ${
           isDragging ? 'opacity-50' : ''
@@ -57,21 +89,32 @@ export function ProjectFormTaskBlock({
             size={16}
           />
         </div>
+        <input
+          type="hidden"
+          {...register(`${fieldName}.uuid`, { value: task.uuid })}
+        />
+        <input
+          type="hidden"
+          {...register(`${fieldName}.rank`, { value: index })}
+        />
+        <input
+          type="hidden"
+          {...register(`${fieldName}.isDummy`, { value: isDummy })}
+        />
         <div className="flex-grow max-w-md">
-          <input type="hidden" value={index} />
           <InputField label="Task Name" className="">
             <RhfInput
-              className="w-full"
-              name={`name-${task.uuid}`}
+              className="w-full text-center"
+              name={`${fieldName}.name`}
               onFocus={onFocus}
-              rules={{ required: isDummy ? false : true }}
+              rules={{ required: !isDummy }}
               control={control}
               value={task.name}
             />
           </InputField>
           <span
             className={`text-red-500 text-xs ${
-              errors[`name-${task.uuid}`] ? '' : 'invisible'
+              errors?.tasks?.[immutableIndex]?.name ? '' : 'invisible'
             }`}
           >
             This field is required
@@ -80,17 +123,19 @@ export function ProjectFormTaskBlock({
         <div className="flex-shrink w-48 flex flex-col items-center">
           <InputField label="Duraiton" className="w-24">
             <RhfInput
-              className="w-full"
-              name={`duration-${task.uuid}`}
+              className="w-full text-center"
+              name={`${fieldName}.plannedDuration`}
               onFocus={onFocus}
-              rules={{ required: isDummy ? false : true }}
+              rules={{ required: !isDummy }}
               control={control}
-              value={task.duration + ''}
+              value={task.plannedDuration + ''}
             />
           </InputField>
           <span
             className={`text-red-500 text-xs ${
-              errors[`duration-${task.uuid}`] ? '' : 'invisible'
+              errors?.tasks?.[immutableIndex]?.plannedDuration
+                ? ''
+                : 'invisible'
             }`}
           >
             This field is required
@@ -99,52 +144,35 @@ export function ProjectFormTaskBlock({
         <div className="flex-shrink w-48">
           <InputField label="User" className="">
             <RhfSelect
-              className="w-full"
-              name={`user-${task.uuid}`}
+              className="w-full text-center"
+              name={`${fieldName}.userId`}
               onFocus={onFocus}
-              rules={{ required: isDummy ? false : true }}
+              rules={{ required: !isDummy }}
               control={control}
-              value={task.user}
+              value={task.userId}
               options={[
-                { label: 'a', value: 'a' },
-                { label: 'b', value: 'b' },
+                { label: 'a', value: 0 },
+                { label: 'b', value: 1 },
               ]}
             />
           </InputField>
           <span
             className={`text-red-500 text-xs ${
-              errors[`user-${task.uuid}`] ? '' : 'invisible'
+              errors?.tasks?.[immutableIndex]?.userId ? '' : 'invisible'
             }`}
           >
             This field is required
           </span>
         </div>
-      </div>
-      {
-        //<DevTool control={control} />
-      }
+      </fieldset>
+      {isDummy ? <DevTool control={control} /> : null}
     </div>
   )
 }
 
 function getIndexElement(isDummy: boolean, index: number): JSX.Element {
   if (isDummy) {
-    return (
-      <>
-        {
-          //<Move className="invisible" size={16} />
-        }
-        <Plus size={16} />
-      </>
-    )
+    return <Plus size={16} />
   }
-  return (
-    <>
-      {
-        //<Move className="text-bluegray-400" size={16} />
-        //<span className="ml-2">{index + 1}</span>
-      }
-      <span>{index + 1}</span>
-    </>
-  )
+  return <span>{index + 1}</span>
 }

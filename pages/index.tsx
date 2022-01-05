@@ -22,6 +22,7 @@ export default function IndexPage(props: Props): JSX.Element {
     fetcher,
     { fallbackData: props.data }
   )
+  console.log(data)
   const { setState: setProjects } = useProjects()
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export default function IndexPage(props: Props): JSX.Element {
 
       return datum
     })
-    setProjects && setProjects(formattedData ?? [])
+    setProjects?.(formattedData ?? [])
   }, [data])
 
   if (error && !data) return <div>error</div>

@@ -6,7 +6,8 @@ import {
   ProjectCardBody,
   BlankCard,
 } from '@/components/project'
-import { ProjectProvider } from '@/contexts/project'
+//import { ProjectProvider } from '@/contexts/project'
+import { useProject } from '@/contexts/project'
 /*
 import {
   requestCreateOneProject,
@@ -29,12 +30,14 @@ type Props = {
   project: ProjectWithoutTechnicalColmuns
 }
 
-export const ProjectCard: FC<Props> = ({ project }) => {
+//export const ProjectCard: FC<Props> = ({ project }) => {
+export function ProjectCard({ project }: Props) {
   const [mutationType, setMutationType] = useState<MutationType>(undefined)
   const isNew = project === null
   const isAdded = project.uuid === uuidv4()
   const initialMode = isAdded ? 'processing' : 'normal'
   const [mode, dispatch] = useReducer(reducer, initialMode)
+  const { setState: setProject } = useProject()
 
   //const { setState: setProject } = useProject()
   //setProject && setProject(project)
@@ -56,6 +59,7 @@ export const ProjectCard: FC<Props> = ({ project }) => {
   )
 */
 
+  /*
   useEffect(() => {
     if (mode !== 'processing') return
     if (isAdded) return
@@ -73,27 +77,29 @@ export const ProjectCard: FC<Props> = ({ project }) => {
         })) ?? [],
     }
   }, [project])
+*/
+  useEffect(() => {
+    setProject?.(project)
+  }, [project])
 
   if (isNew && mode === 'normal') {
     return <BlankCard callback={() => dispatch(null)} />
   }
 
   return (
-    <ProjectProvider value={project}>
-      <div className="flex flex-col items-stretch font-mono text-sm text-center text-bluegray-700 bg-bluegray-200 shadow-sm hover:shadow-md rounded-xl h-56 my-2 px-5 py-3">
-        <ProjectCardHeader
-          mode={mode}
-          dispatch={dispatch}
-          setMutationType={setMutationType}
-          isNew={isNew}
-        />
-        <ProjectCardBody
-          isLoading={!project}
-          isEditing={mode === 'edit'}
-          formRef={projectFormRef}
-        />
-      </div>
-    </ProjectProvider>
+    <div className="flex flex-col items-stretch font-mono text-sm text-center text-bluegray-700 bg-bluegray-200 shadow-sm hover:shadow-md rounded-xl h-56 my-2 px-5 py-3">
+      <ProjectCardHeader
+        mode={mode}
+        dispatch={dispatch}
+        setMutationType={setMutationType}
+        isNew={isNew}
+      />
+      <ProjectCardBody
+        isLoading={!project}
+        isEditing={mode === 'edit'}
+        formRef={projectFormRef}
+      />
+    </div>
   )
 }
 

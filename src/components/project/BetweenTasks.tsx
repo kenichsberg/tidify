@@ -2,7 +2,7 @@ import { useDrop } from 'react-dnd'
 import { Plus } from 'react-feather'
 import { v4 as uuidv4 } from 'uuid'
 
-import { useTasks } from '@/contexts/project'
+import { useTasks, useTaskUuids } from '@/contexts/project'
 
 import { dndTypes } from '@/components/project/constants'
 import { TaskProps } from '@/components/project/types'
@@ -13,29 +13,24 @@ type Props = {
 
 export function BetweenTasks({ index }: Props): JSX.Element {
   const { state: tasks, setState: setTasks } = useTasks()
+  const { state: taskUuids, setState: setTaskUuids } = useTaskUuids()
   if (!tasks || !setTasks) {
-    throw new Error('tasks undefined')
+    throw new Error('Tasks context undefined')
   }
-  console.log('betweentasks:', tasks)
+  if (!taskUuids || !setTaskUuids) {
+    throw new Error('TaskUuids context undefined')
+  }
 
-  const [{ isOver /*, canDrop*/ }, drop] = useDrop(
+  const [{ isOver }, drop] = useDrop(
     () => ({
       accept: dndTypes.TASK,
-      drop: (item, monitor) => {
-        if (!tasks || !setTasks) {
-          throw new Error('tasks undefined')
-        }
-
+      drop: (_, monitor) => {
         const props = monitor.getItem() as TaskProps
         const task = props.task
-
-        console.log('drop:, ', item, monitor)
-        console.log('betweentasks, drop:', tasks)
+        console.log(props)
 
         const oldIndex = tasks.indexOf(task)
         const newIndex = index
-        console.log(oldIndex, newIndex)
-
         const removed = tasks.filter((val) => val.uuid !== task.uuid)
         const actualIndex = oldIndex < newIndex ? newIndex - 1 : newIndex
         const newTasks = [
@@ -43,6 +38,7 @@ export function BetweenTasks({ index }: Props): JSX.Element {
           task,
           ...removed.slice(actualIndex),
         ]
+
         console.log({ old: tasks, removed: removed, new: newTasks })
         setTasks(newTasks)
       },
@@ -52,6 +48,16 @@ export function BetweenTasks({ index }: Props): JSX.Element {
     }),
     [tasks, index]
   )
+
+  const onClick = () => {
+    const newUuid = uuidv4()
+    setTasks([
+      ...tasks.slice(0, index),
+      { uuid: newUuid, name: '', plannedDuration: 0, userId: undefined },
+      ...tasks.slice(index),
+    ])
+    setTaskUuids([...taskUuids, newUuid])
+  }
 
   return (
     <div
@@ -63,13 +69,7 @@ export function BetweenTasks({ index }: Props): JSX.Element {
       <button
         type="button"
         className="absolute -top-1/3 left-1/2 opacity-0 group-hover:opacity-100 flex-shrink-0 rounded-full h-8 w-8 flex items-center justify-center bg-cyan-500 text-bluegray-100 focus:outline-none"
-        onClick={() =>
-          setTasks([
-            ...tasks.slice(0, index),
-            { uuid: uuidv4(), name: '', duration: 0, user: '' },
-            ...tasks.slice(index),
-          ])
-        }
+        onClick={onClick}
       >
         <Plus size={20} />
       </button>
