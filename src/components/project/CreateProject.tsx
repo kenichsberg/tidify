@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from 'react'
+import { useState } from 'react'
 import { mutate } from 'swr'
 import {
   useForm,
@@ -6,6 +6,7 @@ import {
   SubmitHandler,
   SubmitErrorHandler,
 } from 'react-hook-form'
+import { v4 as uuidv4 } from 'uuid'
 
 import {
   InputField,
@@ -16,7 +17,7 @@ import {
   ModalHeader,
 } from '@/components/common'
 import { RhfInput } from '@/components/rhf-wrapper'
-//import { strToDate } from '@/utils/date'
+import { useProjects } from '@/contexts/project'
 
 import { ProjectWithoutTechnicalColmuns } from '@/components/project/types'
 import { CreateProjectFormProps } from '@/components/project/types'
@@ -39,18 +40,46 @@ export function CreateProject({
     control,
   } = useForm<CreateProjectFormProps>()
   const [startAt, setStartAt] = useState<Date | undefined>(project?.startAt)
+  const { state: projects } = useProjects()
 
-  const onSubmit: SubmitHandler<CreateProjectFormProps> = async (data) => {
-    console.log(data)
-    mutate(
-      '/api/projects',
-      await fetch('/api/projects', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      })
+  if (!projects) {
+    throw new Error('projects undefined')
+  }
+
+  const onSubmit: SubmitHandler<CreateProjectFormProps> = async (input) => {
+    const record: ProjectWithoutTechnicalColmuns = {
+      ...input,
+      uuid: project?.uuid ?? uuidv4(),
+      endAt: project?.endAt ?? null,
+      users: project?.users ?? [],
+      tasks: project?.tasks ?? [],
+    }
+
+    const index = projects.findIndex(
+      (element) => element.uuid === project?.uuid
     )
+
+    let newProjects = []
+    if (index !== -1) {
+      newProjects = [...projects]
+      newProjects[index] = record
+    } else {
+      newProjects = [...projects, record]
+    }
+    console.log(projects, newProjects)
+
+    mutate('/api/projects', newProjects, false)
+
+    await fetch('/api/projects', {
+      method: 'POST',
+      body: JSON.stringify(record),
+    })
+
+    mutate('/api/projects')
+
     setPage('next')
   }
+
   const onError: SubmitErrorHandler<CreateProjectFormProps> = (errors) =>
     console.log(errors)
 
@@ -78,7 +107,7 @@ export function CreateProject({
                       <RhfInput
                         name="name"
                         control={control}
-                        className="w-full"
+                        className="w-full text-center"
                         rules={{ required: true }}
                         value={project?.name}
                       />
@@ -95,14 +124,15 @@ export function CreateProject({
                 </div>
                 <div className="flex-1">
                   <div className="w-11/12 max-w-xs mx-auto">
-                    {/*
                     <InputField label="Start Date" className="">
                       <Controller
                         control={control}
                         rules={{ required: true }}
                         name="startAt"
                         defaultValue={startAt}
-                        onChange={(date: Date | undefined) => setStartAt(date)}
+                        data-onChange={(date: Date | undefined) =>
+                          setStartAt(date)
+                        }
                         render={({ field: { name, value, ref, onChange } }) => (
                           <DatetimePicker
                             className="text-center"
@@ -121,7 +151,6 @@ export function CreateProject({
                     >
                       This field is required
                     </span>
-*/}
                   </div>
                 </div>
               </div>

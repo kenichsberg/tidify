@@ -35,8 +35,8 @@ export type ProjectStatus = 'completed' | 'ahead' | 'late'
 export interface TaskFormProps {
   uuid: string
   name: string
-  duration: number
-  user: string
+  plannedDuration: number
+  userId: number | undefined
 }
 
 export interface TaskProps {
@@ -44,12 +44,20 @@ export interface TaskProps {
 }
 
 export interface CreateProjectFormProps {
+  uuid: string
   name: string
-  startAt: string
+  startAt: Date
 }
 
 export interface AssignTasksFormProps {
-  [prop: string]: string | number
+  tasks: {
+    uuid: string
+    rank: number
+    name: string
+    plannedDuration: number
+    userId: number | undefined
+    isDummy: boolean
+  }[]
 }
 
 export type TaskComponentProps = Partial<TaskSchema>

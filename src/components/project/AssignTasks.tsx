@@ -1,4 +1,5 @@
-import { useState, useEffect, Fragment, createContext, useContext } from 'react'
+import { useEffect, Fragment } from 'react'
+import { mutate } from 'swr'
 import {
   useForm,
   FormProvider,
@@ -9,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { ModalBody, ModalFooter, ModalHeader } from '@/components/common'
 import { ProjectFormTaskBlock, BetweenTasks } from '@/components/project'
-import { TasksProvider, useTasks } from '@/contexts/project'
+import { useTasks, useTaskUuids } from '@/contexts/project'
 
 import { ProjectWithoutTechnicalColmuns } from '@/components/project/types'
 import { AssignTasksFormProps } from '@/components/project/types'
@@ -17,50 +18,84 @@ import { NextPrev } from '@/components/types'
 
 type Props = {
   project: ProjectWithoutTechnicalColmuns | null
-  //title: string
   setClose: () => void
   setPage: (arg0: NextPrev) => void
 }
 
 export function AssignTasks({
   project,
-  //title,
   setClose,
   setPage,
 }: Props): JSX.Element {
-  const methods = useForm<AssignTasksFormProps>(/*{ shouldUnregister: true }*/)
+  const methods = useForm<AssignTasksFormProps>()
+
   const { state: tasks, setState: setTasks } = useTasks()
+  const { state: taskUuids, setState: setTaskUuids } = useTaskUuids()
   if (!tasks || !setTasks) {
-    throw new Error('tasks undefined')
+    throw new Error('Tasks context undefined')
   }
-  console.log('assignTasks:', tasks)
-
-  const length = tasks.length
-
-  const onSubmit: SubmitHandler<AssignTasksFormProps> = (data) => {
-    console.log(data)
-    //setPage('next')
+  if (!setTaskUuids || !taskUuids) {
+    throw new Error('TaskUuids context undefined')
   }
+  console.log('assignTasks:', tasks, taskUuids)
+
+  const onSubmit: SubmitHandler<AssignTasksFormProps> = async (
+    input: AssignTasksFormProps
+  ) => {
+    console.log(input)
+    const tasks = input.tasks.filter((fieldsObj) => !fieldsObj.isDummy)
+    const data = {
+      projectUuid: project?.uuid ?? uuidv4(),
+      tasks: tasks,
+    }
+
+    /*
+    const index = projects.findIndex(
+      (element) => element.uuid === project?.uuid
+    )
+
+    let newProjects = []
+    if (index !== -1) {
+      newProjects = [...projects]
+      newProjects[index] = record
+    } else {
+      newProjects = [...projects, record]
+    }
+    console.log(projects, newProjects)
+
+    mutate('/api/projects', newProjects, false)
+*/
+
+    await fetch('/api/projects', {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    })
+
+    //mutate('/api/tasks')
+
+    setPage('next')
+  }
+
   const onError: SubmitErrorHandler<AssignTasksFormProps> = (errors) =>
     console.log(errors)
 
   useEffect(() => {
-    if (tasks.length) {
+    if (tasks.length && taskUuids.length) return
+
+    if (project?.tasks.length) {
+      setTasks(project.tasks)
+      setTaskUuids(project.tasks.map((task) => task.uuid))
       return
     }
+
+    const uuid1 = uuidv4()
+    const uuid2 = uuidv4()
     setTasks([
-      { uuid: uuidv4(), name: '', duration: 0, user: '' },
-      { uuid: uuidv4(), name: '', duration: 0, user: '' },
+      { uuid: uuid1, name: '', plannedDuration: 0, userId: undefined },
+      { uuid: uuid2, name: '', plannedDuration: 0, userId: undefined },
     ])
+    setTaskUuids([uuid1, uuid2])
   }, [tasks])
-  /*
-  if (!tasks.length) {
-    setTasks([
-      { id: uuidv4(), name: '', duration: 0, user: undefined },
-      { id: uuidv4(), name: '', duration: 0, user: undefined },
-    ])
-  }
-*/
 
   return (
     <>
@@ -80,30 +115,12 @@ export function AssignTasks({
           >
             <div className="flex flex-col items-stretch">
               <div className="w-full xl:w-11/12 max-w-5xl mx-auto">
-                {tasks.map((task, index) => {
-                  const isBottom = index === length - 1
+                {tasks.map((task, index, array) => {
+                  const isBottom = index === array.length - 1
                   return (
                     <Fragment key={task.uuid}>
                       <BetweenTasks index={index} />
-                      <ProjectFormTaskBlock
-                        isDummy={isBottom}
-                        task={task}
-                        index={index}
-                        callback={
-                          isBottom
-                            ? () =>
-                                setTasks([
-                                  ...tasks,
-                                  {
-                                    uuid: uuidv4(),
-                                    name: '',
-                                    duration: 0,
-                                    user: '',
-                                  },
-                                ])
-                            : undefined
-                        }
-                      />
+                      <ProjectFormTaskBlock isDummy={isBottom} index={index} />
                     </Fragment>
                   )
                 })}

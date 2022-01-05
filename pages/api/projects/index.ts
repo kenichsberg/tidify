@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { PrismaClient, Prisma } from '@prisma/client'
-import { strToDate } from '@/utils/date'
 
 const prisma = new PrismaClient()
 
@@ -22,19 +21,27 @@ export default async function projectsHandler(
           users: true,
           tasks: true,
         },
+        orderBy: [
+          {
+            id: 'asc',
+          },
+        ],
       })
+
       res.status(200).json(projects)
       break
 
     case 'POST':
-      const { name, startAt } = JSON.parse(body)
-      const project: Prisma.ProjectCreateInput = {
-        name: name,
-        startAt: startAt,
-        //endAt: null,
-      }
-      console.log(project)
-      const createProject = await prisma.project.create({ data: project })
+      const { uuid, name, startAt }: Prisma.ProjectCreateInput =
+        JSON.parse(body)
+      console.log(uuid, name, startAt)
+
+      const createProject = await prisma.project.upsert({
+        where: { uuid },
+        update: { name, startAt },
+        create: { name, startAt },
+      })
+
       res.status(201).json(createProject)
       break
 
