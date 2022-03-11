@@ -13,12 +13,18 @@ interface CountOperation {
   mode: OperationMode
 }
 
-// Calculate working hours between start and end
-// 1. create array of operations which indicates
-//    what starts or ends and when.
-// 2. from the above array, create actual sets of durations
-//    to calulate sum of durations
-// 3. sum durations up
+/**
+ * Calculate working hours between start and end
+ * 1. create array of operations which indicates
+ *    what starts or ends and when.
+ * 2. from the above array, create actual sets of durations
+ *    to calulate sum of durations
+ * 3. sum durations up
+ *
+ * @param startDatetime - start of datetime for calculation
+ * @param endDatetime - end of datetime for calculation
+ * @returns - total man-hour between start and end
+ */
 export function getManHour(startDatetime: Date, endDatetime: Date): number {
   const operations = getCountOperations(startDatetime, endDatetime)
   debugOperations(operations)
