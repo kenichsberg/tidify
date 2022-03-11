@@ -9,7 +9,7 @@ import {
   ModalWindow,
 } from '@/components/common'
 import { AssignTasks, CreateProject } from '@/components/project'
-import { TasksProvider, TaskUuidsProvider } from '@/contexts/project'
+import { TasksOfProjectProvider, TaskUuidsProvider } from '@/contexts/task'
 import { useProjectModal } from '@/contexts/project'
 
 import { ProjectWithoutTechnicalColmuns } from '@/components/project/types'
@@ -34,7 +34,11 @@ export function ProjectFormModal({
     <Modal show={show}>
       <ModalOverlay onBackdrop={() => setClose()}>
         <ModalWindow className="w-11/12 max-w-7xl max-h-95vh flex flex-col bg-bluegray-200 border-0 rounded-3xl shadow-lg font-mono">
-          {getContent(pageNo, modalState?.project ?? null, setPageNo, setClose)}
+          {getContent(
+            pageNo,
+            /*modalState?.project ?? null,*/ setPageNo,
+            setClose
+          )}
         </ModalWindow>
       </ModalOverlay>
     </Modal>
@@ -43,7 +47,7 @@ export function ProjectFormModal({
 
 function getContent(
   pageNo: number,
-  project: ProjectWithoutTechnicalColmuns | null,
+  //project: ProjectWithoutTechnicalColmuns | null,
   setPageNo: (arg0: number) => void,
   setClose: () => void
 ): JSX.Element {
@@ -56,24 +60,24 @@ function getContent(
     case 0:
       return (
         <CreateProject
-          project={project}
+          //project={project}
           setClose={() => setClose()}
           setPage={turnPage}
         />
       )
     case 1:
       return (
-        <TasksProvider>
+        <TasksOfProjectProvider>
           <TaskUuidsProvider>
             <AssignTasks
-              project={project}
+              //project={project}
               setClose={() => setClose()}
               setPage={turnPage}
             />
           </TaskUuidsProvider>
-        </TasksProvider>
+        </TasksOfProjectProvider>
       )
     default:
-      throw new Error('page no not exist')
+      throw new Error(`page ${pageNo} not exist`)
   }
 }

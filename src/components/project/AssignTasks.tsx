@@ -10,70 +10,75 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { ModalBody, ModalFooter, ModalHeader } from '@/components/common'
 import { ProjectFormTaskBlock, BetweenTasks } from '@/components/project'
-import { useTasks, useTaskUuids } from '@/contexts/project'
+import { useProjectModal } from '@/contexts/project'
+import { useTasksOfProject, useTaskUuids } from '@/contexts/task'
+//import { ManHourCalculator, formatDatetimeDisplay } from '@/utils/date'
 
 import { ProjectWithoutTechnicalColmuns } from '@/components/project/types'
 import { AssignTasksFormProps } from '@/components/project/types'
 import { NextPrev } from '@/components/types'
 
 type Props = {
-  project: ProjectWithoutTechnicalColmuns | null
+  //project: ProjectWithoutTechnicalColmuns | null
   setClose: () => void
   setPage: (arg0: NextPrev) => void
 }
 
 export function AssignTasks({
-  project,
+  //project,
   setClose,
   setPage,
 }: Props): JSX.Element {
   const methods = useForm<AssignTasksFormProps>()
 
-  const { state: tasks, setState: setTasks } = useTasks()
+  const { state: tasks, setState: setTasks } = useTasksOfProject()
   const { state: taskUuids, setState: setTaskUuids } = useTaskUuids()
+  const { state: modalState } = useProjectModal()
+
   if (!tasks || !setTasks) {
     throw new Error('Tasks context undefined')
   }
   if (!setTaskUuids || !taskUuids) {
     throw new Error('TaskUuids context undefined')
   }
-  console.log('assignTasks:', tasks, taskUuids)
+  if (!modalState) {
+    throw new Error('modalState undefined')
+  }
+
+  const project = modalState.project as
+    | (ProjectWithoutTechnicalColmuns & { startAt: string })
+    | null
 
   const onSubmit: SubmitHandler<AssignTasksFormProps> = async (
     input: AssignTasksFormProps
   ) => {
-    console.log(input)
-    const tasks = input.tasks.filter((fieldsObj) => !fieldsObj.isDummy)
+    const newTasks = input.tasks.filter((fieldsObj) => !fieldsObj.isDummy)
     const data = {
       projectUuid: project?.uuid ?? uuidv4(),
-      tasks: tasks,
+      tasks: newTasks,
     }
 
     /*
-    const index = projects.findIndex(
-      (element) => element.uuid === project?.uuid
-    )
+    mutate('/api/tasks', @TODO, false)
+    */
 
-    let newProjects = []
-    if (index !== -1) {
-      newProjects = [...projects]
-      newProjects[index] = record
-    } else {
-      newProjects = [...projects, record]
-    }
-    console.log(projects, newProjects)
-
-    mutate('/api/projects', newProjects, false)
-*/
-
-    await fetch('/api/projects', {
-      method: 'PATCH',
+    const response = await fetch('/api/tasks', {
+      method: 'PUT',
       body: JSON.stringify(data),
     })
+    mutate('/api/tasks')
 
-    //mutate('/api/tasks')
+    const res = (await response.json()) as {
+      data: { taskuuIds: string[]; projectUuid: string }
+    }
+    const projectUuid = res.data.projectUuid
 
-    setPage('next')
+    await fetch(`/api/projects/${projectUuid}`, {
+      method: 'PATCH',
+    })
+    mutate('/api/projects')
+
+    setClose()
   }
 
   const onError: SubmitErrorHandler<AssignTasksFormProps> = (errors) =>
@@ -83,8 +88,12 @@ export function AssignTasks({
     if (tasks.length && taskUuids.length) return
 
     if (project?.tasks.length) {
-      setTasks(project.tasks)
-      setTaskUuids(project.tasks.map((task) => task.uuid))
+      const uuid = uuidv4()
+      setTasks([
+        ...project.tasks,
+        { uuid, name: '', plannedDuration: 0, userId: undefined },
+      ])
+      setTaskUuids([...project.tasks.map((task) => task.uuid), uuid])
       return
     }
 
@@ -96,6 +105,23 @@ export function AssignTasks({
     ])
     setTaskUuids([uuid1, uuid2])
   }, [tasks])
+
+  /*
+  const calc = new ManHourCalculator()
+  let endAt = new Date()
+  useEffect(() => {
+    if (!project?.startAt) return
+
+    const totalManHour = tasks.reduce(
+      (acc, current) => acc + current.plannedDuration,
+      0
+    )
+    endAt = calc.getEndDatetimeByManHour(
+      new Date(project.startAt),
+      totalManHour
+    )
+  }, [project?.startAt])
+   */
 
   return (
     <>
@@ -113,6 +139,14 @@ export function AssignTasks({
               methods.handleSubmit(onSubmit, onError)()
             }}
           >
+            {/*
+            <div className="flex flex-col items-stretch">
+              <div className="w-full xl:w-11/12 max-w-5xl mx-auto">
+                <p>Project starts: {formatDatetimeDisplay(project?.startAt)}</p>
+                <p>ends: {formatDatetimeDisplay(endAt?.toISOString())}</p>
+              </div>
+            </div>
+                  */}
             <div className="flex flex-col items-stretch">
               <div className="w-full xl:w-11/12 max-w-5xl mx-auto">
                 {tasks.map((task, index, array) => {

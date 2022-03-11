@@ -5,8 +5,8 @@ import { TaskSchema } from 'schema/model/types'
 
 export interface ProjectWithoutTechnicalColmuns
   extends Omit<Project, 'id' | 'createdAt' | 'updatedAt'> {
-  tasks: Task[]
-  users: User[]
+  tasks: TaskWithoutTechnicalColmuns[]
+  users: UserWithoutTechnicalColmuns[]
 }
 
 export type UserWithoutTechnicalColmuns = Omit<
@@ -14,10 +14,11 @@ export type UserWithoutTechnicalColmuns = Omit<
   'id' | 'createdAt' | 'updatedAt'
 >
 
-export type TaskWithoutTechnicalColmuns = Omit<
-  Task,
-  'id' | 'createdAt' | 'updatedAt'
->
+export interface TaskWithoutTechnicalColmuns
+  extends Omit<Task, 'id' | 'createdAt' | 'updatedAt'> {
+  project: Project
+  user: User
+}
 
 export interface ProjectForm {
   uuid: string

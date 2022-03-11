@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { mutate } from 'swr'
 import {
   useForm,
@@ -6,6 +6,7 @@ import {
   SubmitHandler,
   SubmitErrorHandler,
 } from 'react-hook-form'
+import { DevTool } from '@hookform/devtools'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
@@ -17,20 +18,20 @@ import {
   ModalHeader,
 } from '@/components/common'
 import { RhfInput } from '@/components/rhf-wrapper'
-import { useProjects } from '@/contexts/project'
+import { useProjects, useProjectModal } from '@/contexts/project'
 
 import { ProjectWithoutTechnicalColmuns } from '@/components/project/types'
 import { CreateProjectFormProps } from '@/components/project/types'
 import { NextPrev } from '@/components/types'
 
 type Props = {
-  project: ProjectWithoutTechnicalColmuns | null
+  //project: ProjectWithoutTechnicalColmuns | null
   setClose: () => void
   setPage: (arg0: NextPrev) => void
 }
 
 export function CreateProject({
-  project,
+  //project,
   setClose,
   setPage,
 }: Props): JSX.Element {
@@ -38,13 +39,30 @@ export function CreateProject({
     handleSubmit,
     formState: { errors },
     control,
+    setValue,
   } = useForm<CreateProjectFormProps>()
-  const [startAt, setStartAt] = useState<Date | undefined>(project?.startAt)
+  //const [startAt, setStartAt] = useState<Date | undefined>(project?.startAt)
+  const [startAt, setStartAt] = useState<Date | undefined>(undefined)
   const { state: projects } = useProjects()
+  const { state: modalState, dispatch: dispatchModalState } = useProjectModal()
 
   if (!projects) {
     throw new Error('projects undefined')
   }
+  if (!modalState || !dispatchModalState) {
+    throw new Error('modalState undefined')
+  }
+
+  //let project: ProjectWithoutTechnicalColmuns | null = modalState.project
+  const project = modalState.project
+  console.log('create', project)
+  useEffect(() => {
+    setStartAt(modalState.project?.startAt)
+
+    if (!modalState.project?.startAt) return
+    setValue('startAt', modalState.project?.startAt)
+  }, [project])
+  console.log('create', startAt)
 
   const onSubmit: SubmitHandler<CreateProjectFormProps> = async (input) => {
     const record: ProjectWithoutTechnicalColmuns = {
@@ -70,10 +88,16 @@ export function CreateProject({
 
     mutate('/api/projects', newProjects, false)
 
-    await fetch('/api/projects', {
+    const response = await fetch('/api/projects', {
       method: 'POST',
       body: JSON.stringify(record),
     })
+    const res = (await response.json()) as {
+      data: ProjectWithoutTechnicalColmuns
+    }
+    const newProject = res.data
+    console.log('aaa', { newProject, response })
+    dispatchModalState({ type: 'setNewProject', data: newProject })
 
     mutate('/api/projects')
 
@@ -129,7 +153,7 @@ export function CreateProject({
                         control={control}
                         rules={{ required: true }}
                         name="startAt"
-                        defaultValue={startAt}
+                        defaultValue={project?.startAt}
                         data-onChange={(date: Date | undefined) =>
                           setStartAt(date)
                         }
@@ -158,6 +182,7 @@ export function CreateProject({
           </div>
         </form>
       </ModalBody>
+      <DevTool control={control} />
       <ModalFooter className="sticky flex-1 flex justify-between items-start text-bluegray-600 border-t border-solid border-bluegray-300 p-5">
         <button type="button" className="invisible"></button>
         <button

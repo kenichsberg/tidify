@@ -1,23 +1,9 @@
-import { FC } from 'react'
-
 import {
   ProjectSection,
   PersonalTaskSection,
-  TeamsTaskSection,
+  TeammatesTaskSection,
 } from '@/components/project'
-import {
-  ProjectModalProvider,
-  ProjectsProvider,
-  useProjects,
-} from '@/contexts/project'
-
-import { ProjectWithoutTechnicalColmuns } from '@/components/project/types'
-
-/*
-type Props = {
-  projects: ProjectWithoutTechnicalColmuns[]
-}
-*/
+import { ProjectModalProvider, useProjects } from '@/contexts/project'
 
 export function ProjectsPage(): JSX.Element {
   const { state: projects } = useProjects()
@@ -31,14 +17,10 @@ export function ProjectsPage(): JSX.Element {
         </div>
         <div className="lg:w-2/5 flex flex-col">
           <div className="p-3">
-            <PersonalTaskSection
-              task={
-                projects[0]?.tasks.length ? projects[0].tasks[0] : undefined
-              }
-            />
+            <PersonalTaskSection />
           </div>
           <div className="lg:flex-1 p-3">
-            <TeamsTaskSection tasks={projects[0]?.tasks ?? []} />
+            <TeammatesTaskSection />
           </div>
         </div>
       </div>

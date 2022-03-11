@@ -1,16 +1,14 @@
 import { useEffect } from 'react'
 import { useDrag } from 'react-dnd'
 import { useFormContext, Controller } from 'react-hook-form'
-import { Move, Plus } from 'react-feather'
-import { v4 as uuidv4 } from 'uuid'
+import { Move, Plus, Trash2 } from 'react-feather'
 import { DevTool } from '@hookform/devtools'
+import { v4 as uuidv4 } from 'uuid'
 
 import { InputField, SelectPicker } from '@/components/common'
 import { RhfInput, RhfSelect } from '@/components/rhf-wrapper'
 import { dndTypes } from '@/components/project/constants'
-import { useTasks, useTaskUuids } from '@/contexts/project'
-
-//import { TaskFormProps } from '@/components/project/types'
+import { useTasksOfProject, useTaskUuids } from '@/contexts/task'
 
 type Props = {
   isDummy?: boolean
@@ -21,7 +19,7 @@ export function ProjectFormTaskBlock({
   isDummy = false,
   index,
 }: Props): JSX.Element {
-  const { state: tasks, setState: setTasks } = useTasks()
+  const { state: tasks, setState: setTasks } = useTasksOfProject()
   const { state: taskUuids, setState: setTaskUuids } = useTaskUuids()
   if (!tasks || !setTasks) {
     throw new Error('Tasks context undefined')
@@ -48,6 +46,7 @@ export function ProjectFormTaskBlock({
     control,
     formState: { errors },
     register,
+    unregister,
     setValue,
   } = useFormContext()
 
@@ -69,6 +68,10 @@ export function ProjectFormTaskBlock({
     setValue(`${fieldName}.rank`, index)
   }, [index])
 
+  useEffect(() => {
+    setValue(`${fieldName}.isDummy`, isDummy)
+  }, [isDummy])
+
   return (
     <div className="flex flex-row justify-between items-center font-mono text-sm text-bluegray-700">
       <div className="flex-shrink flex justify-center items-center flex bg-bluegray-50 shadow rounded-full w-16 h-16">
@@ -79,13 +82,17 @@ export function ProjectFormTaskBlock({
       <fieldset
         name={fieldName}
         ref={isDummy ? undefined : drag}
-        className={`flex-glow w-11/12 pt-6 flex justify-evenly bg-bluegray-50 shadow hover:shadow-lg rounded-xl text-center pr-4 py-3 ${
+        className={`group flex-glow w-11/12 pt-6 flex justify-evenly bg-bluegray-50 shadow hover:shadow-lg rounded-xl text-center pr-4 py-3 ${
           isDragging ? 'opacity-50' : ''
-        }`}
+        } ${isDummy ? '' : 'cursor-move'}`}
       >
-        <div className="flex-shrink flex items-center pb-5">
+        <div className="flex-1 flex justify-center items-center pb-5">
           <Move
-            className={`${isDummy ? 'invisible' : ''} text-bluegray-400`}
+            className={`text-bluegray-400 ${
+              isDummy
+                ? 'invisible'
+                : 'invisible group-hover:visible text-cyan-500'
+            }`}
             size={16}
           />
         </div>
@@ -151,8 +158,8 @@ export function ProjectFormTaskBlock({
               control={control}
               value={task.userId}
               options={[
-                { label: 'a', value: 0 },
-                { label: 'b', value: 1 },
+                { label: 'a', value: 2 },
+                { label: 'b', value: 4 },
               ]}
             />
           </InputField>
@@ -164,6 +171,21 @@ export function ProjectFormTaskBlock({
             This field is required
           </span>
         </div>
+        <button
+          className={`flex-1 flex flex-col items-stretch text-bluegray-400 ${
+            isDummy
+              ? 'invisible'
+              : 'invisible group-hover:visible group-focus:visible'
+          } cursor-pointer hover:text-red-600 active:text-red-400`}
+          onClick={() => {
+            setTasks([...tasks.slice(0, index), ...tasks.slice(index + 1)])
+            unregister(fieldName)
+          }}
+        >
+          <span className="pb-5 flex-grow flex items-center justify-center">
+            <Trash2 size={20} />
+          </span>
+        </button>
       </fieldset>
       {isDummy ? <DevTool control={control} /> : null}
     </div>

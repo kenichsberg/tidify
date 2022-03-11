@@ -17,6 +17,10 @@ type Action =
       data: State['project']
     }
   | { type: 'close' }
+  | {
+      type: 'setNewProject'
+      data: State['project']
+    }
 
 const initialState: State = {
   showModal: false,
@@ -47,6 +51,11 @@ function reducer(_: State, action: Action): State {
       return {
         showModal: false,
         project: null,
+      }
+    case 'setNewProject':
+      return {
+        showModal: true,
+        project: action.data,
       }
     default:
       throw new Error('invalid action type')

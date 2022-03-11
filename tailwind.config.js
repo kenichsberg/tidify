@@ -79,6 +79,7 @@ module.exports = {
     extend: {
       backgroundColor: ['active', 'focus-sibling', 'checked-sibling'],
       textColor: ['active', 'focus-sibling', 'checked-sibling'],
+      visibility: ['group-hover', 'group-focus'],
     },
   },
   plugins: [focusSiblingPlugin, checkedSiblingPlugin],
