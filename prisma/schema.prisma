@@ -14,7 +14,7 @@ model User {
   id             Int             @id @default(autoincrement())
   uuid           String          @default(uuid()) @unique
   createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @default(now())
+  updatedAt      DateTime        @default(now()) @updatedAt
   name           String          @unique
   email          String          @unique
   role           Role            @default(MEMBER)
@@ -29,7 +29,7 @@ model Project {
   id        Int      @id @default(autoincrement())
   uuid      String   @default(uuid()) @unique
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
   name      String
   startAt   DateTime
   endAt     DateTime?
@@ -41,7 +41,7 @@ model Task {
   id              Int      @id @default(autoincrement())
   uuid            String   @default(uuid()) @unique
   createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
   rank            Int
   name            String
   status          Status   @default(READY)
@@ -57,7 +57,7 @@ model IrregularDate {
   id        Int      @id @default(autoincrement())
   uuid      String   @default(uuid()) @unique
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
   date      DateTime
   type      DayType  @default(OFF)
   user      User     @relation(fields: [userId], references: [id])
