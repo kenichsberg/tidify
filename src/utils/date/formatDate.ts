@@ -13,7 +13,7 @@ export const formatDatetimeDisplay = (
     minute: 'numeric',
   }
 
-  return date.toLocaleString('en-US', options)
+  return date.toLocaleString('en-GB', options)
 }
 
 export const formatDateDisplay = (dateStrISO: string | undefined): string => {
@@ -26,5 +26,5 @@ export const formatDateDisplay = (dateStrISO: string | undefined): string => {
     year: 'numeric',
   }
 
-  return date.toLocaleString('en-US', options)
+  return date.toLocaleString('en-GB', options)
 }
