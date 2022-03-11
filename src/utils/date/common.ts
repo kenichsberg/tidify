@@ -18,6 +18,19 @@ type DateDiffUnit =
   | 'month'
   | 'year'
 
+export const WORKING_TIME: DurationHM = {
+  start: { h: 9, m: 0 },
+  end: { h: 18, m: 0 },
+}
+export const BREAK_TIMES: DurationHM[] = [
+  {
+    start: { h: 12, m: 0 },
+    end: { h: 13, m: 0 },
+  },
+]
+
+export const weekends = [0, 6]
+
 /**
  * Judges if the 2 dates passed by args are the same
  *
@@ -38,17 +51,6 @@ export function getNextDate(date: Date): Date {
   nextDate.setDate(date.getDate() + 1)
   return nextDate
 }
-
-export const WORKING_TIME: DurationHM = {
-  start: { h: 9, m: 0 },
-  end: { h: 18, m: 0 },
-}
-export const BREAK_TIMES: DurationHM[] = [
-  {
-    start: { h: 12, m: 0 },
-    end: { h: 13, m: 0 },
-  },
-]
 
 /**
  * takes the earliest date from passed array
@@ -90,7 +92,7 @@ export function getMaxDate(dates: Date[] | undefined): Date | undefined {
  * @param dateA - Date to be compared
  * @param dateB - Date to be compared
  * @param dateDiffUnit - unit of returned calculation
- * @returns the calculated difference of dates
+ * @returns - the calculated difference of dates
  */
 export function diffDate(
   dateA: Date,
