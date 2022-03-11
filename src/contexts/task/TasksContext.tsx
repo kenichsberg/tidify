@@ -6,10 +6,9 @@ import {
   ContextProps,
 } from '@/contexts/StateContextAbstraction'
 
-import { TaskFormProps } from '@/components/project/types'
+import { TaskWithoutTechnicalColmuns } from '@/components/project/types'
 
-type State = TaskFormProps[]
-//type SetState = Dispatch<SetStateAction<State>>
+type State = TaskWithoutTechnicalColmuns[]
 
 const initialState: State = []
 

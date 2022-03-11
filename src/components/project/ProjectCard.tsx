@@ -6,8 +6,7 @@ import {
   ProjectCardBody,
   BlankCard,
 } from '@/components/project'
-//import { ProjectProvider } from '@/contexts/project'
-import { useProject } from '@/contexts/project'
+import { useProjectModal, useProject } from '@/contexts/project'
 /*
 import {
   requestCreateOneProject,
@@ -38,6 +37,11 @@ export function ProjectCard({ project }: Props) {
   const initialMode = isAdded ? 'processing' : 'normal'
   const [mode, dispatch] = useReducer(reducer, initialMode)
   const { setState: setProject } = useProject()
+
+  const { state: modalState, dispatch: dispatchModalState } = useProjectModal()
+  if (!modalState || !dispatchModalState) {
+    throw new Error('context value undefined')
+  }
 
   //const { setState: setProject } = useProject()
   //setProject && setProject(project)
@@ -87,7 +91,10 @@ export function ProjectCard({ project }: Props) {
   }
 
   return (
-    <div className="flex flex-col items-stretch font-mono text-sm text-center text-bluegray-700 bg-bluegray-200 shadow-sm hover:shadow-md rounded-xl h-56 my-2 px-5 py-3">
+    <div
+      className="flex flex-col items-stretch font-mono text-sm text-center text-bluegray-700 bg-bluegray-200 hover:opacity-75 shadow-sm hover:shadow-md rounded-xl h-56 my-2 px-5 py-3 cursor-pointer group"
+      onClick={() => dispatchModalState({ type: 'open', data: { ...project } })}
+    >
       <ProjectCardHeader
         mode={mode}
         dispatch={dispatch}

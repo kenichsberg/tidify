@@ -28,7 +28,7 @@ export function getContextProvider<State, Action>(
       reducer,
       initialState
     )
-    const value = props.value ?? { state: state, dispatch: dispatch }
+    const value = props.value ?? { state, dispatch }
 
     return <context.Provider value={value}>{props.children}</context.Provider>
   }

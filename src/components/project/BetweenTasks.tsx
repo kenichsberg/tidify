@@ -2,7 +2,7 @@ import { useDrop } from 'react-dnd'
 import { Plus } from 'react-feather'
 import { v4 as uuidv4 } from 'uuid'
 
-import { useTasks, useTaskUuids } from '@/contexts/project'
+import { useTasksOfProject, useTaskUuids } from '@/contexts/task'
 
 import { dndTypes } from '@/components/project/constants'
 import { TaskProps } from '@/components/project/types'
@@ -12,7 +12,7 @@ type Props = {
 }
 
 export function BetweenTasks({ index }: Props): JSX.Element {
-  const { state: tasks, setState: setTasks } = useTasks()
+  const { state: tasks, setState: setTasks } = useTasksOfProject()
   const { state: taskUuids, setState: setTaskUuids } = useTaskUuids()
   if (!tasks || !setTasks) {
     throw new Error('Tasks context undefined')

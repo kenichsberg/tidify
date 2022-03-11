@@ -114,12 +114,14 @@ function getElement(
       return null
     case projectPercentage === 100:
       return null
+    /*
     case projectEndDate === undefined:
       return (
         <div className="w-1/2">
           <AddTaskButton />
         </div>
       )
+*/
     default:
       return (
         <div className="w-1/2">

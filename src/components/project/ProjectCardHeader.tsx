@@ -1,5 +1,7 @@
-import { Dispatch } from 'react'
+import { Dispatch, MouseEvent } from 'react'
+import { mutate } from 'swr'
 import { Edit, Check, Clock, Trash2, Plus } from 'react-feather'
+
 import { Spinner } from '@/components/common'
 import { useProjectModal, useProject } from '@/contexts/project'
 import { formatDatetimeDisplay } from '@/utils/date'
@@ -41,15 +43,12 @@ export function ProjectCardHeader({
         formatDatetimeDisplay(project.endAt?.toISOString())
       )}
       <div
-        className={`w-16 flex-shrink self-stretch flex justify-end min-w-max truncate group ${rightElementClass}`}
-        onClick={() =>
-          /*
-          dispatch({
-            type: isNew ? 'create' : 'update',
-            setMutationType: setMutationType,
-          })
-*/
-          dispatchModalState({ type: 'open', data: { ...project } })
+        className="w-16 flex-shrink self-stretch flex justify-end min-w-max truncate group invisible group-hover:visible cursor-pointer hover:opacity-100 hover:text-red-700 active:text-red-400"
+        onClick={
+          (event) => {
+            onClick(event, project.uuid)
+          }
+          //dispatchModalState({ type: 'open', data: { ...project } })
         }
       >
         {getRightButton(mode)}
@@ -113,8 +112,8 @@ function getRightButton(mode: Mode) {
   switch (mode) {
     case 'normal':
       return (
-        <button className="text-cyan-500 group-hover:text-cyan-400 focus:outline-none">
-          <Edit size={16} />
+        <button className="focus:outline-none">
+          <Trash2 size={20} />
         </button>
       )
     case 'edit':
@@ -133,4 +132,21 @@ function getRightButton(mode: Mode) {
         </button>
       )
   }
+}
+
+async function onClick(event: MouseEvent<HTMLDivElement>, uuid: string) {
+  event.stopPropagation()
+
+  if (!window.confirm('delete this project?')) return
+
+  mutate(
+    '/api/projects',
+    (data: any[]) => data.filter((item) => item.uuid !== uuid),
+    false
+  )
+  await fetch('/api/projects', {
+    method: 'DELETE',
+    body: JSON.stringify({ uuid }),
+  })
+  mutate('/api/projects')
 }

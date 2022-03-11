@@ -2,49 +2,63 @@ import { useEffect } from 'react'
 import { GetServerSidePropsResult } from 'next'
 import { PrismaClient } from '@prisma/client'
 import useSWR from 'swr'
-import { Layout } from 'components/layout'
-import { ProjectsPage } from 'components/project'
-import { useProjects } from '@/contexts/project'
-import { strToDate } from 'utils/date'
-import { fetcher, patchPropertyValues } from 'utils/functions'
 
-import { ProjectWithoutTechnicalColmuns } from '@/components/project/types'
+import { Layout } from '@/components/layout'
+import { ProjectsPage } from '@/components/project'
+import { useProjects } from '@/contexts/project'
+import { useTasks } from '@/contexts/task'
+import { strToDate } from '@/utils/date'
+import { fetcher, patchPropertyValues } from '@/utils/functions'
+
+import {
+  ProjectWithoutTechnicalColmuns,
+  TaskWithoutTechnicalColmuns,
+} from '@/components/project/types'
 
 type Props = {
-  data: ProjectWithoutTechnicalColmuns[]
+  projects: ProjectWithoutTechnicalColmuns[]
+  tasks: TaskWithoutTechnicalColmuns[]
 }
 
 const prisma = new PrismaClient()
 
 export default function IndexPage(props: Props): JSX.Element {
-  const { data, error } = useSWR<ProjectWithoutTechnicalColmuns[]>(
-    '/api/projects',
-    fetcher,
-    { fallbackData: props.data }
-  )
-  console.log(data)
+  const { data: projects, error: projectsError } = useSWR<
+    ProjectWithoutTechnicalColmuns[]
+  >('/api/projects', fetcher, { fallbackData: props.projects })
+  const { data: tasks, error: tasksError } = useSWR<
+    TaskWithoutTechnicalColmuns[]
+  >('/api/tasks', fetcher, { fallbackData: props.tasks })
+  console.log('pages', projects, tasks)
+
   const { setState: setProjects } = useProjects()
+  const { setState: setTasks } = useTasks()
 
   useEffect(() => {
-    const formattedData = data?.map((datum) => {
+    const formattedData = projects?.map((project) => {
       if (
-        typeof datum.startAt === 'string' ||
-        typeof datum.endAt === 'string'
+        typeof project.startAt === 'string' ||
+        typeof project.endAt === 'string'
       ) {
         return patchPropertyValues<ProjectWithoutTechnicalColmuns>(
-          datum,
+          project,
           strToDate,
           'startAt',
           'endAt'
         )
       }
 
-      return datum
+      return project
     })
     setProjects?.(formattedData ?? [])
-  }, [data])
+  }, [projects])
 
-  if (error && !data) return <div>error</div>
+  useEffect(() => {
+    setTasks?.(tasks ?? [])
+  }, [tasks])
+
+  if ((projectsError && !projects) || (tasksError && !tasks))
+    return <div>error</div>
 
   return (
     <Layout currentPageName="Home">
@@ -56,7 +70,7 @@ export default function IndexPage(props: Props): JSX.Element {
 export async function getServerSideProps(): Promise<
   GetServerSidePropsResult<Props>
 > {
-  const res = await prisma.project.findMany({
+  const _projects = await prisma.project.findMany({
     select: {
       uuid: true,
       name: true,
@@ -66,7 +80,22 @@ export async function getServerSideProps(): Promise<
       tasks: true,
     },
   })
-  const data = JSON.parse(JSON.stringify(res))
+  const projects = JSON.parse(JSON.stringify(_projects))
 
-  return { props: { data } }
+  const _tasks = await prisma.task.findMany({
+    select: {
+      uuid: true,
+      name: true,
+      rank: true,
+      status: true,
+      plannedDuration: true,
+      actualDuration: true,
+      user: true,
+      project: true,
+    },
+    orderBy: [{ rank: 'asc' }, { projectId: 'asc' }],
+  })
+  const tasks = JSON.parse(JSON.stringify(_tasks))
+
+  return { props: { projects, tasks } }
 }

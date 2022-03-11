@@ -21,7 +21,7 @@ export function getContextProvider<State>(
 ) {
   return (props: { children: ReactNode; value?: State }): JSX.Element => {
     const [state, setState] = useState<State>(props.value ?? defaultValue)
-    const value = { state: state, setState: setState }
+    const value = { state, setState }
 
     return <context.Provider value={value}>{props.children}</context.Provider>
   }
