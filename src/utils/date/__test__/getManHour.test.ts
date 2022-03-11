@@ -1,4 +1,4 @@
-import { getManHour } from 'utils/date'
+import { getManHour } from '@/utils/date'
 
 describe('getManHour', () => {
   it('in working hour', () => {

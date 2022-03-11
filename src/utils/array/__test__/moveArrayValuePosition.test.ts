@@ -1,4 +1,4 @@
-import { moveArrayValuePosition, insertToArray } from 'utils/array'
+import { moveArrayValuePosition, insertToArray } from '@/utils/array'
 
 let array: string[] = []
 
