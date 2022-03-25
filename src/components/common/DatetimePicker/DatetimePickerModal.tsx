@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react'
+import { ReactNode } from 'react'
 
 type Props = {
   show: boolean
@@ -8,17 +8,17 @@ type Props = {
   children?: ReactNode | ReactNode[]
 }
 
-export const DatetimePickerModal: FC<Props> = ({
+export function DatetimePickerModal({
   show,
   setShow,
   onClose,
   title,
   children,
-}) => {
+}: Props): JSX.Element | null {
   if (!show) return null
 
   const closeModal = () => {
-    onClose && onClose()
+    onClose?.()
     setShow(false)
   }
 
@@ -29,10 +29,10 @@ export const DatetimePickerModal: FC<Props> = ({
         onClick={() => closeModal()}
       >
         <div
-          className="w-auto mx-auto max-w-7xl font-mono"
+          className="w-auto mx-auto max-w-7xl font-mono animate-popup"
           onClick={(event) => event.stopPropagation()}
         >
-          <div className="flex flex-col w-full bg-bluegray-200 border-0 rounded-3xl shadow-lg">
+          <div className="flex flex-col w-full bg-gradient-to-br from-bluegray-200 to-bluegray-300 border-0 rounded-3xl shadow-lg">
             {/* header */}
             <div className="flex-1 flex justify-between items-start text-bluegray-600 border-b border-solid border-bluegray-300 p-5">
               <h3 className="text-3xl font-semibold">{title}</h3>

@@ -1,5 +1,3 @@
-import { FC } from 'react'
-
 type Props = {
   date: Date
   isCurrent: boolean
@@ -8,13 +6,13 @@ type Props = {
   onClick: () => void
 }
 
-export const DayButton: FC<Props> = ({
+export function DayButton({
   date,
   isCurrent,
   isSelected,
   disabled,
   onClick,
-}) => {
+}: Props): JSX.Element {
   const color = getColorClassName(disabled, isSelected, isCurrent)
 
   return (
@@ -28,11 +26,11 @@ export const DayButton: FC<Props> = ({
   )
 }
 
-const getColorClassName = (
+function getColorClassName(
   disabled: boolean,
   isSelected: boolean,
   isCurrent: boolean
-): string => {
+): string {
   switch (true) {
     case disabled:
       return ' text-bluegray-300 cursor-default'
