@@ -19,9 +19,9 @@ export function GridView(): JSX.Element {
   return (
     <div className="my-3 px-5 md:px-6 py-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-4">
-        {projects.map((project) => (
+        {projects.map((project, index) => (
           <ProjectProvider key={project.uuid} value={project}>
-            <ProjectCard project={project} />
+            <ProjectCard project={project} index={index} />
           </ProjectProvider>
         ))}
       </div>

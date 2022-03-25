@@ -136,7 +136,7 @@ export function AssignTasks({
             id="assignTask"
             onSubmit={(event) => {
               event.preventDefault()
-              methods.handleSubmit(onSubmit, onError)()
+              //@TODO methods.handleSubmit(onSubmit, onError)()
             }}
           >
             {/*
@@ -166,15 +166,17 @@ export function AssignTasks({
       <ModalFooter className="sticky flex-1 flex justify-between items-start text-bluegray-600 border-t border-solid border-bluegray-300 p-5">
         <button
           type="button"
-          className="rounded-xl h-10 w-20 flex justify-center items-center hover:bg-bluegray-500 hover:text-bluegray-200 active:bg-bluegray-900 active:text-bluegray-100 focus:outline-none"
-          onClick={() => setPage('prev')}
+          //@TODO className="rounded-xl h-10 w-20 flex justify-center items-center hover:bg-bluegray-500 hover:text-bluegray-200 active:bg-bluegray-900 active:text-bluegray-100 focus:outline-none"
+          //@TODO onClick={() => setPage('prev')}
+          className="rounded-xl h-10 w-20 flex justify-center items-center focus:outline-none cursor-not-allowed"
         >
           &lt; Back
         </button>
         <button
           type="submit"
           form="assignTask"
-          className="rounded-xl h-10 w-20 flex justify-center items-center hover:bg-bluegray-500 hover:text-bluegray-200 active:bg-bluegray-900 active:text-bluegray-100 focus:outline-none"
+          //@TODO className="rounded-xl h-10 w-20 flex justify-center items-center hover:bg-bluegray-500 hover:text-bluegray-200 active:bg-bluegray-900 active:text-bluegray-100 focus:outline-none"
+          className="rounded-xl h-10 w-20 flex justify-center items-center focus:outline-none cursor-not-allowed"
         >
           Save
         </button>

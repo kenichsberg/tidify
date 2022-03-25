@@ -9,12 +9,12 @@ export const Header: FC = () => (
       <p className="text-xs">The Project Manager</p>
     </h1>
     <div className="flex-shrink">
-      <div className="rounded-full h-12 w-12 flex items-center justify-center hover:bg-bluegray-900 hover:text-bluegray-100 mx-auto cursor-pointer">
+      <div className="rounded-full h-12 w-12 flex items-center justify-center transition hover:bg-gradient-to-br hover:from-bluegray-700 hover:to-bluegray-900 hover:text-bluegray-100 mx-auto cursor-pointer">
         <Bell size={20} />
       </div>
     </div>
     <div className="flex-shrink">
-      <div className="rounded-full h-12 w-12 flex items-center justify-center hover:bg-bluegray-900 hover:text-bluegray-100 mx-auto cursor-pointer">
+      <div className="rounded-full h-12 w-12 flex items-center justify-center transition hover:bg-gradient-to-br hover:from-bluegray-700 hover:to-bluegray-900 hover:text-bluegray-100 mx-auto cursor-pointer">
         <Settings size={20} />
       </div>
     </div>
@@ -22,7 +22,7 @@ export const Header: FC = () => (
       <div className="rounded-full h-12 w-12 flex items-center justify-center bg-gray-300 text-bluegray-500 mx-auto cursor-pointer">
         <User size={20} />
       </div>
-      <div className="text-bluegray-700 group-hover:text-bluegray-400">
+      <div className="text-bluegray-700 transition group-hover:text-bluegray-400">
         username
       </div>
     </div>

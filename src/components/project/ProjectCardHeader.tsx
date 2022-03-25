@@ -43,7 +43,7 @@ export function ProjectCardHeader({
         formatDatetimeDisplay(project.endAt?.toISOString())
       )}
       <div
-        className="w-16 flex-shrink self-stretch flex justify-end min-w-max truncate group invisible group-hover:visible cursor-pointer hover:opacity-100 hover:text-red-700 active:text-red-400"
+        className="w-16 flex-shrink self-stretch flex justify-end min-w-max truncate transition group invisible group-hover:visible cursor-pointer hover:opacity-100 hover:text-red-700 active:text-red-400"
         onClick={
           (event) => {
             onClick(event, project.uuid)
@@ -82,13 +82,13 @@ const getLeftElement = (
       }
     >
       {isNew ? (
-        <button className="flex justify-center items-center focus:outline-none">
+        <span className="flex justify-center items-center focus:outline-none">
           <Plus size={16} />
-        </button>
+        </span>
       ) : (
-        <button className="flex justify-center items-center focus:outline-none text-rose-800 group-hover:text-rose-600">
+        <span className="flex justify-center items-center focus:outline-none text-rose-800 group-hover:text-rose-600">
           <Trash2 size={20} />
-        </button>
+        </span>
       )}
     </div>
   )
