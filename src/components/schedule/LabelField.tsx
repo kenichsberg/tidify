@@ -26,7 +26,7 @@ export function LabelField({ tasks, projectName }: Props): JSX.Element {
     <svg width={LABEL_FIELD_WIDTH} height={chartHeight}>
       <g>
         <RoundRect
-          className="fill-current text-gray-50"
+          className="fill-gray-50"
           isRoundCorners={{
             leftTop: true,
             leftBottom: true,
@@ -42,7 +42,7 @@ export function LabelField({ tasks, projectName }: Props): JSX.Element {
           }}
         />
         <text
-          className="fill-current text-gray-700 font-bold"
+          className="fill-gray-700 font-bold"
           x={TEXT_OFFSET_X}
           y={PROJECT_TEXT_OFFSET_Y}
           fontSize="16px"
@@ -51,18 +51,21 @@ export function LabelField({ tasks, projectName }: Props): JSX.Element {
         </text>
       </g>
       {tasks.map((task, index) => {
-        const color = index % 2 === 0 ? ' text-bluegray-100' : ' text-gray-50'
+        console.log(task)
+        const color = index % 2 === 0 ? ' fill-bluegray-100' : ' fill-gray-50'
+        /*
         const projectTextColor =
           index % 2 === 0 ? ' text-bluegray-400' : ' text-gray-400'
+         */
         const taskTextColor =
-          index % 2 === 0 ? ' text-bluegray-600' : ' text-gray-600'
+          index % 2 === 0 ? ' fill-bluegray-600' : ' fill-gray-600'
         const userTextColor =
-          index % 2 === 0 ? ' text-bluegray-400' : ' text-gray-400'
+          index % 2 === 0 ? ' fill-bluegray-400' : ' fill-gray-400'
 
         return (
           <g key={task.uuid}>
             <rect
-              className={`fill-current${color}`}
+              className={`${color}`}
               key={task.uuid}
               x="0"
               y={headerHeight + rowHeight * index}
@@ -83,14 +86,14 @@ export function LabelField({ tasks, projectName }: Props): JSX.Element {
             </text>
 */}
             <text
-              className={`fill-current${taskTextColor}`}
+              className={`${taskTextColor}`}
               x={TEXT_OFFSET_X}
               y={headerHeight + rowHeight * index + TASK_TEXT_OFFSET_Y}
             >
               {task.name}
             </text>
             <text
-              className={`fill-current${userTextColor}`}
+              className={`${userTextColor}`}
               x={TEXT_OFFSET_X}
               y={headerHeight + rowHeight * index + USER_TEXT_OFFSET_Y}
               fontSize="14px"
@@ -102,7 +105,7 @@ export function LabelField({ tasks, projectName }: Props): JSX.Element {
       })}
       <g>
         <RoundRect
-          className="stroke-current text-gray-200"
+          className="stroke-gray-200"
           isRoundCorners={{
             leftTop: true,
             leftBottom: true,

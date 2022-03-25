@@ -15,6 +15,52 @@ export class ManHourCalculator {
   private workingTime: Duration = { start: new Date(), end: new Date() }
   private rests: Duration[] = []
 
+  public getGrossDurationDays(
+    startDatetime: Date,
+    endDatetime: Date,
+    acc: number = 0
+  ): number {
+    // finish calculation if start and end are the same day
+    if (isSameDay(startDatetime, endDatetime)) {
+      if (weekends.includes(startDatetime.getDay())) {
+        return acc
+      }
+
+      const workingTime = this._getWorkingTime(startDatetime)
+      const maxManHour = this._getManHourPerDay(
+        workingTime.start,
+        workingTime.end
+      )
+      if (maxManHour === 0) throw new Error('maxManHour shoud not be 0')
+
+      const manHour = this._getManHourPerDay(startDatetime, endDatetime)
+      return acc + manHour / maxManHour
+    }
+
+    // if weekend, count as 1 day
+    if (weekends.includes(startDatetime.getDay())) {
+      const nextStart = this._getNextDayStart(startDatetime)
+      return this.getGrossDurationDays(nextStart, endDatetime, acc + 1)
+    }
+
+    // if week days, add manHour/total
+    const workingTime = this._getWorkingTime(startDatetime)
+    const maxManHour = this._getManHourPerDay(
+      workingTime.start,
+      workingTime.end
+    )
+    if (maxManHour === 0) throw new Error('maxManHour shoud not be 0')
+
+    const manHour = this._getManHourPerDay(startDatetime, workingTime.end)
+    const nextStart = this._getNextDayStart(startDatetime)
+
+    return this.getGrossDurationDays(
+      nextStart,
+      endDatetime,
+      acc + manHour / maxManHour
+    )
+  }
+
   public getEndDatetimeByManHour(startDatetime: Date, manHour: number): Date {
     let diff = 0
     let offset = 0
@@ -26,13 +72,6 @@ export class ManHourCalculator {
       const provisionalManHour = this.getManHour(startDatetime, endDatetime)
       diff = manHour - provisionalManHour
       offset += diff
-      console.log({
-        startDatetime,
-        endDatetime,
-        provisionalManHour,
-        diff,
-        offset,
-      })
     } while (diff > 0)
 
     return endDatetime
@@ -58,6 +97,13 @@ export class ManHourCalculator {
     console.log({ nextStart, durationEnd, acc, current })
 
     return this.getManHour(nextStart, durationEnd, acc + current)
+  }
+
+  private _getNextDayStart(thisDay: Date): Date {
+    const nextStart = new Date(thisDay.getTime())
+    nextStart.setDate(thisDay.getDate() + 1)
+    nextStart.setHours(WORKING_TIME.start.h, WORKING_TIME.start.m)
+    return nextStart
   }
 
   private _getManHourPerDay(
@@ -104,6 +150,16 @@ export class ManHourCalculator {
     const grossWorkingHour = diffDate(calcStart, calcEnd, 'hour')
 
     return grossWorkingHour - totalRestHour
+  }
+
+  private _getWorkingTime(thisDay: Date) {
+    const workingTime = { start: new Date(thisDay), end: new Date(thisDay) }
+    workingTime.start.setTime(thisDay.getTime())
+    workingTime.start.setHours(WORKING_TIME.start.h, WORKING_TIME.start.m, 0, 0)
+    workingTime.end.setTime(thisDay.getTime())
+    workingTime.end.setHours(WORKING_TIME.end.h, WORKING_TIME.end.m, 0, 0)
+
+    return workingTime
   }
 
   private _setWorkingTime(thisDay: Date) {

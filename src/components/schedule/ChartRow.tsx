@@ -21,7 +21,7 @@ export function ChartRow({ tasks }: Props): JSX.Element {
   return (
     <g>
       <RoundRect
-        className="fill-current text-gray-50"
+        className="fill-gray-50"
         isRoundCorners={{
           leftTop: false,
           leftBottom: false,
@@ -37,10 +37,10 @@ export function ChartRow({ tasks }: Props): JSX.Element {
         }}
       />
       {tasks.map((task, index) => {
-        const color = index % 2 === 0 ? ' text-bluegray-100' : ' text-gray-50'
+        const color = index % 2 === 0 ? ' fill-bluegray-100' : ' fill-gray-50'
         return (
           <rect
-            className={`fill-current${color}`}
+            className={`${color}`}
             key={task.uuid}
             x="0"
             y={rowHeight * index + (headerHeight ?? 0)}
