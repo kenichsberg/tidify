@@ -1,9 +1,9 @@
 import { User } from 'react-feather'
 
-import { TaskComponentProps } from '@/components/project/types'
+import { TaskWithoutTechnicalColmuns } from '@/components/project/types'
 
 type Props = {
-  task: TaskComponentProps
+  task: TaskWithoutTechnicalColmuns
   index?: number
 }
 

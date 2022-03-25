@@ -5,7 +5,7 @@ import {
   UseControllerProps,
   UnpackNestedValue,
   PathValue,
-  FieldPathWithValue,
+  FieldPathValue,
   Path,
 } from 'react-hook-form'
 import { SelectPicker } from 'components/common'
@@ -46,7 +46,7 @@ export function RhfSelect<T extends FieldValues>({
     control,
     rules: rules,
     defaultValue: value as UnpackNestedValue<
-      PathValue<T, FieldPathWithValue<T, any, Path<T>>>
+      PathValue<T, FieldPathValue<T, Path<T>>>
     >,
     //onBlur: onBlur,
     //onChange: onChange,
