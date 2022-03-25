@@ -1,25 +1,36 @@
-import { FC, Dispatch } from 'react'
+import { Dispatch, MouseEvent } from 'react'
+import { mutate } from 'swr'
 import { Edit, Check, Clock, Trash2, Plus } from 'react-feather'
-import { Spinner } from 'components/common'
-import { formatDatetimeDisplay } from 'utils/date'
 
-import { Mode, Action, SetMutationType } from 'components/types'
+import { Spinner } from '@/components/common'
+import { useProjectModal, useProject } from '@/contexts/project'
+import { formatDatetimeDisplay } from '@/utils/date'
+
+import { Mode, Action, SetMutationType } from '@/components/types'
 
 type Props = {
   mode: Mode
-  projectEndDate: Date | undefined
   dispatch: Dispatch<Action>
   setMutationType: SetMutationType
   isNew: boolean
 }
 
-export const ProjectCardHeader: FC<Props> = ({
+export function ProjectCardHeader({
   mode,
-  projectEndDate,
   dispatch,
   setMutationType,
   isNew,
-}) => {
+}: Props): JSX.Element {
+  const { state: modalState, dispatch: dispatchModalState } = useProjectModal()
+  if (!modalState || !dispatchModalState) {
+    throw new Error('context value undefined')
+  }
+
+  const { state: project } = useProject()
+  if (!project) {
+    throw new Error('context value undefined')
+  }
+
   const rightElementClass =
     mode === 'processing' ? '' : ' transform hover:scale-110 cursor-pointer'
 
@@ -29,15 +40,15 @@ export const ProjectCardHeader: FC<Props> = ({
       {getCenterElement(
         mode,
         isNew,
-        formatDatetimeDisplay(projectEndDate?.toISOString())
+        formatDatetimeDisplay(project.endAt?.toISOString())
       )}
       <div
-        className={`w-16 flex-shrink self-stretch flex justify-end min-w-max truncate group ${rightElementClass}`}
-        onClick={() =>
-          dispatch({
-            type: isNew ? 'create' : 'update',
-            setMutationType: setMutationType,
-          })
+        className="w-16 flex-shrink self-stretch flex justify-end min-w-max truncate transition group invisible group-hover:visible cursor-pointer hover:opacity-100 hover:text-red-700 active:text-red-400"
+        onClick={
+          (event) => {
+            onClick(event, project.uuid)
+          }
+          //dispatchModalState({ type: 'open', data: { ...project } })
         }
       >
         {getRightButton(mode)}
@@ -71,13 +82,13 @@ const getLeftElement = (
       }
     >
       {isNew ? (
-        <button className="flex justify-center items-center focus:outline-none">
+        <span className="flex justify-center items-center focus:outline-none">
           <Plus size={16} />
-        </button>
+        </span>
       ) : (
-        <button className="flex justify-center items-center focus:outline-none text-rose-800 group-hover:text-rose-600">
+        <span className="flex justify-center items-center focus:outline-none text-rose-800 group-hover:text-rose-600">
           <Trash2 size={20} />
-        </button>
+        </span>
       )}
     </div>
   )
@@ -101,8 +112,8 @@ function getRightButton(mode: Mode) {
   switch (mode) {
     case 'normal':
       return (
-        <button className="text-cyan-500 group-hover:text-cyan-400 focus:outline-none">
-          <Edit size={16} />
+        <button className="focus:outline-none">
+          <Trash2 size={20} />
         </button>
       )
     case 'edit':
@@ -121,4 +132,21 @@ function getRightButton(mode: Mode) {
         </button>
       )
   }
+}
+
+async function onClick(event: MouseEvent<HTMLDivElement>, uuid: string) {
+  event.stopPropagation()
+
+  if (!window.confirm('delete this project?')) return
+
+  mutate(
+    '/api/projects',
+    (data: any[]) => data.filter((item) => item.uuid !== uuid),
+    false
+  )
+  await fetch('/api/projects', {
+    method: 'DELETE',
+    body: JSON.stringify({ uuid }),
+  })
+  mutate('/api/projects')
 }

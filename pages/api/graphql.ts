@@ -1,3 +1,4 @@
+/*
 import { ApolloServer } from 'apollo-server-micro'
 import prisma from 'schema/prisma'
 import { schema } from 'schema/schema'
@@ -19,3 +20,4 @@ export const config = {
 }
 
 export default handler
+*/

@@ -1,24 +1,29 @@
-import { FC } from 'react'
-import { ProjectCard } from 'components/project'
+import {
+  ProjectSection,
+  PersonalTaskSection,
+  TeammatesTaskSection,
+} from '@/components/project'
+import { ProjectModalProvider, useProjects } from '@/contexts/project'
 
-import { ProjectSchema } from 'schema/model/types'
+export function ProjectsPage(): JSX.Element {
+  const { state: projects } = useProjects()
+  if (!projects) throw new Error('context value undefined')
 
-type Props = {
-  projects: ProjectSchema[]
-}
-
-export const ProjectsPage: FC<Props> = ({ projects }) => (
-  <>
-    <h2 className="font-mono text-2xl font-bold text-bluegray-500 mt-1 mb-7 ml-4 md:ml-2 md:mb-9">
-      Projects
-    </h2>
-    <div className="bg-bluegray-200 shadow rounded-3xl my-3 px-5 md:px-10 py-4 md:py-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-        {projects?.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
-        <ProjectCard project={null} />
+  return (
+    <ProjectModalProvider>
+      <div className="flex flex-col lg:flex-row min-h-85vh">
+        <div className="lg:w-3/5 p-3">
+          <ProjectSection />
+        </div>
+        <div className="lg:w-2/5 flex flex-col">
+          <div className="p-3">
+            <PersonalTaskSection />
+          </div>
+          <div className="lg:flex-1 p-3">
+            <TeammatesTaskSection />
+          </div>
+        </div>
       </div>
-    </div>
-  </>
-)
+    </ProjectModalProvider>
+  )
+}

@@ -5,7 +5,7 @@ import {
   getMinDate,
   getMaxDate,
   diffDate,
-} from 'utils/date'
+} from '@/utils/date'
 
 describe('utils/date/common', () => {
   describe('isSameDay', () => {

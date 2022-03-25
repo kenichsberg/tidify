@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { GetServerSideProps } from 'next'
 import useSWR from 'swr'
-import { gql } from 'graphql-request'
+//import { gql } from 'graphql-request'
 import { Layout } from 'components/layout'
 import { UserList } from 'components/user'
 import { fetcher } from 'core/client'
@@ -15,6 +15,7 @@ type Props = {
   }
 }
 
+/*
 export const queryAllUsers = gql`
   query {
     users(orderBy: { id: asc }) {
@@ -29,6 +30,7 @@ export const queryAllUsers = gql`
     }
   }
 `
+*/
 
 const IndexPage: FC<Props> = (props) => {
   const { data, error } = useSWR(queryAllUsers, fetcher, {

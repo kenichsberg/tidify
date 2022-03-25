@@ -20,7 +20,7 @@ export const ListItemForMultiselect: FC<Props> = ({
   return (
     <li
       className={`flex flex-none justify-between text-left px-3 py-2${
-        isChecked ? ' bg-lightblue-100' : ' hover:bg-bluegray-100'
+        isChecked ? ' bg-sky-100' : ' hover:bg-sky-100'
       }`}
       onClick={(event) => {
         event.stopPropagation()

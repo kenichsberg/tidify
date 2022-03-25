@@ -34,7 +34,7 @@ const getBgColor = (percent: number | undefined) => {
     case percent < thresholdMiddle:
       return ' bg-orange-200'
     case percent < thresholdHigh:
-      return ' bg-lightblue-200'
+      return ' bg-sky-200'
     default:
       return ' bg-emerald-200'
   }
@@ -50,7 +50,7 @@ const getFilledColor = (percent: number | undefined) => {
     case percent < thresholdMiddle:
       return ' bg-orange-500'
     case percent < thresholdHigh:
-      return ' bg-lightblue-500'
+      return ' bg-sky-500'
     default:
       return ' bg-emerald-500'
   }

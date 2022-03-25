@@ -1,4 +1,4 @@
-import { FC, MutableRefObject } from 'react'
+import { MutableRefObject } from 'react'
 import { HourButton, Datetime } from './'
 
 type Props = {
@@ -7,7 +7,11 @@ type Props = {
   setNextPage: () => void
 }
 
-export const ClockHour: FC<Props> = ({ date, datetimeRef, setNextPage }) => {
+export function ClockHour({
+  date,
+  datetimeRef,
+  setNextPage,
+}: Props): JSX.Element {
   const selectedHour = date?.getHours()
   const getOnClick = (hour: number) => () => {
     datetimeRef.current.hour = hour

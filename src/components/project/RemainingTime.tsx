@@ -1,75 +1,86 @@
 import { FC } from 'react'
 
+import { diffDate, getOptimalDateDiffUnit } from '@/utils/date'
+
 type Props = {
-  remainingHours: number | undefined
+  targetDate: Date | undefined
   className?: string
 }
 
-export const RemainingTime: FC<Props> = ({ remainingHours, className }) => (
+const REMAINING_NONE = 0
+const REMAINING_LITTLE = 24 * 3
+const REMAINING_MUCH = 24 * 7
+
+export const RemainingTime: FC<Props> = ({ targetDate, className }) => (
   <div
-    className={`rounded-full${getFilledColor(
-      remainingHours
-    )} text-xs${getTextColor(remainingHours)} p-3 ${
-      className ? ' ' + className : ''
-    }`}
+    className={`rounded-full${getFilledColor(targetDate)} text-xs${getTextColor(
+      targetDate
+    )} p-3 ${className ? ' ' + className : ''}`}
   >
-    {getDisplayStr(remainingHours)}
+    {getDisplayStr(targetDate)}
   </div>
 )
 
-const remainingNone = 0
-const remainingLittle = 24 * 3
-const remainingMuch = 24 * 7
-
-const getFilledColor = (hours: number | undefined) => {
+function getFilledColor(targetDate: Date | undefined) {
+  const hours = getRemainingHours(targetDate)
   if (hours === undefined) {
     return ' bg-gray-200'
   }
+
   switch (true) {
-    case hours < remainingNone:
+    case hours === undefined:
+    case hours < REMAINING_NONE:
       return ' bg-rose-100'
-    case hours < remainingLittle:
+    case hours < REMAINING_LITTLE:
       return ' bg-orange-100'
-    case hours < remainingMuch:
-      return ' bg-lightblue-100'
+    case hours < REMAINING_MUCH:
+      return ' bg-sky-100'
     default:
       return ' bg-emerald-100'
   }
 }
 
-const getTextColor = (hours: number | undefined) => {
+function getTextColor(targetDate: Date | undefined) {
+  const hours = getRemainingHours(targetDate)
   if (hours === undefined) {
     return ' text-gray-400'
   }
   switch (true) {
-    case hours < remainingNone:
+    case hours < REMAINING_NONE:
       return ' text-rose-400'
-    case hours < remainingLittle:
+    case hours < REMAINING_LITTLE:
       return ' text-orange-400'
-    case hours < remainingMuch:
-      return ' text-lightblue-400'
+    case hours < REMAINING_MUCH:
+      return ' text-sky-400'
     default:
       return ' text-emerald-400'
   }
 }
 
-const getDisplayStr = (hours: number | undefined) => {
-  if (hours === undefined) {
+function getDisplayStr(targetDate: Date | undefined) {
+  const hours = getRemainingHours(targetDate)
+
+  if (targetDate === undefined || hours === undefined) {
     return '----'
-  } else if (hours < remainingNone) {
-    return getTimeStr(Math.abs(hours)) + ' over'
+  } else if (hours < REMAINING_NONE) {
+    return getTimeStr(targetDate) + ' over'
   } else {
-    return getTimeStr(hours) + ' left'
+    return getTimeStr(targetDate) + ' left'
   }
 }
 
-const getTimeStr = (hours: number) => {
-  switch (true) {
-    case hours < 24:
-      return `${Math.trunc(hours)} hours`
-    case hours < 48:
-      return '1 day'
-    default:
-      return `${Math.trunc(hours / 24)} days`
-  }
+function getTimeStr(targetDate: Date) {
+  const now = new Date()
+  const unit = getOptimalDateDiffUnit(targetDate, now)
+  const diff = diffDate(targetDate, now, unit)
+  const s = diff === 1 ? '' : 's'
+
+  return `${Math.trunc(diff)} ${unit}${s}`
+}
+
+function getRemainingHours(endDate: Date | undefined): number | undefined {
+  if (!endDate) return undefined
+
+  const now = new Date()
+  return diffDate(now, endDate, 'hour')
 }

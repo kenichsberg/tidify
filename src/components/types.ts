@@ -7,3 +7,5 @@ export type Action = {
   type: MutationType
   setMutationType?: SetMutationType
 } | null
+
+export type NextPrev = 'next' | 'prev'

@@ -1,3 +1,4 @@
+/*
 import { mutate } from 'swr'
 import { request, gql } from 'graphql-request'
 import { API } from 'core/client'
@@ -75,3 +76,4 @@ function getArgForCreate(projectForm: ProjectFormRef['current']) {
     },
   }
 }
+*/

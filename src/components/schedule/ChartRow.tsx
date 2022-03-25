@@ -1,13 +1,13 @@
-import { FC } from 'react'
-import { useCache } from 'hooks/index'
-import { RoundRect } from './'
-import { NexusGenFieldTypes } from 'schema/generated/nexusTypes'
+import { RoundRect } from '@/components/schedule'
+import { useCache } from '@/hooks/index'
+
+import { TaskWithoutTechnicalColmuns } from '@/components/project/types'
 
 type Props = {
-  tasks: NexusGenFieldTypes['Task'][]
+  tasks: TaskWithoutTechnicalColmuns[]
 }
 
-export const ChartRow: FC<Props> = ({ tasks }) => {
+export function ChartRow({ tasks }: Props): JSX.Element {
   const { data: _ganttFieldWidth } = useCache<number>('ganttFieldWidth')
   const { data: _chartHeight } = useCache<number>('chartHeight')
   const { data: _headerHeight } = useCache<number>('headerHeight')
@@ -21,7 +21,7 @@ export const ChartRow: FC<Props> = ({ tasks }) => {
   return (
     <g>
       <RoundRect
-        className="fill-current text-gray-50"
+        className="fill-gray-50"
         isRoundCorners={{
           leftTop: false,
           leftBottom: false,
@@ -37,11 +37,11 @@ export const ChartRow: FC<Props> = ({ tasks }) => {
         }}
       />
       {tasks.map((task, index) => {
-        const color = index % 2 === 0 ? ' text-bluegray-100' : ' text-gray-50'
+        const color = index % 2 === 0 ? ' fill-bluegray-100' : ' fill-gray-50'
         return (
           <rect
-            className={`fill-current${color}`}
-            key={task.id}
+            className={`${color}`}
+            key={task.uuid}
             x="0"
             y={rowHeight * index + (headerHeight ?? 0)}
             width={ganttFieldWidth}

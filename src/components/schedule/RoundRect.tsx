@@ -1,5 +1,3 @@
-import { FC } from 'react'
-
 interface IsRoundCorners {
   leftTop: boolean
   leftBottom: boolean
@@ -21,25 +19,27 @@ type Props = {
   fillOpacity?: string
 }
 
-export const RoundRect: FC<Props> = ({
+export function RoundRect({
   className = '',
   isRoundCorners,
   rectProps,
   fillOpacity = '100%',
-}) => (
-  <path
-    className={className}
-    d={getRectPathString(isRoundCorners, rectProps)}
-    fillOpacity={fillOpacity}
-  ></path>
-)
+}: Props): JSX.Element {
+  return (
+    <path
+      className={className}
+      d={getRectPathString(isRoundCorners, rectProps)}
+      fillOpacity={fillOpacity}
+    ></path>
+  )
+}
 
-// Create path of a corner of rect partially,
-// from leftTop counterclockwise
-const getRectPathString = (
+// Create path of a corner of rect in order,
+// from left-top counterclockwise
+function getRectPathString(
   isRoundCorners: IsRoundCorners,
   rectProps: RectProps
-) => {
+): string {
   const leftTopCorner = isRoundCorners.leftTop
     ? ` M ${rectProps.x + rectProps.radius} ${rectProps.y}` +
       ` q -${rectProps.radius} 0 -${rectProps.radius} ${rectProps.radius}` +

@@ -1,4 +1,4 @@
-import { getGrossDays } from 'utils/date'
+import { getGrossDays } from '@/utils/date'
 
 describe('utils/date/', () => {
   it('3 weekdays + 1 weekend', () => {

@@ -12,14 +12,23 @@ type Props = {
   configs: IconConfigs | undefined
   isCurrent: boolean
   index: number
+  disabled?: boolean
 }
 
-export const MenuIcon: FC<Props> = ({ title, configs, isCurrent, index }) => {
+export const MenuIcon: FC<Props> = ({
+  title,
+  configs,
+  isCurrent,
+  index,
+  disabled = false,
+}) => {
   const color = isCurrent
-    ? ' bg-bluegray-900 text-bluegray-100'
-    : ' hover:bg-bluegray-400 hover:text-bluegray-200'
+    ? ' bg-gradient-to-br from-bluegray-700 to-bluegray-900 text-bluegray-100'
+    : ' transition hover:bg-bluegray-400 hover:text-bluegray-200'
 
   const marginY = index === 0 ? ' mb-2' : ' my-2'
+
+  const cursor = disabled ? 'cursor-not-allowed' : 'cursor-pointer'
 
   if (configs === undefined) {
     return <Link href="#"></Link>
@@ -30,7 +39,7 @@ export const MenuIcon: FC<Props> = ({ title, configs, isCurrent, index }) => {
       <a>
         <div
           title={title}
-          className={`flex-shrink-0 rounded-full h-16 w-16 flex items-center justify-center ${color} mx-auto ${marginY} cursor-pointer`}
+          className={`flex-shrink-0 rounded-full h-16 w-16 flex items-center justify-center ${color} mx-auto ${marginY} ${cursor}`}
         >
           {configs.iconJsx}
         </div>

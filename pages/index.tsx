@@ -1,72 +1,101 @@
-import { FC } from 'react'
-import { GetServerSideProps } from 'next'
+import { useEffect } from 'react'
+import { GetServerSidePropsResult } from 'next'
+import { PrismaClient } from '@prisma/client'
 import useSWR from 'swr'
-import { gql, request } from 'graphql-request'
-import { Layout } from 'components/layout'
-import { ProjectsPage } from 'components/project'
-import { API, fetcher } from 'core/client'
 
-import { ProjectSchema } from 'schema/model/types'
+import { Layout } from '@/components/layout'
+import { ProjectsPage } from '@/components/project'
+import { useProjects } from '@/contexts/project'
+import { useTasks } from '@/contexts/task'
+import { strToDate } from '@/utils/date'
+import { fetcher, patchPropertyValues } from '@/utils/functions'
+
+import {
+  ProjectWithoutTechnicalColmuns,
+  TaskWithoutTechnicalColmuns,
+} from '@/components/project/types'
 
 type Props = {
-  data: {
-    projects: ProjectSchema[]
-    status: number
-  }
+  projects: ProjectWithoutTechnicalColmuns[]
+  tasks: TaskWithoutTechnicalColmuns[]
 }
 
-export const queryAllProjects = gql`
-  query {
-    projects(orderBy: { id: asc }) {
-      id
-      name
-      startAt
-      endAt
-      users(orderBy: { id: asc }) {
-        id
-        name
-        email
-        role
-      }
-      tasks(orderBy: { id: asc }) {
-        id
-        name
-        rank
-        status
-        plannedDuration
-        actualDuration
-        user {
-          id
-          name
-        }
-        projectId
-      }
-    }
-  }
-`
+const prisma = new PrismaClient()
 
-const IndexPage: FC<Props> = (props) => {
-  const { data, error } = useSWR<{ projects: ProjectSchema[] }>(
-    queryAllProjects,
-    (query) => request(API, query),
-    {
-      initialData: props.data,
-    }
-  )
+export default function IndexPage(props: Props): JSX.Element {
+  const { data: projects, error: projectsError } = useSWR<
+    ProjectWithoutTechnicalColmuns[]
+  >('/api/projects', fetcher, { fallbackData: props.projects })
+  const { data: tasks, error: tasksError } = useSWR<
+    TaskWithoutTechnicalColmuns[]
+  >('/api/tasks', fetcher, { fallbackData: props.tasks })
+  console.log('pages', projects, tasks)
 
-  if (error && !data) return <div>error</div>
-  //if (!data) return <div>loading...</div>
+  const { setState: setProjects } = useProjects()
+  const { setState: setTasks } = useTasks()
+
+  useEffect(() => {
+    const formattedData = projects?.map((project) => {
+      if (
+        typeof project.startAt === 'string' ||
+        typeof project.endAt === 'string'
+      ) {
+        return patchPropertyValues<ProjectWithoutTechnicalColmuns>(
+          project,
+          strToDate,
+          'startAt',
+          'endAt'
+        )
+      }
+
+      return project
+    })
+    setProjects?.(formattedData ?? [])
+  }, [projects])
+
+  useEffect(() => {
+    setTasks?.(tasks ?? [])
+  }, [tasks])
+
+  if ((projectsError && !projects) || (tasksError && !tasks))
+    return <div>error</div>
 
   return (
     <Layout currentPageName="Home">
-      <ProjectsPage projects={data?.projects ?? []} />
+      <ProjectsPage />
     </Layout>
   )
 }
 
-export default IndexPage
+export async function getServerSideProps(): Promise<
+  GetServerSidePropsResult<Props>
+> {
+  const _projects = await prisma.project.findMany({
+    select: {
+      uuid: true,
+      name: true,
+      startAt: true,
+      endAt: true,
+      users: true,
+      tasks: true,
+    },
+  })
+  const projects = JSON.parse(JSON.stringify(_projects))
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const data = await fetcher(queryAllProjects)
-  return { props: { data } }
+  const _tasks = await prisma.task.findMany({
+    select: {
+      uuid: true,
+      name: true,
+      rank: true,
+      status: true,
+      plannedDuration: true,
+      actualDuration: true,
+      user: true,
+      project: true,
+    },
+    orderBy: [{ rank: 'asc' }, { projectId: 'asc' }],
+  })
+  const tasks = JSON.parse(JSON.stringify(_tasks))
+
+  return { props: { projects, tasks } }
 }

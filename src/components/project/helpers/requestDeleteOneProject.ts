@@ -1,3 +1,4 @@
+/*
 import { mutate } from 'swr'
 import { request, gql } from 'graphql-request'
 import { API } from 'core/client'
@@ -27,3 +28,4 @@ export async function requestDeleteOneProject(
   await request(API, deleteOneProject, { id: projectId })
   mutate(queryAllProjects)
 }
+*/
