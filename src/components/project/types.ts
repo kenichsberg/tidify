@@ -1,8 +1,6 @@
 import { MutableRefObject } from 'react'
 import { Project, Task, User } from '@prisma/client'
 
-import { TaskSchema } from 'schema/model/types'
-
 export interface ProjectWithoutTechnicalColmuns
   extends Omit<Project, 'id' | 'createdAt' | 'updatedAt'> {
   tasks: TaskWithoutTechnicalColmuns[]
@@ -61,4 +59,4 @@ export interface AssignTasksFormProps {
   }[]
 }
 
-export type TaskComponentProps = Partial<TaskSchema>
+//export type TaskComponentProps = Partial<TaskSchema>
