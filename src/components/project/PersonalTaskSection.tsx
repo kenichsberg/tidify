@@ -1,24 +1,33 @@
 import { NoData } from '@/components/common'
-import { Task } from '@/components/project'
+import { PersonalTask } from '@/components/project'
+import { useTasks } from '@/contexts/task'
+import { useLoginUser } from '@/contexts/user'
 
-import { TaskComponentProps } from '@/components/project/types'
+import { TaskWithoutTechnicalColmuns } from '@/components/project/types'
 
-type Props = {
-  task: TaskComponentProps | undefined
-}
+export function PersonalTaskSection(): JSX.Element {
+  const { state: tasks } = useTasks()
+  if (!tasks) throw new Error('context value undefined')
 
-export function PersonalTaskSection({ task }: Props): JSX.Element {
+  const { state: loginUser } = useLoginUser()
+  if (!loginUser) throw new Error('context value undefined')
+
+  const personalTask = tasks.filter(
+    (task) => task.user.uuid === loginUser.uuid && task.status !== 'DONE'
+  )?.[0]
+  console.log(tasks, loginUser, personalTask)
+
   return (
-    <section className="lg:h-full bg-gray-100 rounded-3xl overflow-auto px-2 sm:px-4 py-8 lg:py-6">
+    <section className="lg:h-full bg-gradient-to-b from-bluegray-50 via-bluegray-50 to-bluegray-100 rounded-[60px] overflow-auto px-4 sm:px-6 py-10">
       <h2 className="font-mono text-lg font-bold text-bluegray-500 mt-1 mb-7 ml-4">
         Your Current Tasks
       </h2>
-      {getTask(task)}
+      {getTask(personalTask)}
     </section>
   )
 }
 
-function getTask(task: TaskComponentProps | undefined): JSX.Element {
+function getTask(task: TaskWithoutTechnicalColmuns | undefined): JSX.Element {
   if (task === undefined) {
     return (
       <div className="m-10">
@@ -28,7 +37,7 @@ function getTask(task: TaskComponentProps | undefined): JSX.Element {
   } else {
     return (
       <div>
-        <Task task={task} />
+        <PersonalTask task={task} />
       </div>
     )
   }

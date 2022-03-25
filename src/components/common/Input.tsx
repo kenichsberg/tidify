@@ -1,6 +1,7 @@
 import { FocusEvent, Ref } from 'react'
 
 type Props = {
+  type?: 'text' | 'number'
   name: string
   value?: string
   className?: string
@@ -12,6 +13,7 @@ type Props = {
 }
 
 export function Input({
+  type = 'text',
   name,
   value = '',
   className = '',
@@ -25,7 +27,7 @@ export function Input({
   const sizeClass = getSizeClass(size)
   return (
     <input
-      type="text"
+      type={type}
       className={`focus:outline-none ${
         className === '' ? '' : ' ' + className
       } ${sizeClass}`}

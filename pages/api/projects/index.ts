@@ -19,7 +19,9 @@ export default async function projectsHandler(
           startAt: true,
           endAt: true,
           users: true,
-          tasks: true,
+          tasks: {
+            include: { user: true },
+          },
         },
         orderBy: [{ id: 'asc' }],
       })

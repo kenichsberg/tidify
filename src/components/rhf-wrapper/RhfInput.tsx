@@ -5,12 +5,13 @@ import {
   UseControllerProps,
   UnpackNestedValue,
   PathValue,
-  FieldPathWithValue,
+  FieldPathValue,
   Path,
 } from 'react-hook-form'
 import { Input } from 'components/common'
 
 type RhfInputProps<T extends FieldValues> = UseControllerProps<T> & {
+  type?: 'text' | 'number'
   className?: string
   size?: 'sm' | 'md'
   onFocus?: (arg0?: FocusEvent<HTMLInputElement>) => void
@@ -23,6 +24,7 @@ type RhfInputProps<T extends FieldValues> = UseControllerProps<T> & {
 }
 
 export function RhfInput<T extends FieldValues>({
+  type = 'text',
   name,
   control,
   className,
@@ -44,7 +46,7 @@ RhfInputProps<T>): JSX.Element {
     control,
     rules: rules,
     defaultValue: value as UnpackNestedValue<
-      PathValue<T, FieldPathWithValue<T, any, Path<T>>>
+      PathValue<T, FieldPathValue<T, Path<T>>>
     >,
     //onBlur: onBlur,
     //onChange: onChange,
@@ -52,6 +54,7 @@ RhfInputProps<T>): JSX.Element {
 
   return (
     <Input
+      type={type}
       className={className}
       size={size}
       onFocus={onFocus}
