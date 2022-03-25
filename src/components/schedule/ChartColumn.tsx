@@ -26,7 +26,7 @@ export function ChartColumn({ weekCount, chartStartDate }: Props): JSX.Element {
           day: 'numeric',
           month: 'short',
         } as Intl.DateTimeFormatOptions
-        const dateString = date.toLocaleString('en-us', options)
+        const dateString = date.toLocaleString('en-GB', options)
         const partialDates = dateString.split(',')
         const weekday = partialDates[0]
         const monthDay = partialDates[1]
@@ -34,7 +34,7 @@ export function ChartColumn({ weekCount, chartStartDate }: Props): JSX.Element {
         return (
           <g key={number}>
             <text
-              className="fill-current text-gray-500"
+              className="fill-gray-500"
               x={(columnWidth ?? 0) * number + WEEKDAY_TEXT_OFFSET_X}
               y={WEEKDAY_TEXT_OFFSET_Y}
               fill="#2a2f3c"
@@ -43,7 +43,7 @@ export function ChartColumn({ weekCount, chartStartDate }: Props): JSX.Element {
               {weekday}
             </text>
             <text
-              className="fill-current text-gray-500"
+              className="fill-gray-500"
               x={columnWidth * number + MONTHDAY_TEXT_OFFSET_X}
               y={MONTH_DAY_TEXT_OFFSET_Y}
               fill="#2a2f3c"
@@ -52,7 +52,7 @@ export function ChartColumn({ weekCount, chartStartDate }: Props): JSX.Element {
               {monthDay}
             </text>
             <RoundRect
-              className="stroke-current text-gray-200"
+              className="stroke-gray-200"
               isRoundCorners={{
                 leftTop: false,
                 leftBottom: false,

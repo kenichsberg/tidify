@@ -1,6 +1,17 @@
 import { ManHourCalculator } from '@/utils/date'
 
 describe('utils/date/', () => {
+  it('grossDurationDays', () => {
+    const start = new Date('2022-03-11T00:00:00.000Z')
+    const end = new Date('2022-03-15T14:00:00.000Z')
+
+    const calc = new ManHourCalculator()
+    const grossDays = calc.getGrossDurationDays(start, end)
+    const expected = 4.5
+
+    expect(grossDays).toEqual(expected)
+  })
+
   it('endDatetime1', () => {
     const start = new Date('2022-02-14T00:00:00.000Z')
     const totalManHour = 15

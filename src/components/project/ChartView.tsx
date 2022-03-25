@@ -20,7 +20,15 @@ export function ChartView(): JSX.Element {
     .map((project) => new Date(project.startAt))
   const chartStartDate = getMinDate(projectStartDates)
 
-  if (projects.length && !chartStartDate) {
+  if (!projects.length) {
+    return (
+      <div className="m-10">
+        <NoData dataType="projects" />
+      </div>
+    )
+  }
+
+  if (!chartStartDate) {
     throw new Error(
       `project.startAt should not be undefined\n` +
         `projects uuids:\n ${projects.map((p) => p.uuid).join('\n')}`
@@ -33,13 +41,6 @@ export function ChartView(): JSX.Element {
   const chartEndDate = getMaxDate(projectEndDates)
   console.log(chartStartDate, chartEndDate)
 
-  if (!projects.length) {
-    return (
-      <div className="m-10">
-        <NoData dataType="projects" />
-      </div>
-    )
-  }
   return (
     <div className="my-3 px-5 md:px-6 py-4">
       <div className="">
