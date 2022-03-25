@@ -1,4 +1,3 @@
-import { FC } from 'react'
 import { ChevronLeft, ChevronRight } from 'react-feather'
 
 type Props = {
@@ -6,7 +5,10 @@ type Props = {
   setFirstDay: (arg0: Date) => void
 }
 
-export const YearMonthControler: FC<Props> = ({ firstDay, setFirstDay }) => {
+export function YearMonthControler({
+  firstDay,
+  setFirstDay,
+}: Props): JSX.Element {
   const yearMonthStr = firstDay.toLocaleString('en-US', {
     year: 'numeric',
     month: 'short',
