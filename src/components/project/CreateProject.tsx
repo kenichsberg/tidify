@@ -11,7 +11,6 @@ import { v4 as uuidv4 } from 'uuid'
 
 import {
   InputField,
-  SelectPicker,
   DatetimePicker,
   ModalBody,
   ModalFooter,
@@ -19,6 +18,8 @@ import {
 } from '@/components/common'
 import { RhfInput } from '@/components/rhf-wrapper'
 import { useProjects, useProjectModal } from '@/contexts/project'
+import { strToDate } from '@/utils/date'
+import { patchPropertyValues } from '@/utils/functions'
 
 import { ProjectWithoutTechnicalColmuns } from '@/components/project/types'
 import { CreateProjectFormProps } from '@/components/project/types'
@@ -55,6 +56,12 @@ export function CreateProject({
 
   //let project: ProjectWithoutTechnicalColmuns | null = modalState.project
   const project = modalState.project
+    ? patchPropertyValues<ProjectWithoutTechnicalColmuns>(
+        modalState.project,
+        strToDate,
+        'startAt'
+      )
+    : null
   console.log('create', project)
   useEffect(() => {
     setStartAt(modalState.project?.startAt)
@@ -119,7 +126,8 @@ export function CreateProject({
           id="createProject"
           onSubmit={(event) => {
             event.preventDefault()
-            handleSubmit(onSubmit, onError)()
+            //@TODO handleSubmit(onSubmit, onError)()
+            setPage('next') //@TODO delete
           }}
         >
           <div className="flex flex-col items-stretch">

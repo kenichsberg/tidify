@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Home, Users, Calendar, List } from 'react-feather'
+import { Home, Users, Activity, List } from 'react-feather'
 import { MenuIcon, IconConfigs } from './'
 
 type Props = {
@@ -11,6 +11,7 @@ export const Sidebar: FC<Props> = ({ currentPageName }) => (
     {pageNames.map((pageName, index) => {
       const configs = pageNameToData.get(pageName)
       const isCurrent = pageName === currentPageName
+      const disabled = pageName !== 'Home'
 
       return (
         <MenuIcon
@@ -19,6 +20,7 @@ export const Sidebar: FC<Props> = ({ currentPageName }) => (
           isCurrent={isCurrent}
           index={index}
           key={pageName}
+          disabled={disabled}
         />
       )
     })}
@@ -27,9 +29,9 @@ export const Sidebar: FC<Props> = ({ currentPageName }) => (
 
 const pageNameToDataInit = [
   ['Home', { url: '/', iconJsx: <Home size={28} /> }],
-  ['Schedule', { url: '/schedule', iconJsx: <Calendar size={28} /> }],
-  ['Tasks', { url: '/tasks', iconJsx: <List size={28} /> }],
-  ['Users', { url: '/users', iconJsx: <Users size={28} /> }],
+  ['Activities', { url: '#', iconJsx: <Activity size={28} /> }],
+  ['Tasks', { url: '#', iconJsx: <List size={28} /> }],
+  ['Users', { url: '#', iconJsx: <Users size={28} /> }],
 ] as const
 export type PageName = typeof pageNameToDataInit[number][0]
 

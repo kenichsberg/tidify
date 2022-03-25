@@ -16,39 +16,37 @@ export function ProjectSection(): JSX.Element {
 
   const setClose = () => dispatchModalState({ type: 'close' })
 
+  /*shadow hover:shadow-2xl w-full h-full transition-[width,height,z-index,2] duration-[2s,2s,.5s,.5s] z-[2] hover:fixed hover:z-[15] hover:w-screen hover:h-screen */
   return (
-    <section className="h-full bg-gray-100 rounded-3xl overflow-auto px-2 sm:px-4 py-8 lg:py-6">
+    <section className="bg-gradient-to-b from-bluegray-50 to-bluegray-100 rounded-[60px] overflow-auto px-4 sm:px-10 py-10">
       <div className="flex flex-row justify-stretch items-center mt-1 mb-7">
         <h2 className="flex-grow font-mono text-2xl font-bold text-bluegray-500 ml-4">
           Projects
         </h2>
-        <div className="w-48 h-10 rounded-full bg-bluegray-200 text-bluegray-400 flex flex-row p-1">
-          <label title="Grid View" className="relative flex-1 cursor-pointer">
-            <input
-              id="grid-view"
-              type="radio"
-              name="view-toggle-switch"
-              value="grid"
-              className="appearance-none"
-              defaultChecked={true}
-              onChange={() => setView('grid')}
-            />
-            <span className="absolute left-0 top-0 w-full h-full rounded-full checked-sibling:bg-bluegray-800 checked-sibling:text-bluegray-200 flex flex-col items-center">
-              <Grid className="flex-grow" size={20} />
+        <div className="group relative w-48 h-10 bg-gradient-to-br from-bluegray-100/90 to-bluegray-200 rounded-full shadow">
+          <input
+            id="view-toggle-switch"
+            type="checkbox"
+            name="view-toggle-switch"
+            value="grid"
+            className="peer absolute inline-block appearance-none"
+            defaultChecked={false}
+            onChange={() => setView(view === 'grid' ? 'chart' : 'grid')}
+          />
+          <label
+            htmlFor="view-toggle-switch"
+            className="absolute w-full h-full rounded-full text-bluegray-200 cursor-pointer peer-checked:text-bluegray-600 before:absolute before:top-1 before:left-4 before:w-20 before:h-8 before:bg-gradient-to-br before:from-bluegray-700 before:to-bluegray-900 before:rounded-full before:transition before:duration-500 before:peer-checked:translate-x-[80px]" /* after:absolute after:top-2 after:right-3 after:w-20 after:h-8 after:content-[''] after:bg-transparent after:rounded-full after:text-bluegray-600 after:transition after:peer-checked:text-bluegray-200 after:cursor-pointer"*/
+          >
+            <span className="absolute w-1/2 top-[5px] left-2 text-center transition">
+              <Grid className="inline" size={20} />
             </span>
           </label>
-          <label title="Chart View" className="relative flex-1 cursor-pointer">
-            <input
-              id="chart-view"
-              type="radio"
-              name="view-toggle-switch"
-              value="chart"
-              className="appearance-none"
-              defaultChecked={false}
-              onChange={() => setView('chart')}
-            />
-            <span className="absolute left-0 top-0 w-full h-full rounded-full checked-sibling:bg-bluegray-800 checked-sibling:text-bluegray-200 flex flex-col items-center">
-              <Calendar className="flex-grow" size={20} />
+          <label
+            htmlFor="view-toggle-switch"
+            className="absolute right-0 w-1/2 rounded-full text-bluegray-600 peer-checked:text-bluegray-200"
+          >
+            <span className="absolute w-full h-[70%] top-[5px] right-2 text-center transition curor-pointer">
+              <Calendar className="inline cursor-pointer" size={20} />
             </span>
           </label>
         </div>
@@ -57,7 +55,7 @@ export function ProjectSection(): JSX.Element {
       <button
         type="button"
         title="Create New Project"
-        className="z-10 fixed right-10 lg:right-2/5 lg:transform lg:-translate-x-1/2 xl:translate-x-0 bottom-10 lg:bottom-20 flex-shrink-0 rounded-full shadow-xl h-20 w-20 flex items-center justify-center bg-cyan-500 bg-opacity-90 text-bluegray-100 hover:bg-cyan-400 hover:text-bluegray-200 focus:outline-none"
+        className="z-10 fixed right-10 lg:right-2/5 lg:-translate-x-1/2 xl:translate-x-0 bottom-10 lg:bottom-20 flex-shrink-0 rounded-full shadow-xl h-20 w-20 flex items-center justify-center bg-cyan-500 bg-opacity-90 text-bluegray-100 transition focus:outline-none hover:bg-cyan-400 hover:text-bluegray-200 hover:shadow-2xl hover:-translate-y-1 hover:scale-[103%] active:shadow-lg active:translate-y-2 active:scale-[97%] active:bg-cyan-600 active:text-bluegray-100"
         onClick={() => dispatchModalState({ type: 'open', data: null })}
       >
         <Plus size={32} />

@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import { useDrag } from 'react-dnd'
-import { useFormContext, Controller } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { Move, Plus, Trash2 } from 'react-feather'
 import { DevTool } from '@hookform/devtools'
 import { v4 as uuidv4 } from 'uuid'
 
-import { InputField, SelectPicker } from '@/components/common'
+import { InputField } from '@/components/common'
 import { RhfInput, RhfSelect } from '@/components/rhf-wrapper'
 import { dndTypes } from '@/components/project/constants'
 import { useTasksOfProject, useTaskUuids } from '@/contexts/task'
@@ -74,7 +74,10 @@ export function ProjectFormTaskBlock({
 
   return (
     <div className="flex flex-row justify-between items-center font-mono text-sm text-bluegray-700">
-      <div className="flex-shrink flex justify-center items-center flex bg-bluegray-50 shadow rounded-full w-16 h-16">
+      <div
+        className="flex-shrink flex justify-center items-center flex bg-gradient-to-br from-bluegray-50  via-bluegray-50 to-bluegray-100 shadow rounded-full w-16 h-16 animate-popup"
+        style={{ animationDelay: `${0.2 * index}s` }}
+      >
         <div className="flex items-center text-bluegray-500">
           {getIndexElement(isDummy, index)}
         </div>
@@ -82,11 +85,14 @@ export function ProjectFormTaskBlock({
       <fieldset
         name={fieldName}
         ref={isDummy ? undefined : drag}
-        className={`group flex-glow w-11/12 pt-6 flex justify-evenly bg-bluegray-50 shadow hover:shadow-lg rounded-xl text-center pr-4 py-3 ${
+        className={`group flex-glow w-11/12 pt-6 flex justify-evenly bg-gradient-to-br from-bluegray-50/90 to-bluegray-100 shadow rounded-xl text-center pr-4 py-3 ${
           isDragging ? 'opacity-50' : ''
-        } ${isDummy ? '' : 'cursor-move'}`}
+        } ${
+          isDummy ? '' : 'cursor-move'
+        } transition  transform transition duration-500 animate-popup hover:shadow-2xl hover:scale-[103%] hover:-translate-y-1`}
+        style={{ animationDelay: `${0.2 * index}s` }}
       >
-        <div className="flex-1 flex justify-center items-center pb-5">
+        <div className="flex-1 flex justify-center items-center pb-5 transition">
           <Move
             className={`text-bluegray-400 ${
               isDummy
@@ -130,6 +136,7 @@ export function ProjectFormTaskBlock({
         <div className="flex-shrink w-48 flex flex-col items-center">
           <InputField label="Duraiton" className="w-24">
             <RhfInput
+              type="number"
               className="w-full text-center"
               name={`${fieldName}.plannedDuration`}
               onFocus={onFocus}
@@ -182,7 +189,7 @@ export function ProjectFormTaskBlock({
             unregister(fieldName)
           }}
         >
-          <span className="pb-5 flex-grow flex items-center justify-center">
+          <span className="pb-5 flex-grow flex items-center justify-center focus:outline-none transition">
             <Trash2 size={20} />
           </span>
         </button>

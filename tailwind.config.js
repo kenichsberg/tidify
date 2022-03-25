@@ -19,10 +19,38 @@ const checkedSiblingPlugin = plugin(function ({ addVariant, e }) {
 })
 
 module.exports = {
-  purge: ['./src/**/*.tsx', './pages/**/*.tsx'],
-  darkMode: false, // or 'media' or 'class'
+  //mode: 'jit',
+  //purge: ['./src/**/*.tsx', './pages/**/*.tsx'],
+  content: ['./src/**/*.tsx', './pages/**/*.tsx'],
+  //darkMode: false, // or 'media' or 'class'
+  darkMode: 'media',
   theme: {
     extend: {
+      keyframes: {
+        'slide-up': {
+          '0%': {
+            transform: 'translateY(76px) scale(.92)',
+            opacity: '0',
+          },
+        },
+        'slide-x': {
+          '0%': {
+            transform: 'translateX(300px)',
+            opacity: '0',
+          },
+        },
+        popup: {
+          '0%': {
+            transform: 'translateY(30px)',
+            opacity: '0',
+          },
+        },
+      },
+      animation: {
+        'slide-up': 'slide-up .6s both',
+        'slide-x': 'slide-x .6s both',
+        popup: 'popup .15s both',
+      },
       lineHeight: {
         skinny: '0.3',
       },
@@ -55,8 +83,8 @@ module.exports = {
       transparent: colors.transparent,
       white: colors.white,
       black: colors.black,
-      gray: colors.coolGray,
-      bluegray: colors.blueGray,
+      gray: colors.gray,
+      bluegray: colors.slate,
       red: colors.red,
       orange: colors.orange,
       amber: colors.amber,

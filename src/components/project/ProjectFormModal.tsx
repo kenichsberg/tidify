@@ -32,8 +32,13 @@ export function ProjectFormModal({
   console.log(modalState)
   return (
     <Modal show={show}>
-      <ModalOverlay onBackdrop={() => setClose()}>
-        <ModalWindow className="w-11/12 max-w-7xl max-h-95vh flex flex-col bg-bluegray-200 border-0 rounded-3xl shadow-lg font-mono">
+      <ModalOverlay
+        onBackdrop={() => {
+          setClose()
+          setPageNo(0)
+        }}
+      >
+        <ModalWindow className="w-11/12 max-w-7xl max-h-95vh flex flex-col bg-gradient-to-br from-bluegray-200 to-bluegray-300 border-0 rounded-3xl shadow-lg font-mono transition duration-500 animate-popup">
           {getContent(
             pageNo,
             /*modalState?.project ?? null,*/ setPageNo,
@@ -61,7 +66,10 @@ function getContent(
       return (
         <CreateProject
           //project={project}
-          setClose={() => setClose()}
+          setClose={() => {
+            setClose()
+            setPageNo(0)
+          }}
           setPage={turnPage}
         />
       )
@@ -71,7 +79,10 @@ function getContent(
           <TaskUuidsProvider>
             <AssignTasks
               //project={project}
-              setClose={() => setClose()}
+              setClose={() => {
+                setClose()
+                setPageNo(0)
+              }}
               setPage={turnPage}
             />
           </TaskUuidsProvider>

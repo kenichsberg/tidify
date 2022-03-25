@@ -1,23 +1,11 @@
-import { FC, useState, useReducer, useEffect, useRef } from 'react'
+import { useState, useReducer, useEffect, useRef } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import useSWR from 'swr'
 import {
   ProjectCardHeader,
   ProjectCardBody,
   BlankCard,
 } from '@/components/project'
 import { useProjectModal, useProject } from '@/contexts/project'
-/*
-import {
-  requestCreateOneProject,
-  requestUpdateOneProject,
-  requestDeleteOneProject,
-} from './helpers'
-import { queryAllProjects } from 'pages'
-import { useCRUD } from 'hooks/index'
-import { fetcher } from 'core/client'
-*/
-import { getMaxDate } from 'utils/date'
 
 import { Mode, Action, MutationType } from '@/components/types'
 import {
@@ -27,10 +15,10 @@ import {
 
 type Props = {
   project: ProjectWithoutTechnicalColmuns
+  index: number
 }
 
-//export const ProjectCard: FC<Props> = ({ project }) => {
-export function ProjectCard({ project }: Props) {
+export function ProjectCard({ project, index }: Props) {
   const [mutationType, setMutationType] = useState<MutationType>(undefined)
   const isNew = project === null
   const isAdded = project.uuid === uuidv4()
@@ -48,40 +36,6 @@ export function ProjectCard({ project }: Props) {
 
   const projectFormRef = useRef<ProjectForm | undefined>()
 
-  /*
-  useCRUD(
-    mode !== 'processing',
-    mutationType,
-    (arg0) =>
-      requestCreateOneProject(projectFormRef, arg0, () => dispatch(null)),
-    (arg0) =>
-      requestUpdateOneProject(projectFormRef, arg0, () => {
-        dispatch(null)
-      }),
-    (arg0) => requestDeleteOneProject(project?.id, arg0),
-    [projects]
-  )
-*/
-
-  /*
-  useEffect(() => {
-    if (mode !== 'processing') return
-    if (isAdded) return
-    dispatch(null)
-  }, [project.uuid])
-
-  useEffect(() => {
-    projectFormRef.current = {
-      uuid: project?.uuid ?? uuidv4(),
-      name: project?.name ?? '',
-      users:
-        project?.users.map((user) => ({
-          value: user.id,
-          label: user.name,
-        })) ?? [],
-    }
-  }, [project])
-*/
   useEffect(() => {
     setProject?.(project)
   }, [project])
@@ -91,8 +45,9 @@ export function ProjectCard({ project }: Props) {
   }
 
   return (
-    <div
-      className="flex flex-col items-stretch font-mono text-sm text-center text-bluegray-700 bg-bluegray-200 hover:opacity-75 shadow-sm hover:shadow-md rounded-xl h-56 my-2 px-5 py-3 cursor-pointer group"
+    <button
+      className="flex flex-col items-stretch font-mono text-sm text-center text-bluegray-700 bg-gradient-to-br from-bluegray-100/90 to-bluegray-200 shadow rounded-xl h-56 my-2 px-5 py-3 cursor-pointer group transform-gpu transition duration-500 ease-out animate-slide-up hover:shadow-2xl hover:scale-[108%] hover:z-[2] hover:-translate-y-1 active:shadow-sm active:scale-[95%] active:translate-y-[0.2rem] md:active:shadow-xl md:active:scale-[103%] md:active:translate-y-[0.15rem]"
+      style={{ animationDelay: `${0.14 * index}s` }}
       onClick={() => dispatchModalState({ type: 'open', data: { ...project } })}
     >
       <ProjectCardHeader
@@ -106,7 +61,7 @@ export function ProjectCard({ project }: Props) {
         isEditing={mode === 'edit'}
         formRef={projectFormRef}
       />
-    </div>
+    </button>
   )
 }
 
