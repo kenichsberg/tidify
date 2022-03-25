@@ -1,5 +1,5 @@
 import { makeSchema } from '@nexus/schema'
-import { nexusSchemaPrisma } from 'nexus-plugin-prisma/schema'
+import { nexusPrisma } from 'nexus-plugin-prisma'
 import path from 'path'
 import * as OperationTypes from 'schema/crud'
 import * as ObjectTypes from 'schema/model'
@@ -7,7 +7,7 @@ import * as ObjectTypes from 'schema/model'
 export const schema = makeSchema({
   types: { OperationTypes, ObjectTypes },
   plugins: [
-    nexusSchemaPrisma({
+    nexusPrisma({
       experimentalCRUD: true,
       shouldGenerateArtifacts: process.env.NODE_ENV === 'development',
       outputs: {

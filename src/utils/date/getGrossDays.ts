@@ -1,10 +1,7 @@
 import { isSameDay, getNextDate, WORKING_TIME } from './common'
 import { getManHour } from './getManHour'
 
-export const getGrossDays = (
-  startDatetime: Date,
-  endDatetime: Date
-): number => {
+export function getGrossDays(startDatetime: Date, endDatetime: Date): number {
   if (isSameDay(startDatetime, endDatetime)) {
     return getManHour(startDatetime, endDatetime) / manHourPerDay
   }
@@ -14,12 +11,12 @@ export const getGrossDays = (
   const dayEndBeforeEndDate = new Date(endDatetime)
   dayEndBeforeEndDate.setHours(0, 0)
 
-  const fistDayDecimal = diffDecimalDay(startDatetime, dayStartAfterStartDate)
+  const firstDayDecimal = diffDecimalDay(startDatetime, dayStartAfterStartDate)
   const inBetweenDays = diffIntDays(dayStartAfterStartDate, dayEndBeforeEndDate)
   const endDayDecimal = diffDecimalDay(dayEndBeforeEndDate, endDatetime)
-  console.log(manHourPerDay, fistDayDecimal, inBetweenDays, endDayDecimal)
+  console.log(manHourPerDay, firstDayDecimal, inBetweenDays, endDayDecimal)
 
-  return fistDayDecimal + inBetweenDays + endDayDecimal
+  return firstDayDecimal + inBetweenDays + endDayDecimal
 }
 
 const abstractStartTime = new Date('1900-01-01')
@@ -29,9 +26,11 @@ abstractEndTime.setHours(WORKING_TIME.end.h, WORKING_TIME.end.m)
 const manHourPerDay = getManHour(abstractStartTime, abstractEndTime)
 
 // get days diff count in integer regardless of time
-const diffIntDays = (a: Date, b: Date): number =>
-  (b.getTime() - a.getTime()) / (1000 * 60 * 60 * 24)
+function diffIntDays(a: Date, b: Date): number {
+  return (b.getTime() - a.getTime()) / (1000 * 60 * 60 * 24)
+}
 
 // get decimal ratio of hours / manHourPerDay from 2 different dates
-const diffDecimalDay = (a: Date, b: Date): number =>
-  getManHour(a, b) / manHourPerDay
+function diffDecimalDay(a: Date, b: Date): number {
+  return getManHour(a, b) / manHourPerDay
+}

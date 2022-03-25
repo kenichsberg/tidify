@@ -1,3 +1,4 @@
+/*
 import useSWR from 'swr'
 import { request, gql } from 'graphql-request'
 import { queryAllUsers } from 'pages/users'
@@ -7,7 +8,6 @@ import { OptionTagObject } from 'components/common/SelectPicker/types'
 
 type User = NexusGenFieldTypes['User']
 
-/*
 const queryAllUsers = gql`
   query {
     users(orderBy: { id: asc }) {
@@ -22,7 +22,6 @@ const queryAllUsers = gql`
     }
   }
 `
-*/
 
 export function useAllUsers(): OptionTagObject[] {
   const { data: allUsers } = useSWR(queryAllUsers, (query) =>
@@ -35,3 +34,4 @@ export function useAllUsers(): OptionTagObject[] {
     })) ?? []
   )
 }
+*/

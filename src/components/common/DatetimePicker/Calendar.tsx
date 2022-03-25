@@ -13,15 +13,17 @@ type Props = {
   setNextPage: () => void
 }
 
-export const Calendar: FC<Props> = ({ date, datetimeRef, setNextPage }) => {
+export function Calendar({
+  date,
+  datetimeRef,
+  setNextPage,
+}: Props): JSX.Element {
   const now = new Date()
   const initialFirstDay = date
     ? new Date(date.getFullYear(), date.getMonth(), 1)
     : new Date(now.getFullYear(), now.getMonth(), 1)
   const [firstDay, setFirstDay] = useState<Date>(initialFirstDay)
   const dates = getCalendarDates(firstDay)
-
-  console.log('date: ', date)
 
   return (
     <>

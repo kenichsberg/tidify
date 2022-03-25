@@ -12,8 +12,9 @@ generator client {
 
 model User {
   id             Int             @id @default(autoincrement())
+  uuid           String          @default(uuid()) @unique
   createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @default(now())
+  updatedAt      DateTime        @default(now()) @updatedAt
   name           String          @unique
   email          String          @unique
   role           Role            @default(MEMBER)
@@ -21,27 +22,29 @@ model User {
   tasks          Task[]
   durationPerDay Int             @default(8)
   dayOff         DayOfWeek[]
-  IrregularDate  IrregularDate[]
+  irregularDates IrregularDate[]
 }
 
 model Project {
   id        Int      @id @default(autoincrement())
+  uuid      String   @default(uuid()) @unique
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
   name      String
   startAt   DateTime
-  endAt     DateTime
+  endAt     DateTime?
   users     User[]
   tasks     Task[]
 }
 
 model Task {
   id              Int      @id @default(autoincrement())
+  uuid            String   @default(uuid()) @unique
   createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
   rank            Int
   name            String
-  status          Status   @default(WIP)
+  status          Status   @default(READY)
   plannedDuration Int      @default(0)
   actualDuration  Int      @default(0)
   user            User     @relation(fields: [userId], references: [id])
@@ -52,8 +55,9 @@ model Task {
 
 model IrregularDate {
   id        Int      @id @default(autoincrement())
+  uuid      String   @default(uuid()) @unique
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
   date      DateTime
   type      DayType  @default(OFF)
   user      User     @relation(fields: [userId], references: [id])
@@ -66,8 +70,7 @@ enum Role {
 }
 
 enum Status {
-  NEW
-  WIP
+  READY
   PENDING
   DONE
 }

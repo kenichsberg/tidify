@@ -1,13 +1,12 @@
-import { FC } from 'react'
-import { useCache } from 'hooks/index'
-import { RoundRect } from './'
+import { useCache } from '@/hooks/index'
+import { RoundRect } from '@/components/schedule'
 
 type Props = {
   weekCount: number
   chartStartDate: Date
 }
 
-export const ChartColumn: FC<Props> = ({ weekCount, chartStartDate }) => {
+export function ChartColumn({ weekCount, chartStartDate }: Props): JSX.Element {
   const { data: _columnWidth } = useCache<number>('columnWidth')
   const { data: _chartHeight } = useCache<number>('chartHeight')
 
@@ -26,8 +25,8 @@ export const ChartColumn: FC<Props> = ({ weekCount, chartStartDate }) => {
           weekday: 'short',
           day: 'numeric',
           month: 'short',
-        }
-        const dateString = date.toLocaleString('en-us', options)
+        } as Intl.DateTimeFormatOptions
+        const dateString = date.toLocaleString('en-GB', options)
         const partialDates = dateString.split(',')
         const weekday = partialDates[0]
         const monthDay = partialDates[1]
@@ -35,7 +34,7 @@ export const ChartColumn: FC<Props> = ({ weekCount, chartStartDate }) => {
         return (
           <g key={number}>
             <text
-              className="fill-current text-gray-500"
+              className="fill-gray-500"
               x={(columnWidth ?? 0) * number + WEEKDAY_TEXT_OFFSET_X}
               y={WEEKDAY_TEXT_OFFSET_Y}
               fill="#2a2f3c"
@@ -44,7 +43,7 @@ export const ChartColumn: FC<Props> = ({ weekCount, chartStartDate }) => {
               {weekday}
             </text>
             <text
-              className="fill-current text-gray-500"
+              className="fill-gray-500"
               x={columnWidth * number + MONTHDAY_TEXT_OFFSET_X}
               y={MONTH_DAY_TEXT_OFFSET_Y}
               fill="#2a2f3c"
@@ -53,7 +52,7 @@ export const ChartColumn: FC<Props> = ({ weekCount, chartStartDate }) => {
               {monthDay}
             </text>
             <RoundRect
-              className="stroke-current text-gray-200"
+              className="stroke-gray-200"
               isRoundCorners={{
                 leftTop: false,
                 leftBottom: false,

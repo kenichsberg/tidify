@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(76px) scale(0.92);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-x {
+  0% {
+    transform: translateX(300px);
+    opacity: 0;
+  }
+}

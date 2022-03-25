@@ -1,5 +1,3 @@
-import { FC, useRef } from 'react'
-
 type Props = {
   radialCoord: number
   polarAngle: number
@@ -10,7 +8,12 @@ type Props = {
   onClick: () => void
 }
 
-export const HourButton: FC<Props> = ({
+type Quadrant = {
+  x: 1 | -1
+  y: 1 | -1
+}
+
+export function HourButton({
   radialCoord,
   polarAngle,
   buttonRadius,
@@ -18,7 +21,7 @@ export const HourButton: FC<Props> = ({
   isSmaller = false,
   isSelected,
   onClick,
-}) => {
+}: Props): JSX.Element {
   // for button
   const radian = (polarAngle * Math.PI) / 180
   const buttonX = Math.round(radialCoord * Math.cos(radian))
@@ -71,7 +74,7 @@ export const HourButton: FC<Props> = ({
   )
 }
 
-const getSign = (angle: number) => {
+function getSign(angle: number): Quadrant {
   switch (true) {
     case 0 <= angle:
       return { x: -1, y: -1 }

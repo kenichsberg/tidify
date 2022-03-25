@@ -824,7 +824,7 @@ export interface NexusGenEnums {
   QueryMode: "default" | "insensitive"
   Role: "MANAGER" | "MEMBER"
   SortOrder: "asc" | "desc"
-  Status: "DONE" | "NEW" | "PENDING" | "WIP"
+  Status: "DONE" | "PENDING" | "READY"
 }
 
 export interface NexusGenScalars {

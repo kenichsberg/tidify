@@ -1,19 +1,25 @@
-import { FC } from 'react'
-import { useCache } from 'hooks/index'
-import { NexusGenFieldTypes } from 'schema/generated/nexusTypes'
-import { diffDate, getChartStartDate, getChartEndDate } from 'utils/date'
-import { ChartRow, ChartColumn, GanttRow } from './'
+import { useCache } from '@/hooks/index'
+import { diffDate } from '@/utils/date'
+import { ChartRow, ChartColumn, GanttRow } from '@/components/schedule'
+
+import { TaskWithoutTechnicalColmuns } from '@/components/project/types'
 
 type Props = {
-  tasks: NexusGenFieldTypes['Task'][]
+  tasks: TaskWithoutTechnicalColmuns[]
+  chartStartDate: Date
+  chartEndDate: Date | undefined
+  projectStartDate: Date
 }
 
-export const GanttField: FC<Props> = ({ tasks }) => {
-  const startDates = tasks.map((task) => new Date(task.startAt))
-  const chartStartDate = getChartStartDate(startDates)
-  const endDates = tasks.map((task) => new Date(task.endAt))
-  const chartEndDate = getChartEndDate(endDates)
-  const weekCount = Math.ceil(diffDate(chartStartDate, chartEndDate, 'week'))
+const COLUMN_WIDTH = 70
+
+export function GanttField({
+  tasks,
+  chartStartDate,
+  chartEndDate,
+  projectStartDate,
+}: Props): JSX.Element {
+  const weekCount = getWeekCount(chartStartDate, chartEndDate)
 
   const { data: _chartHeight } = useCache<number>('chartHeight')
   const chartHeight = _chartHeight ?? 0
@@ -26,9 +32,36 @@ export const GanttField: FC<Props> = ({ tasks }) => {
     <svg width={ganttFieldWidth} height={chartHeight}>
       <ChartRow tasks={tasks} />
       <ChartColumn weekCount={weekCount} chartStartDate={chartStartDate} />
-      <GanttRow tasks={tasks} chartStartDate={chartStartDate} />
+      {getGantRow(tasks, chartStartDate, projectStartDate, chartEndDate)}
     </svg>
   )
 }
 
-const COLUMN_WIDTH = 70
+function getWeekCount(
+  chartStartDate: Date,
+  chartEndDate: Date | undefined
+): number {
+  if (!chartEndDate) {
+    return 1
+  }
+  return Math.ceil(diffDate(chartStartDate, chartEndDate, 'week'))
+}
+
+function getGantRow(
+  tasks: TaskWithoutTechnicalColmuns[],
+  chartStartDate: Date,
+  projectStartDate: Date,
+  chartEndDate: Date | undefined
+): JSX.Element {
+  if (!chartEndDate) {
+    return <></>
+  }
+
+  return (
+    <GanttRow
+      tasks={tasks}
+      chartStartDate={chartStartDate}
+      projectStartDate={projectStartDate}
+    />
+  )
+}
