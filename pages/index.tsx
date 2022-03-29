@@ -20,7 +20,7 @@ import {
 type Props = {
   projects: ProjectWithoutTechnicalColmuns[]
   tasks: TaskWithoutTechnicalColmuns[]
-  users: UserWithoutTechnicalColmuns[]
+  users: Array<UserWithoutTechnicalColmuns & { id: number }>
 }
 
 const prisma = new PrismaClient()
@@ -32,8 +32,8 @@ export default function IndexPage(props: Props): JSX.Element {
   const { data: tasks, error: tasksError } = useSWR<
     TaskWithoutTechnicalColmuns[]
   >('/api/tasks', fetcher, { fallbackData: props.tasks })
-  const { data: users, error: userssError } = useSWR<
-    UserWithoutTechnicalColmuns[]
+  const { data: users, error: usersError } = useSWR<
+    Array<UserWithoutTechnicalColmuns & { id: number }>
   >('/api/users', fetcher, { fallbackData: props.users })
 
   const { setState: setProjects } = useProjects()
@@ -67,7 +67,11 @@ export default function IndexPage(props: Props): JSX.Element {
     setUsers?.(users ?? [])
   }, [users])
 
-  if ((projectsError && !projects) || (tasksError && !tasks))
+  if (
+    (projectsError && !projects) ||
+    (tasksError && !tasks) ||
+    (usersError && !users)
+  )
     return <div>error</div>
 
   return (
