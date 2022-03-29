@@ -22,93 +22,102 @@ export default async function tasksHandler(
 
   switch (method) {
     case 'GET':
-      const tasksSorted = await prisma.task.findMany({
-        select: {
-          uuid: true,
-          name: true,
-          rank: true,
-          status: true,
-          plannedDuration: true,
-          actualDuration: true,
-          user: true,
-          project: true,
-        },
-        orderBy: [{ rank: 'asc' }, { projectId: 'asc' }],
-      })
-      res.status(200).json(tasksSorted)
+      {
+        const tasks = await prisma.task.findMany({
+          select: {
+            uuid: true,
+            name: true,
+            rank: true,
+            status: true,
+            plannedDuration: true,
+            actualDuration: true,
+            user: true,
+            project: true,
+          },
+          orderBy: [{ rank: 'asc' }, { projectId: 'asc' }],
+        })
+        res.status(200).json(tasks)
+      }
       break
 
     case 'PUT':
-      const { projectUuid, tasks }: putProps = JSON.parse(body)
-      console.log(projectUuid, tasks)
+      {
+        const { projectUuid, tasks }: putProps = JSON.parse(body)
+        console.log(projectUuid, tasks)
 
-      const project = await prisma.project.findUnique({
-        where: {
-          uuid: projectUuid,
-        },
-        select: { id: true },
-      })
+        const project = await prisma.project.findUnique({
+          where: {
+            uuid: projectUuid,
+          },
+          select: { id: true },
+        })
+        if (project === null) {
+          res.status(400).end('invalid parameters')
+          return
+        }
 
-      if (project === null) {
-        res.status(400).end('invalid parameters')
-        return
+        // Beforehand, delete records that don't exist in request, but do exist on DB.
+        const oldTasks = await prisma.task.findMany({
+          where: {
+            project: { uuid: projectUuid },
+          },
+        })
+        const deleteIds = oldTasks
+          .filter(
+            (oldTask) => !tasks.find((task) => task.uuid === oldTask.uuid)
+          )
+          .map((oldTask) => oldTask.uuid)
+
+        await prisma.$transaction(
+          deleteIds.map((deleteId) =>
+            prisma.task.delete({
+              where: { uuid: deleteId },
+            })
+          )
+        )
+
+        console.log(
+          'newIds: ',
+          tasks.map((task) => task.uuid),
+          'oldIds: ',
+          oldTasks.map((oldTask) => oldTask.uuid),
+          'deleteIds: ',
+          deleteIds
+        )
+
+        // Then, upsert records
+        const upsertTasks = await prisma.$transaction(
+          tasks.map((task) =>
+            prisma.task.upsert({
+              where: { uuid: task.uuid },
+              update: {
+                rank: +task.rank,
+                name: task.name,
+                plannedDuration: task.plannedDuration
+                  ? +task.plannedDuration
+                  : 0,
+                userId: +task.userId,
+              },
+              create: {
+                uuid: task.uuid,
+                rank: +task.rank,
+                name: task.name,
+                status: 'READY',
+                plannedDuration: task.plannedDuration
+                  ? +task.plannedDuration
+                  : 0,
+                actualDuration: undefined,
+                userId: +task.userId,
+                projectId: project.id,
+              },
+            })
+          )
+        )
+        const successIds = upsertTasks.map((task) => task.uuid)
+
+        const data = { taskUuids: successIds, projectUuid }
+        res.status(201).json({ data })
       }
-
-      // Beforehand, delete records that don't exist in request, but do exist on DB.
-      const oldTasks = await prisma.task.findMany({
-        where: {
-          project: { uuid: projectUuid },
-        },
-      })
-      const deleteIds = oldTasks
-        .filter((oldTask) => !tasks.find((task) => task.uuid === oldTask.uuid))
-        .map((oldTask) => oldTask.uuid)
-
-      await prisma.$transaction(
-        deleteIds.map((deleteId) =>
-          prisma.task.delete({
-            where: { uuid: deleteId },
-          })
-        )
-      )
-
-      console.log(
-        'newIds: ',
-        tasks.map((task) => task.uuid),
-        'oldIds: ',
-        oldTasks.map((oldTask) => oldTask.uuid),
-        'deleteIds: ',
-        deleteIds
-      )
-
-      // Then, upsert records
-      const upsertTasks = await prisma.$transaction(
-        tasks.map((task) =>
-          prisma.task.upsert({
-            where: { uuid: task.uuid },
-            update: {
-              rank: +task.rank,
-              name: task.name,
-              plannedDuration: task.plannedDuration ? +task.plannedDuration : 0,
-              userId: +task.userId,
-            },
-            create: {
-              uuid: task.uuid,
-              rank: +task.rank,
-              name: task.name,
-              status: 'READY',
-              plannedDuration: task.plannedDuration ? +task.plannedDuration : 0,
-              actualDuration: undefined,
-              userId: +task.userId,
-              projectId: project.id,
-            },
-          })
-        )
-      )
-      const successIds = upsertTasks.map((task) => task.uuid)
-
-      const data = { taskUuids: successIds, projectUuid }
-      res.status(201).json({ data })
       break
 
     /*
