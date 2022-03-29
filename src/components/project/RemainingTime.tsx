@@ -72,10 +72,10 @@ function getDisplayStr(targetDate: Date | undefined) {
 function getTimeStr(targetDate: Date) {
   const now = new Date()
   const unit = getOptimalDateDiffUnit(targetDate, now)
-  const diff = diffDate(targetDate, now, unit)
+  const diff = Math.abs(Math.trunc(diffDate(targetDate, now, unit)))
   const s = diff === 1 ? '' : 's'
 
-  return `${Math.trunc(diff)} ${unit}${s}`
+  return `${diff} ${unit}${s}`
 }
 
 function getRemainingHours(endDate: Date | undefined): number | undefined {
