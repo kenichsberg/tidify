@@ -1,7 +1,7 @@
 import { NoData } from '@/components/common'
 import { TeammateTask } from '@/components/project'
 import { useTasks } from '@/contexts/task'
-import { useLoginUser } from '@/contexts/user'
+import { useUsers, useLoginUser } from '@/contexts/user'
 
 import { TaskWithoutTechnicalColmuns } from '@/components/project/types'
 
@@ -9,11 +9,49 @@ export function TeammatesTaskSection(): JSX.Element {
   const { state: tasks } = useTasks()
   if (!tasks) throw new Error('context value undefined')
 
+  const { state: users } = useUsers()
+  if (!users) throw new Error('context value undefined')
+
   const { state: loginUser } = useLoginUser()
   if (!loginUser) throw new Error('context value undefined')
 
-  const teammateTasks =
-    tasks.filter((task) => task.user.uuid !== loginUser.uuid) ?? []
+  const usernameToTasks = tasks
+    .filter(
+      (task) => task.user.uuid !== loginUser.uuid && task.status !== 'DONE'
+    )
+    .reduce<any>(
+      (acc, current) => ({
+        ...acc,
+        [current.user.uuid]: acc?.[current.user.uuid]
+          ? [...acc[current.user.uuid], current]
+          : [current],
+      }),
+      {}
+    )
+
+  const userNames = Object.keys(usernameToTasks)
+  let teammateTasks: TaskWithoutTechnicalColmuns[] = []
+
+  userNames.forEach((userName) => {
+    const tasks = [...usernameToTasks[userName]]
+    /*
+    const taskRanks = tasks.map(
+      (task: TaskWithoutTechnicalColmuns) => task.rank
+    )
+    const minTaskRank = Math.min(taskRanks)
+    const target = tasks.find(
+      (task: TaskWithoutTechnicalColmuns) => task.rank === minTaskRank
+    )
+
+    if (target) {
+      teammateTasks = [...teammateTasks, target]
+    }
+*/
+    tasks.sort((a, b) => a.rank - b.rank)
+    teammateTasks = tasks?.[0] ? [...teammateTasks, tasks?.[0]] : teammateTasks
+  })
+
+  console.log({ tasks, usernameToTasks, userNames, teammateTasks })
 
   return (
     <section className="bg-gradient-to-b from-bluegray-50 to-bluegray-100 rounded-[60px] overflow-auto px-4 sm:px-6 py-10">

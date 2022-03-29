@@ -14,7 +14,7 @@ export function TeammateTask({ task, index = 0 }: Props): JSX.Element {
     : ' bg-bluegray-300 text-bluegray-200 hover:bg-bluegray-400 active:bg-green-600'
   return (
     <div
-      className="h-20 flex flex-row justify-between items-center font-mono text-sm text-center text-bluegray-700 bg-gradient-to-br from-bluegray-100/90 to-bluegray-200 shadow rounded-xl my-2 px-5 py-2 transition-all duration-500 animate-slide-x hover:shadow-2xl hover:scale-105 hover:-translate-y-1"
+      className="h-28 flex flex-row justify-between items-center font-mono text-sm text-center text-bluegray-700 bg-gradient-to-br from-bluegray-100/90 to-bluegray-200 shadow rounded-xl my-2 px-5 py-2 transition-all duration-500 animate-slide-x hover:shadow-2xl hover:scale-105 hover:-translate-y-1"
       style={{ animationDelay: `${0.2 * (index + 1)}s` }}
     >
       <div className="flex-shrink self-stretch w-2 h-full bg-bluegray-300 rounded-xl"></div>
@@ -24,6 +24,7 @@ export function TeammateTask({ task, index = 0 }: Props): JSX.Element {
         >
           <User size={18} />
         </div>
+        <p className="truncate text-bluegray-500 pt-1">{task.user?.name}</p>
       </div>
       <div className="w-1/2 max-w-[20rem] flex-1 flex flex-col items-start">
         <div className="block w-4/5">
