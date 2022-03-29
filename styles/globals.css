@@ -1923,9 +1923,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 
 @media (min-width: 768px) {
+
   .md\:flex {
     display: flex;
   }
+
   .md\:px-6 {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
