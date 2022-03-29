@@ -3,6 +3,7 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { ProjectsProvider } from '@/contexts/project'
 import { TasksProvider } from '@/contexts/task'
+import { UsersProvider } from '@/contexts/user'
 import { LoginUserProvider } from '@/contexts/user'
 
 import '../styles/tailwind.css'
@@ -17,7 +18,9 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
       <LoginUserProvider>
         <ProjectsProvider>
           <TasksProvider>
-            <Component {...pageProps} />
+            <UsersProvider>
+              <Component {...pageProps} />
+            </UsersProvider>
           </TasksProvider>
         </ProjectsProvider>
       </LoginUserProvider>

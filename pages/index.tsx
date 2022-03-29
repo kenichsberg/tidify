@@ -7,17 +7,20 @@ import { Layout } from '@/components/layout'
 import { ProjectsPage } from '@/components/project'
 import { useProjects } from '@/contexts/project'
 import { useTasks } from '@/contexts/task'
+import { useUsers } from '@/contexts/user'
 import { strToDate } from '@/utils/date'
 import { fetcher, patchPropertyValues } from '@/utils/functions'
 
 import {
   ProjectWithoutTechnicalColmuns,
   TaskWithoutTechnicalColmuns,
+  UserWithoutTechnicalColmuns,
 } from '@/components/project/types'
 
 type Props = {
   projects: ProjectWithoutTechnicalColmuns[]
   tasks: TaskWithoutTechnicalColmuns[]
+  users: UserWithoutTechnicalColmuns[]
 }
 
 const prisma = new PrismaClient()
@@ -29,10 +32,13 @@ export default function IndexPage(props: Props): JSX.Element {
   const { data: tasks, error: tasksError } = useSWR<
     TaskWithoutTechnicalColmuns[]
   >('/api/tasks', fetcher, { fallbackData: props.tasks })
-  console.log('pages', projects, tasks)
+  const { data: users, error: userssError } = useSWR<
+    UserWithoutTechnicalColmuns[]
+  >('/api/users', fetcher, { fallbackData: props.users })
 
   const { setState: setProjects } = useProjects()
   const { setState: setTasks } = useTasks()
+  const { setState: setUsers } = useUsers()
 
   useEffect(() => {
     const formattedData = projects?.map((project) => {
@@ -57,6 +63,10 @@ export default function IndexPage(props: Props): JSX.Element {
     setTasks?.(tasks ?? [])
   }, [tasks])
 
+  useEffect(() => {
+    setUsers?.(users ?? [])
+  }, [users])
+
   if ((projectsError && !projects) || (tasksError && !tasks))
     return <div>error</div>
 
@@ -79,6 +89,7 @@ export async function getServerSideProps(): Promise<
       users: true,
       tasks: true,
     },
+    orderBy: [{ id: 'asc' }],
   })
   const projects = JSON.parse(JSON.stringify(_projects))
 
@@ -97,5 +108,17 @@ export async function getServerSideProps(): Promise<
   })
   const tasks = JSON.parse(JSON.stringify(_tasks))
 
-  return { props: { projects, tasks } }
+  const _users = await prisma.user.findMany({
+    select: {
+      uuid: true,
+      name: true,
+      role: true,
+      dayOff: true,
+      irregularDates: true,
+    },
+    orderBy: [{ id: 'asc' }],
+  })
+  const users = JSON.parse(JSON.stringify(_users))
+
+  return { props: { projects, tasks, users } }
 }
