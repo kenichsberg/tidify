@@ -160,7 +160,7 @@ export function getYearsBetween(
 ): number {
   const diff = diffDate(dateA, dateB)
   if (diff < 0) return getYearsBetween(dateB, dateA, -1)
-
+  
   const yearsDiff = dateB.getFullYear() - dateA.getFullYear()
   const monthsDiff = dateB.getMonth() - dateA.getMonth()
   const daysDiff = dateB.getDate() - dateA.getDate()

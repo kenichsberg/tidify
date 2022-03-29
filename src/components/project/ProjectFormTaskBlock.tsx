@@ -10,7 +10,7 @@ import { RhfInput, RhfSelect } from '@/components/rhf-wrapper'
 import { dndTypes } from '@/components/project/constants'
 import { useTasksOfProject, useTaskUuids } from '@/contexts/task'
 import { useUsers } from '@/contexts/user'
-
+        
 type Props = {
   isDummy?: boolean
   index: number
@@ -23,12 +23,14 @@ export function ProjectFormTaskBlock({
   const { state: tasks, setState: setTasks } = useTasksOfProject()
   const { state: taskUuids, setState: setTaskUuids } = useTaskUuids()
   const { state: users } = useUsers()
+
   if (!tasks || !setTasks) {
     throw new Error('Tasks context undefined')
   }
   if (!taskUuids || !setTaskUuids) {
     throw new Error('TaskUuids context undefined')
   }
+
   if (!users) {
     throw new Error('Users context undefined')
   }
