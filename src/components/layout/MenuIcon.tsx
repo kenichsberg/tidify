@@ -36,7 +36,7 @@ export const MenuIcon: FC<Props> = ({
 
   return (
     <Link href={configs.url}>
-      <a>
+      <a className="focus:outline-none">
         <div
           title={title}
           className={`flex-shrink-0 rounded-full h-16 w-16 flex items-center justify-center ${color} mx-auto ${marginY} ${cursor}`}

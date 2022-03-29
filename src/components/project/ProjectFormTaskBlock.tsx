@@ -9,7 +9,8 @@ import { InputField } from '@/components/common'
 import { RhfInput, RhfSelect } from '@/components/rhf-wrapper'
 import { dndTypes } from '@/components/project/constants'
 import { useTasksOfProject, useTaskUuids } from '@/contexts/task'
-
+import { useUsers } from '@/contexts/user'
+        
 type Props = {
   isDummy?: boolean
   index: number
@@ -21,6 +22,8 @@ export function ProjectFormTaskBlock({
 }: Props): JSX.Element {
   const { state: tasks, setState: setTasks } = useTasksOfProject()
   const { state: taskUuids, setState: setTaskUuids } = useTaskUuids()
+  const { state: users } = useUsers()
+
   if (!tasks || !setTasks) {
     throw new Error('Tasks context undefined')
   }
@@ -28,11 +31,14 @@ export function ProjectFormTaskBlock({
     throw new Error('TaskUuids context undefined')
   }
 
+  if (!users) {
+    throw new Error('Users context undefined')
+  }
+
   const task = tasks?.[index]
   if (!task) {
     throw new Error('task undefined')
   }
-  console.log(index, task.uuid, taskUuids.indexOf(task.uuid))
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: dndTypes.TASK,
@@ -49,6 +55,11 @@ export function ProjectFormTaskBlock({
     unregister,
     setValue,
   } = useFormContext()
+
+  const selectOptionsUser = users.map((user) => ({
+    label: user.name,
+    value: user.id,
+  }))
 
   const onFocus = isDummy
     ? () => {
@@ -164,10 +175,7 @@ export function ProjectFormTaskBlock({
               rules={{ required: !isDummy }}
               control={control}
               value={task.userId}
-              options={[
-                { label: 'a', value: 2 },
-                { label: 'b', value: 4 },
-              ]}
+              options={selectOptionsUser}
             />
           </InputField>
           <span

@@ -33,8 +33,10 @@ export type ProjectStatus = 'completed' | 'ahead' | 'late'
 
 export interface TaskFormProps {
   uuid: string
+  rank?: number
   name: string
   plannedDuration: number
+  //userUuid: string | undefined
   userId: number | undefined
 }
 

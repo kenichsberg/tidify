@@ -5,6 +5,9 @@ import {
   getMinDate,
   getMaxDate,
   diffDate,
+  getMonthsBetween,
+  getYearsBetween,
+  getOptimalDateDiffUnit,
 } from '@/utils/date'
 
 describe('utils/date/common', () => {
@@ -65,11 +68,41 @@ describe('utils/date/common', () => {
       expect(diff).toBe(2 * 24 * 60 * 60 * 1000)
     })
 
-    it('msec', () => {
+    it('week', () => {
       const dateA = new Date('2020-12-31 00:00:00')
       const dateB = new Date('2021-01-14 00:00:00')
       const diff = diffDate(dateA, dateB, 'week')
       expect(diff).toBe(2)
+    })
+  })
+
+  describe('monthBetween', () => {
+    it('b < a', () => {
+      const dateA = new Date('2022-04-14 00:00:00')
+      const dateB = new Date('2022-02-14 00:00:00')
+      const diff = getMonthsBetween(dateA, dateB)
+      expect(diff === -2).toBeTruthy()
+    })
+  })
+
+  describe('yearBetween', () => {
+    it('a < b', () => {
+      const dateA = new Date('2020-04-14 00:00:00')
+      const dateB = new Date('2022-03-14 00:00:00')
+      const diff = getYearsBetween(dateA, dateB)
+      expect(diff === 1).toBeTruthy()
+    })
+    it('b < a', () => {
+      const dateA = new Date('2022-04-14 00:00:00')
+      const dateB = new Date('2022-03-14 00:00:00')
+      const diff = getYearsBetween(dateA, dateB)
+      expect(diff === 0).toBeTruthy()
+    })
+    it('b < a', () => {
+      const dateA = new Date('2022-04-14 00:00:00')
+      const dateB = new Date('2020-03-14 00:00:00')
+      const diff = getYearsBetween(dateA, dateB)
+      expect(diff === -2).toBeTruthy()
     })
   })
 })

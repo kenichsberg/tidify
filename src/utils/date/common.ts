@@ -129,18 +129,21 @@ export function diffDate(
  * @param dateB - Date to be compared
  * @returns how many months between 2 dates
  */
-function getMonthsBetween(dateA: Date, dateB: Date): number {
+export function getMonthsBetween(
+  dateA: Date,
+  dateB: Date,
+  sign: 1 | -1 = 1
+): number {
+  const diff = diffDate(dateA, dateB)
+  if (diff < 0) return getMonthsBetween(dateB, dateA, -1)
+
   const yearsDiff = dateB.getFullYear() - dateA.getFullYear()
   const monthsDiff = dateB.getMonth() - dateA.getMonth()
   const daysDiff = dateB.getDate() - dateA.getDate()
 
-  let monthCorrection = 0
+  const monthCorrection = daysDiff < 0 ? -1 : 0
 
-  if (daysDiff < 0) {
-    monthCorrection = -1
-  }
-
-  return yearsDiff * 12 + monthsDiff + monthCorrection
+  return sign * (yearsDiff * 12 + monthsDiff + monthCorrection)
 }
 
 /**
@@ -150,18 +153,22 @@ function getMonthsBetween(dateA: Date, dateB: Date): number {
  * @param dateB - Date to be compared
  * @returns how many years between 2 dates
  */
-function getYearsBetween(dateA: Date, dateB: Date): number {
+export function getYearsBetween(
+  dateA: Date,
+  dateB: Date,
+  sign: 1 | -1 = 1
+): number {
+  const diff = diffDate(dateA, dateB)
+  if (diff < 0) return getYearsBetween(dateB, dateA, -1)
+  
   const yearsDiff = dateB.getFullYear() - dateA.getFullYear()
   const monthsDiff = dateB.getMonth() - dateA.getMonth()
   const daysDiff = dateB.getDate() - dateA.getDate()
 
-  let yearCorrection = 0
+  const yearCorrection =
+    monthsDiff < 0 || (monthsDiff === 0 && daysDiff < 0) ? -1 : 0
 
-  if (monthsDiff < 0 || (monthsDiff === 0 && daysDiff < 0)) {
-    yearCorrection = -1
-  }
-
-  return yearsDiff + yearCorrection
+  return sign * (yearsDiff + yearCorrection)
 }
 
 /**
@@ -173,19 +180,19 @@ function getYearsBetween(dateA: Date, dateB: Date): number {
  */
 export function getOptimalDateDiffUnit(dateA: Date, dateB: Date): DateDiffUnit {
   switch (true) {
-    case diffDate(dateA, dateB, 'year') >= 1:
+    case Math.abs(diffDate(dateA, dateB, 'year')) >= 1:
       return 'year'
-    case diffDate(dateA, dateB, 'month') >= 1:
+    case Math.abs(diffDate(dateA, dateB, 'month')) >= 1:
       return 'month'
-    case diffDate(dateA, dateB, 'week') >= 1:
+    case Math.abs(diffDate(dateA, dateB, 'week')) >= 1:
       return 'week'
-    case diffDate(dateA, dateB, 'day') >= 1:
+    case Math.abs(diffDate(dateA, dateB, 'day')) >= 1:
       return 'day'
-    case diffDate(dateA, dateB, 'hour') >= 1:
+    case Math.abs(diffDate(dateA, dateB, 'hour')) >= 1:
       return 'hour'
-    case diffDate(dateA, dateB, 'min') >= 1:
+    case Math.abs(diffDate(dateA, dateB, 'min')) >= 1:
       return 'min'
-    case diffDate(dateA, dateB, 'sec') >= 1:
+    case Math.abs(diffDate(dateA, dateB, 'sec')) >= 1:
       return 'sec'
     default:
       return 'msec'
