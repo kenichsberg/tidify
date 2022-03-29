@@ -32,6 +32,7 @@ export default function IndexPage(props: Props): JSX.Element {
   const { data: tasks, error: tasksError } = useSWR<
     TaskWithoutTechnicalColmuns[]
   >('/api/tasks', fetcher, { fallbackData: props.tasks })
+
   const { data: users, error: usersError } = useSWR<
     Array<UserWithoutTechnicalColmuns & { id: number }>
   >('/api/users', fetcher, { fallbackData: props.users })
@@ -72,6 +73,7 @@ export default function IndexPage(props: Props): JSX.Element {
     (tasksError && !tasks) ||
     (usersError && !users)
   )
+
     return <div>error</div>
 
   return (
