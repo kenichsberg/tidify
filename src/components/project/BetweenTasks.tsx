@@ -27,7 +27,6 @@ export function BetweenTasks({ index }: Props): JSX.Element {
       drop: (_, monitor) => {
         const props = monitor.getItem() as TaskProps
         const task = props.task
-        console.log(props)
 
         const oldIndex = tasks.indexOf(task)
         const newIndex = index
@@ -39,7 +38,6 @@ export function BetweenTasks({ index }: Props): JSX.Element {
           ...removed.slice(actualIndex),
         ]
 
-        console.log({ old: tasks, removed: removed, new: newTasks })
         setTasks(newTasks)
       },
       collect: (monitor) => ({

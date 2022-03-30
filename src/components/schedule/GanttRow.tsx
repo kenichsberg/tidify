@@ -43,7 +43,6 @@ export function GanttRow({
           startAt,
           task.plannedDuration
         )
-        console.log(startAt, endAt)
         tmpEndAt = endAt
 
         const planGanttOffsetX =

@@ -33,7 +33,6 @@ export const SelectPickerWithRef: FC<Props> = ({
 }) => {
   const [value, setValue] = useState<number | string | undefined>(initialValue)
   const onChange = (newValueObj: OptionTagObject | undefined) => {
-    console.log(newValueObj, formRef.current)
     formRef.current = {
       ...formRef.current,
       [name]: newValueObj,

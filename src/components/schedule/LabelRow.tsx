@@ -29,7 +29,6 @@ export function LabelRow({
   return (
     <>
       {tasks.map((task, index) => {
-        console.log(task)
         const color =
           (previousRowsCount + index) % 2 === 0
             ? ' fill-bluegray-100'

@@ -69,7 +69,7 @@ export function DatetimePicker({
     datetimeRef.current.minute = undefined
   }
   const setNextPage = (page: number) => () => setPage(++page)
-  console.log(date)
+  //console.log(date)
 
   return (
     <>

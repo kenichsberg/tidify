@@ -39,7 +39,6 @@ export function ChartView(): JSX.Element {
     .filter((project): project is ProjectWithNotNullEndAt => !!project.endAt)
     .map((project) => new Date(project.endAt))
   const chartEndDate = getMaxDate(projectEndDates)
-  console.log(chartStartDate, chartEndDate)
 
   return (
     <div className="px-5 md:px-6 py-4">

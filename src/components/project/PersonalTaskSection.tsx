@@ -15,7 +15,6 @@ export function PersonalTaskSection(): JSX.Element {
   const personalTask = tasks.filter(
     (task) => task.user.uuid === loginUser.uuid && task.status !== 'DONE'
   )?.[0]
-  console.log(tasks, loginUser, personalTask)
 
   return (
     <section className="lg:h-full bg-gradient-to-b from-bluegray-50 via-bluegray-50 to-bluegray-100 rounded-[60px] overflow-auto px-4 sm:px-6 py-10">

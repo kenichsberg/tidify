@@ -3,7 +3,6 @@ import { TeammateTask } from '@/components/project'
 import { useTasks } from '@/contexts/task'
 import { useUsers, useLoginUser } from '@/contexts/user'
 
-
 import { TaskWithoutTechnicalColmuns } from '@/components/project/types'
 
 export function TeammatesTaskSection(): JSX.Element {
@@ -35,24 +34,9 @@ export function TeammatesTaskSection(): JSX.Element {
 
   userNames.forEach((userName) => {
     const tasks = [...usernameToTasks[userName]]
-    /*
-    const taskRanks = tasks.map(
-      (task: TaskWithoutTechnicalColmuns) => task.rank
-    )
-    const minTaskRank = Math.min(taskRanks)
-    const target = tasks.find(
-      (task: TaskWithoutTechnicalColmuns) => task.rank === minTaskRank
-    )
-
-    if (target) {
-      teammateTasks = [...teammateTasks, target]
-    }
-*/
     tasks.sort((a, b) => a.rank - b.rank)
     teammateTasks = tasks?.[0] ? [...teammateTasks, tasks?.[0]] : teammateTasks
   })
-
-  console.log({ tasks, usernameToTasks, userNames, teammateTasks })
 
   return (
     <section className="bg-gradient-to-b from-bluegray-50 to-bluegray-100 rounded-[60px] overflow-auto px-4 sm:px-6 py-10">

@@ -62,14 +62,12 @@ export function CreateProject({
         'startAt'
       )
     : null
-  console.log('create', project)
   useEffect(() => {
     setStartAt(modalState.project?.startAt)
 
     if (!modalState.project?.startAt) return
     setValue('startAt', modalState.project?.startAt)
   }, [project])
-  console.log('create', startAt)
 
   const onSubmit: SubmitHandler<CreateProjectFormProps> = async (input) => {
     const record: ProjectWithoutTechnicalColmuns = {
@@ -91,7 +89,6 @@ export function CreateProject({
     } else {
       newProjects = [...projects, record]
     }
-    console.log(projects, newProjects)
 
     mutate('/api/projects', newProjects, false)
 
@@ -103,7 +100,6 @@ export function CreateProject({
       data: ProjectWithoutTechnicalColmuns
     }
     const newProject = res.data
-    console.log('aaa', { newProject, response })
     dispatchModalState({ type: 'setNewProject', data: newProject })
 
     mutate('/api/projects')

@@ -16,7 +16,7 @@ export function moveArrayValuePosition(
   if (oldIndex === -1) throw new Error('value not found')
 
   const filtered = array.filter((_, index) => index !== oldIndex)
-  console.log(value, filtered, array, oldIndex, newIndex)
+  //console.log(value, filtered, array, oldIndex, newIndex)
   const offset = oldIndex < newIndex ? -1 : 0
 
   return insertToArray(filtered, value, newIndex + offset)

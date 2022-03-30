@@ -83,10 +83,6 @@ export class ManHourCalculator {
     acc: number = 0
   ): number {
     if (isSameDay(durationStart, durationEnd)) {
-      console.log({
-        acc,
-        last: this._getManHourPerDay(durationStart, durationEnd),
-      })
       return acc + this._getManHourPerDay(durationStart, durationEnd)
     }
 
@@ -94,7 +90,6 @@ export class ManHourCalculator {
     const nextStart = new Date(durationStart.getTime())
     nextStart.setDate(durationStart.getDate() + 1)
     nextStart.setHours(WORKING_TIME.start.h, WORKING_TIME.start.m)
-    console.log({ nextStart, durationEnd, acc, current })
 
     return this.getManHour(nextStart, durationEnd, acc + current)
   }

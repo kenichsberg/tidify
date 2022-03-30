@@ -18,7 +18,6 @@ export function YearMonthControler({
     const offset = direction === 'next' ? 1 : -1
     const newMonthFirstDay = new Date(firstDay)
     newMonthFirstDay.setMonth(firstDay.getMonth() + offset)
-    console.log('firstDay: ' + newMonthFirstDay)
     setFirstDay(newMonthFirstDay)
   }
 

@@ -29,10 +29,6 @@ export function PersonalTask({ task, index = 0 }: Props): JSX.Element {
     control,
     setValue,
   } = useForm<FormProps>()
-  const isTapped = false
-  const color = isTapped
-    ? ' bg-green-700 text-bluegray-100'
-    : ' bg-bluegray-300 text-bluegray-200 hover:bg-bluegray-400 active:bg-green-600'
 
   const onSubmit: SubmitHandler<FormProps> = async (input: FormProps) => {
     await fetch(`/api/tasks/${task.uuid}`, {
