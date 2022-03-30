@@ -112,24 +112,21 @@ function getRightButton(mode: Mode) {
   switch (mode) {
     case 'normal':
       return (
-        <button className="focus:outline-none">
+        <span className="focus:outline-none">
           <Trash2 size={20} />
-        </button>
+        </span>
       )
     case 'edit':
       return (
-        <button className="text-teal-600 group-hover:text-teal-400 focus:outline-none">
+        <span className="text-teal-600 group-hover:text-teal-400 focus:outline-none">
           <Check size={20} />
-        </button>
+        </span>
       )
     case 'processing':
       return (
-        <button
-          className="focus:outline-none cursor-not-allowed"
-          disabled={true}
-        >
+        <span className="focus:outline-none cursor-not-allowed">
           <Spinner className="text-bluegray-400" />
-        </button>
+        </span>
       )
   }
 }

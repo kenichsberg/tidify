@@ -36,6 +36,7 @@ export function LabelField(): JSX.Element {
           .reduce<number>((acc, current) => acc + current.tasks.length, 0)
         return (
           <LabelRow
+            key={project.uuid}
             tasks={project.tasks}
             projectName={project.name}
             previousRowsCount={previousRowsCount}
