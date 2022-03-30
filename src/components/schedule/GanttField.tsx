@@ -1,24 +1,29 @@
 import { useCache } from '@/hooks/index'
 import { diffDate } from '@/utils/date'
-import { ChartRow, ChartColumn, GanttRow } from '@/components/schedule'
+import {
+  ChartBase,
+  ChartRow,
+  ChartColumn,
+  GanttRow,
+} from '@/components/schedule'
+import { useProjects } from '@/contexts/project'
 
 import { TaskWithoutTechnicalColmuns } from '@/components/project/types'
 
 type Props = {
-  tasks: TaskWithoutTechnicalColmuns[]
   chartStartDate: Date
   chartEndDate: Date | undefined
-  projectStartDate: Date
 }
 
 const COLUMN_WIDTH = 70
 
 export function GanttField({
-  tasks,
   chartStartDate,
   chartEndDate,
-  projectStartDate,
 }: Props): JSX.Element {
+  const { state: projects } = useProjects()
+  if (!projects) throw new Error('context value undefined')
+
   const weekCount = getWeekCount(chartStartDate, chartEndDate)
 
   const { data: _chartHeight } = useCache<number>('chartHeight')
@@ -30,9 +35,31 @@ export function GanttField({
 
   return (
     <svg width={ganttFieldWidth} height={chartHeight}>
-      <ChartRow tasks={tasks} />
+      <ChartBase />
+      {projects.map((project, index, array) => {
+        const previousRowsCount = array
+          .slice(0, index)
+          .reduce<number>((acc, current) => acc + current.tasks.length, 0)
+        return (
+          <ChartRow
+            tasks={project.tasks}
+            previousRowsCount={previousRowsCount}
+          />
+        )
+      })}
       <ChartColumn weekCount={weekCount} chartStartDate={chartStartDate} />
-      {getGantRow(tasks, chartStartDate, projectStartDate, chartEndDate)}
+      {projects.map((project, index, array) => {
+        const previousRowsCount = array
+          .slice(0, index)
+          .reduce<number>((acc, current) => acc + current.tasks.length, 0)
+        return getGanttRows(
+          project.tasks,
+          chartStartDate,
+          project.startAt,
+          chartEndDate,
+          previousRowsCount
+        )
+      })}
     </svg>
   )
 }
@@ -47,11 +74,12 @@ function getWeekCount(
   return Math.ceil(diffDate(chartStartDate, chartEndDate, 'week'))
 }
 
-function getGantRow(
+function getGanttRows(
   tasks: TaskWithoutTechnicalColmuns[],
   chartStartDate: Date,
   projectStartDate: Date,
-  chartEndDate: Date | undefined
+  chartEndDate: Date | undefined,
+  previousRowsCount: number
 ): JSX.Element {
   if (!chartEndDate) {
     return <></>
@@ -62,6 +90,7 @@ function getGantRow(
       tasks={tasks}
       chartStartDate={chartStartDate}
       projectStartDate={projectStartDate}
+      previousRowsCount={previousRowsCount}
     />
   )
 }

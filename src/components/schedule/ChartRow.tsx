@@ -1,49 +1,36 @@
-import { RoundRect } from '@/components/schedule'
 import { useCache } from '@/hooks/index'
 
 import { TaskWithoutTechnicalColmuns } from '@/components/project/types'
 
 type Props = {
   tasks: TaskWithoutTechnicalColmuns[]
+  previousRowsCount: number
 }
 
-export function ChartRow({ tasks }: Props): JSX.Element {
+export function ChartRow({ tasks, previousRowsCount }: Props): JSX.Element {
   const { data: _ganttFieldWidth } = useCache<number>('ganttFieldWidth')
-  const { data: _chartHeight } = useCache<number>('chartHeight')
   const { data: _headerHeight } = useCache<number>('headerHeight')
   const { data: _rowHeight } = useCache<number>('rowHeight')
 
   const ganttFieldWidth = _ganttFieldWidth ?? 0
-  const chartHeight = _chartHeight ?? 0
   const headerHeight = _headerHeight ?? 0
   const rowHeight = _rowHeight ?? 0
 
+  const offsetY = previousRowsCount * rowHeight
+
   return (
     <g>
-      <RoundRect
-        className="fill-gray-50"
-        isRoundCorners={{
-          leftTop: false,
-          leftBottom: false,
-          rightTop: true,
-          rightBottom: true,
-        }}
-        rectProps={{
-          x: 0,
-          y: 0,
-          width: ganttFieldWidth ?? 0,
-          height: chartHeight ?? 0,
-          radius: 20,
-        }}
-      />
       {tasks.map((task, index) => {
-        const color = index % 2 === 0 ? ' fill-bluegray-100' : ' fill-gray-50'
+        const color =
+          (previousRowsCount + index) % 2 === 0
+            ? ' fill-bluegray-100'
+            : ' fill-gray-50'
         return (
           <rect
             className={`${color}`}
             key={task.uuid}
             x="0"
-            y={rowHeight * index + (headerHeight ?? 0)}
+            y={offsetY + rowHeight * index + (headerHeight ?? 0)}
             width={ganttFieldWidth}
             height={rowHeight}
           ></rect>

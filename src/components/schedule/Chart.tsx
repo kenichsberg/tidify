@@ -1,14 +1,9 @@
 import { NoData } from '@/components/common'
 import { GanttField, LabelField } from '@/components/schedule'
 import { useCache } from '@/hooks/index'
-
-import {
-  ProjectWithoutTechnicalColmuns,
-  TaskWithoutTechnicalColmuns,
-} from '@/components/project/types'
+import { useTasks } from '@/contexts/task'
 
 type Props = {
-  project: ProjectWithoutTechnicalColmuns
   chartStartDate: Date
   chartEndDate: Date | undefined
 }
@@ -17,16 +12,14 @@ const HEADER_HEIGHT = 50
 const ROW_HEIGHT = 80
 const FOOTER_HEIGHT = 10
 
-export function Chart({
-  project,
-  chartStartDate,
-  chartEndDate,
-}: Props): JSX.Element {
+export function Chart({ chartStartDate, chartEndDate }: Props): JSX.Element {
+  const { state: tasks } = useTasks()
+  if (!tasks) throw new Error('context value undefined')
+
   useCache<number>('headerHeight', HEADER_HEIGHT)
   useCache<number>('rowHeight', ROW_HEIGHT)
 
-  const tasks = project.tasks
-  if (!tasks) {
+  if (!tasks.length) {
     return <NoData dataType="tasks" />
   }
   const taskCount = tasks.length
@@ -38,14 +31,12 @@ export function Chart({
   return (
     <div className="flex pb-10">
       <div className="min-w-max max-w-min overflow-x-auto">
-        <LabelField tasks={tasks} projectName={project?.name ?? ''} />
+        <LabelField />
       </div>
       <div className="w-full overflow-x-auto">
         <GanttField
-          tasks={tasks}
           chartStartDate={chartStartDate}
           chartEndDate={chartEndDate}
-          projectStartDate={new Date(project.startAt)}
         />
       </div>
     </div>

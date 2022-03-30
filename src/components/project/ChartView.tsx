@@ -42,17 +42,8 @@ export function ChartView(): JSX.Element {
   console.log(chartStartDate, chartEndDate)
 
   return (
-    <div className="my-3 px-5 md:px-6 py-4">
-      <div className="">
-        {projects.map((project) => (
-          <Chart
-            key={project.uuid}
-            project={project}
-            chartStartDate={chartStartDate}
-            chartEndDate={chartEndDate}
-          />
-        ))}
-      </div>
+    <div className="px-5 md:px-6 py-4">
+      <Chart chartStartDate={chartStartDate} chartEndDate={chartEndDate} />
     </div>
   )
 }

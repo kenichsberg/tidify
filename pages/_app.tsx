@@ -21,7 +21,6 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
             <UsersProvider>
               <Component {...pageProps} />
             </UsersProvider>
-            <Component {...pageProps} />
           </TasksProvider>
         </ProjectsProvider>
       </LoginUserProvider>
