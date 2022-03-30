@@ -37,7 +37,7 @@ export function ProjectFormModal({
           setPageNo(0)
         }}
       >
-        <ModalWindow className="w-11/12 max-w-7xl max-h-95vh flex flex-col bg-gradient-to-br from-bluegray-200 to-bluegray-300 border-0 rounded-3xl shadow-lg font-mono transition duration-500 animate-popup">
+        <ModalWindow className="w-11/12 max-w-7xl max-h-[98vh] flex flex-col bg-gradient-to-br from-bluegray-200 to-bluegray-300 border-0 rounded-3xl shadow-lg font-mono transition duration-500 animate-popup">
           {getContent(
             pageNo,
             /*modalState?.project ?? null,*/ setPageNo,

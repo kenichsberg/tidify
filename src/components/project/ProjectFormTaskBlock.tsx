@@ -10,7 +10,7 @@ import { RhfInput, RhfSelect } from '@/components/rhf-wrapper'
 import { dndTypes } from '@/components/project/constants'
 import { useTasksOfProject, useTaskUuids } from '@/contexts/task'
 import { useUsers } from '@/contexts/user'
-        
+
 type Props = {
   isDummy?: boolean
   index: number
@@ -167,7 +167,7 @@ export function ProjectFormTaskBlock({
           </span>
         </div>
         <div className="flex-shrink w-48">
-          <InputField label="User" className="">
+          <InputField label="Executor" className="">
             <RhfSelect
               className="w-full text-center"
               name={`${fieldName}.userId`}

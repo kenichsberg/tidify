@@ -12,7 +12,7 @@ export function ProjectsPage(): JSX.Element {
   return (
     <ProjectModalProvider>
       <div className="flex flex-col lg:flex-row min-h-85vh">
-        <div className="lg:w-3/5 p-3">
+        <div className="relative lg:w-3/5 p-3">
           <ProjectSection />
         </div>
         <div className="lg:w-2/5 flex flex-col">

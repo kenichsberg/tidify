@@ -16,14 +16,16 @@ export function ProjectSection(): JSX.Element {
 
   const setClose = () => dispatchModalState({ type: 'close' })
 
-  /*shadow hover:shadow-2xl w-full h-full transition-[width,height,z-index,2] duration-[2s,2s,.5s,.5s] z-[2] hover:fixed hover:z-[15] hover:w-screen hover:h-screen */
+  const viewWidth = view === 'grid' ? '' : 'lg:absolute lg:z-[15] lg:w-[163%]'
   return (
-    <section className="bg-gradient-to-b from-bluegray-50 to-bluegray-100 rounded-[60px] overflow-auto px-4 sm:px-10 py-10">
+    <section
+      className={`w-full h-full bg-gradient-to-b from-bluegray-50 to-bluegray-100 rounded-[60px] overflow-auto px-4 sm:px-10 py-10 transition-[width,z-index,box-shadow] duration-[.5s,2s,.25s] ease-out z-[2] shadow lg:hover:shadow-2xl ${viewWidth}`}
+    >
       <div className="flex flex-row justify-stretch items-center mt-1 mb-7">
         <h2 className="flex-grow font-mono text-2xl font-bold text-bluegray-500 ml-4">
           Projects
         </h2>
-        <div className="group relative w-48 h-10 bg-gradient-to-br from-bluegray-100/90 to-bluegray-200 rounded-full shadow">
+        <div className="lg:fixed lg:left-3/5 lg:-translate-x-[250px] group relative w-48 h-10 bg-gradient-to-br from-bluegray-100/90 to-bluegray-200 rounded-full shadow">
           <input
             id="view-toggle-switch"
             type="checkbox"

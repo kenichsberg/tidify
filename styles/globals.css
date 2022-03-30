@@ -626,8 +626,17 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-48 {
   height: 12rem;
 }
+.h-1 {
+  height: 0.25rem;
+}
 .max-h-95vh {
   max-height: 95vh;
+}
+.max-h-\[99vh\] {
+  max-height: 99vh;
+}
+.max-h-\[98vh\] {
+  max-height: 98vh;
 }
 .min-h-screen {
   min-height: 100vh;
@@ -707,6 +716,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 .w-2\/3 {
   width: 66.666667%;
 }
+.w-\[60\%\] {
+  width: 60%;
+}
+.w-\[100\%\] {
+  width: 100%;
+}
 .min-w-max {
   min-width: -webkit-max-content;
   min-width: -moz-max-content;
@@ -761,6 +776,22 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .origin-bottom {
   transform-origin: bottom;
+}
+.translate-x-\[80px\] {
+  --tw-translate-x: 80px;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.-translate-x-\[80px\] {
+  --tw-translate-x: -80px;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.-translate-x-\[200px\] {
+  --tw-translate-x: -200px;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.-translate-x-\[250px\] {
+  --tw-translate-x: -250px;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .transform {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
@@ -1466,6 +1497,26 @@ Ensure the default browser behavior of the `hidden` attribute.
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+.transition-\[width\2c height\2c z-index\] {
+  transition-property: width,height,z-index;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.transition-\[width\2c z-index\] {
+  transition-property: width,z-index;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.transition-\[width\2c z-index\2c shadow\] {
+  transition-property: width,z-index,shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.transition-\[width\2c z-index\2c box-shadow\] {
+  transition-property: width,z-index,box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
 .duration-500 {
   transition-duration: 500ms;
 }
@@ -1474,6 +1525,33 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .duration-100 {
   transition-duration: 100ms;
+}
+.duration-\[1s\2c 2s\2c \.5s\2c \.5s\] {
+  transition-duration: 1s,2s,.5s,.5s;
+}
+.duration-\[1s\2c 2s\2c 2s\2c \.5s\] {
+  transition-duration: 1s,2s,2s,.5s;
+}
+.duration-\[1s\2c 2s\2c 2s\] {
+  transition-duration: 1s,2s,2s;
+}
+.duration-\[\.5s\2c 2s\2c 2s\] {
+  transition-duration: .5s,2s,2s;
+}
+.duration-\[\.5s\2c 2s\] {
+  transition-duration: .5s,2s;
+}
+.duration-\[\.5s\2c 2s\2c 0\.5s\] {
+  transition-duration: .5s,2s,0.5s;
+}
+.duration-\[\.5s\2c 2s\2c 1s\] {
+  transition-duration: .5s,2s,1s;
+}
+.duration-\[\.5s\2c 2s\2c \.5s\] {
+  transition-duration: .5s,2s,.5s;
+}
+.duration-\[\.5s\2c 2s\2c \.25s\] {
+  transition-duration: .5s,2s,.25s;
 }
 .ease-out {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
@@ -1622,6 +1700,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   position: fixed;
 }
 
+.hover\:absolute:hover {
+  position: absolute;
+}
+
 .hover\:z-\[2\]:hover {
   z-index: 2;
 }
@@ -1636,6 +1718,30 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .hover\:w-screen:hover {
   width: 100vw;
+}
+
+.hover\:w-\[90\%\]:hover {
+  width: 90%;
+}
+
+.hover\:w-\[70\%\]:hover {
+  width: 70%;
+}
+
+.hover\:w-\[100\%\]:hover {
+  width: 100%;
+}
+
+.hover\:w-\[150\%\]:hover {
+  width: 150%;
+}
+
+.hover\:w-\[160\%\]:hover {
+  width: 160%;
+}
+
+.hover\:w-\[165\%\]:hover {
+  width: 165%;
 }
 
 .hover\:-translate-y-1:hover {
@@ -1959,12 +2065,40 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 @media (min-width: 1024px) {
 
+  .lg\:fixed {
+    position: fixed;
+  }
+
+  .lg\:absolute {
+    position: absolute;
+  }
+
   .lg\:right-2\/5 {
     right: 40%;
   }
 
   .lg\:bottom-20 {
     bottom: 5rem;
+  }
+
+  .lg\:left-\[300px\] {
+    left: 300px;
+  }
+
+  .lg\:left-\[600px\] {
+    left: 600px;
+  }
+
+  .lg\:left-3\/5 {
+    left: 60%;
+  }
+
+  .lg\:left-2\/5 {
+    left: 40%;
+  }
+
+  .lg\:z-\[15\] {
+    z-index: 15;
   }
 
   .lg\:h-full {
@@ -1979,6 +2113,10 @@ Ensure the default browser behavior of the `hidden` attribute.
     width: 40%;
   }
 
+  .lg\:w-\[163\%\] {
+    width: 163%;
+  }
+
   .lg\:flex-1 {
     flex: 1 1;
   }
@@ -1988,8 +2126,47 @@ Ensure the default browser behavior of the `hidden` attribute.
     transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   }
 
+  .lg\:-translate-x-\[250px\] {
+    --tw-translate-x: -250px;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  }
+
   .lg\:flex-row {
     flex-direction: row;
+  }
+
+  .lg\:shadow-2xl {
+    --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  }
+
+  .hover\:lg\:absolute:hover {
+    position: absolute;
+  }
+
+  .hover\:lg\:z-\[15\]:hover {
+    z-index: 15;
+  }
+
+  .hover\:lg\:w-\[165\%\]:hover {
+    width: 165%;
+  }
+
+  .hover\:lg\:w-\[163\%\]:hover {
+    width: 163%;
+  }
+
+  .hover\:lg\:shadow-2xl:hover {
+    --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  }
+
+  .lg\:hover\:shadow-2xl:hover {
+    --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   }
 }
 

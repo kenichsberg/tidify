@@ -39,7 +39,7 @@ export function TeammatesTaskSection(): JSX.Element {
   })
 
   return (
-    <section className="bg-gradient-to-b from-bluegray-50 to-bluegray-100 rounded-[60px] overflow-auto px-4 sm:px-6 py-10">
+    <section className="bg-gradient-to-b from-bluegray-50 to-bluegray-100 rounded-[60px] overflow-auto px-4 sm:px-6 py-10 transition shadow hover:shadow-2xl">
       <h2 className="font-mono text-lg font-bold text-bluegray-500 mt-1 mb-7 ml-4">
         Teammates' Tasks
       </h2>
