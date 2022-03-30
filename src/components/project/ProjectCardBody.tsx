@@ -61,7 +61,9 @@ export function ProjectCardBody({
       </div>
       <div className="flex-1 flex justify-between items-center">
         <div className="flex-grow flex text-left text-xs text-bluegray-400">
-          <Users className="self-center mr-2" size={16} />
+          {
+            //<Users className="self-center mr-2" size={16} />
+          }
           <ToggleableFormSelectMultiple
             isEditing={isEditing}
             options={allUsers.map((user) => ({
@@ -114,17 +116,9 @@ function getElement(
       return null
     case projectPercentage === 100:
       return null
-    /*
-    case projectEndDate === undefined:
-      return (
-        <div className="w-1/2">
-          <AddTaskButton />
-        </div>
-      )
-*/
     default:
       return (
-        <div className="w-1/2">
+        <div className="w-2/3">
           <RemainingTime targetDate={projectEndDate} />
         </div>
       )

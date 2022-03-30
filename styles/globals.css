@@ -704,6 +704,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .w-1\/12 {
   width: 8.333333%;
 }
+.w-2\/3 {
+  width: 66.666667%;
+}
 .min-w-max {
   min-width: -webkit-max-content;
   min-width: -moz-max-content;
