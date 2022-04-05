@@ -16,10 +16,11 @@ export function ProjectSection(): JSX.Element {
 
   const setClose = () => dispatchModalState({ type: 'close' })
 
-  const viewWidth = view === 'grid' ? '' : 'lg:absolute lg:z-[15] lg:w-[163%]'
+  const viewWidth =
+    view === 'grid' ? ' lg:w-[97%] xl:w-[98%]' : 'lg:w-[163%] 2xl:w-[164%]'
   return (
     <section
-      className={`w-full h-full bg-gradient-to-b from-bluegray-50 to-bluegray-100 rounded-[60px] overflow-auto px-4 sm:px-10 py-10 transition-[width,z-index,box-shadow] duration-[.5s,2s,.25s] ease-out z-[2] shadow lg:hover:shadow-2xl ${viewWidth}`}
+      className={`w-full h-full bg-gradient-to-b from-bluegray-50 to-bluegray-100 rounded-[60px] overflow-auto px-4 sm:px-10 py-10 transition-[width,z-index,box-shadow] duration-[.5s,2s,.25s] ease-out z-[2] shadow lg:absolute lg:z-[15] lg:hover:shadow-2xl ${viewWidth}`}
     >
       <div className="flex flex-row justify-stretch items-center mt-1 mb-7">
         <h2 className="flex-grow font-mono text-2xl font-bold text-bluegray-500 ml-4">
