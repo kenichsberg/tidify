@@ -1969,6 +1969,14 @@ Ensure the default browser behavior of the `hidden` attribute.
     z-index: 15;
   }
 
+  .lg\:z-\[5\] {
+    z-index: 5;
+  }
+
+  .lg\:z-\[10\] {
+    z-index: 10;
+  }
+
   .lg\:h-full {
     height: 100%;
   }

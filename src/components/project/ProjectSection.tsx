@@ -20,13 +20,13 @@ export function ProjectSection(): JSX.Element {
     view === 'grid' ? ' lg:w-[97%] xl:w-[98%]' : 'lg:w-[163%] 2xl:w-[164%]'
   return (
     <section
-      className={`w-full h-full bg-gradient-to-b from-bluegray-50 to-bluegray-100 rounded-[60px] overflow-auto px-4 sm:px-10 py-10 transition-[width,z-index,box-shadow] duration-[.5s,2s,.25s] ease-out z-[2] shadow lg:absolute lg:z-[15] lg:hover:shadow-2xl ${viewWidth}`}
+      className={`w-full h-full bg-gradient-to-b from-bluegray-50 to-bluegray-100 rounded-[60px] overflow-auto px-4 sm:px-10 py-10 transition-[width,z-index,box-shadow] duration-[.5s,2s,.25s] ease-out z-[2] shadow lg:absolute lg:z-[5] lg:hover:shadow-2xl ${viewWidth}`}
     >
       <div className="flex flex-row justify-stretch items-center mt-1 mb-7">
         <h2 className="flex-grow font-mono text-2xl font-bold text-bluegray-500 ml-4">
           Projects
         </h2>
-        <div className="lg:fixed lg:left-3/5 lg:-translate-x-[250px] group relative w-48 h-10 bg-gradient-to-br from-bluegray-100/90 to-bluegray-200 rounded-full shadow">
+        <div className="lg:fixed lg:left-3/5 lg:z-[10] lg:-translate-x-[250px] group relative w-48 h-10 bg-gradient-to-br from-bluegray-100/90 to-bluegray-200 rounded-full shadow">
           <input
             id="view-toggle-switch"
             type="checkbox"
@@ -58,7 +58,7 @@ export function ProjectSection(): JSX.Element {
       <button
         type="button"
         title="Create New Project"
-        className="z-10 fixed right-10 lg:right-2/5 lg:-translate-x-1/2 xl:translate-x-0 bottom-10 lg:bottom-20 flex-shrink-0 rounded-full shadow-xl h-20 w-20 flex items-center justify-center bg-cyan-500 bg-opacity-90 text-bluegray-100 transition focus:outline-none hover:bg-cyan-400 hover:text-bluegray-200 hover:shadow-2xl hover:-translate-y-1 hover:scale-[103%] active:shadow-lg active:translate-y-2 active:scale-[97%] active:bg-cyan-600 active:text-bluegray-100"
+        className="z-15 fixed right-10 lg:right-2/5 lg:-translate-x-1/2 xl:translate-x-0 bottom-10 lg:bottom-20 flex-shrink-0 rounded-full shadow-xl h-20 w-20 flex items-center justify-center bg-cyan-500 bg-opacity-90 text-bluegray-100 transition focus:outline-none hover:bg-cyan-400 hover:text-bluegray-200 hover:shadow-2xl hover:-translate-y-1 hover:scale-[103%] active:shadow-lg active:translate-y-2 active:scale-[97%] active:bg-cyan-600 active:text-bluegray-100"
         onClick={() => dispatchModalState({ type: 'open', data: null })}
       >
         <Plus size={32} />
