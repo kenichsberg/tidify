@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { GetServerSidePropsResult } from 'next'
+import { GetStaticPropsResult } from 'next'
 import { PrismaClient } from '@prisma/client'
 import useSWR from 'swr'
 
@@ -73,7 +73,6 @@ export default function IndexPage(props: Props): JSX.Element {
     (tasksError && !tasks) ||
     (usersError && !users)
   )
-
     return <div>error</div>
 
   return (
@@ -83,9 +82,7 @@ export default function IndexPage(props: Props): JSX.Element {
   )
 }
 
-export async function getServerSideProps(): Promise<
-  GetServerSidePropsResult<Props>
-> {
+export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
   const _projects = await prisma.project.findMany({
     select: {
       uuid: true,
@@ -126,5 +123,8 @@ export async function getServerSideProps(): Promise<
   })
   const users = JSON.parse(JSON.stringify(_users))
 
-  return { props: { projects, tasks, users } }
+  return {
+    props: { projects, tasks, users },
+    revalidate: 10,
+  }
 }
