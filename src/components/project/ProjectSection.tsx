@@ -26,32 +26,34 @@ export function ProjectSection(): JSX.Element {
         <h2 className="flex-grow font-mono text-2xl font-bold text-bluegray-500 ml-4">
           Projects
         </h2>
-        <div className="lg:fixed lg:left-3/5 lg:z-[10] lg:-translate-x-[250px] group relative w-48 h-10 bg-gradient-to-br from-bluegray-100/90 to-bluegray-200 rounded-full shadow">
-          <input
-            id="view-toggle-switch"
-            type="checkbox"
-            name="view-toggle-switch"
-            value="grid"
-            className="peer absolute inline-block appearance-none"
-            defaultChecked={false}
-            onChange={() => setView(view === 'grid' ? 'chart' : 'grid')}
-          />
-          <label
-            htmlFor="view-toggle-switch"
-            className="absolute w-full h-full rounded-full text-bluegray-200 cursor-pointer peer-checked:text-bluegray-600 before:absolute before:top-1 before:left-4 before:w-20 before:h-8 before:bg-gradient-to-br before:from-bluegray-700 before:to-bluegray-900 before:rounded-full before:transition before:duration-500 before:peer-checked:translate-x-[80px]" /* after:absolute after:top-2 after:right-3 after:w-20 after:h-8 after:content-[''] after:bg-transparent after:rounded-full after:text-bluegray-600 after:transition after:peer-checked:text-bluegray-200 after:cursor-pointer"*/
-          >
-            <span className="absolute w-1/2 top-[5px] left-2 text-center transition">
-              <Grid className="inline" size={20} />
-            </span>
-          </label>
-          <label
-            htmlFor="view-toggle-switch"
-            className="absolute right-0 w-1/2 rounded-full text-bluegray-600 peer-checked:text-bluegray-200"
-          >
-            <span className="absolute w-full h-[70%] top-[5px] right-2 text-center transition curor-pointer">
-              <Calendar className="inline cursor-pointer" size={20} />
-            </span>
-          </label>
+        <div className="absolute left-[200px] lg:fixed lg:left-3/5 lg:z-[10] lg:-translate-x-[250px] group w-48 h-10 bg-gradient-to-br from-bluegray-100/90 to-bluegray-200 rounded-full shadow">
+          <div className="relative">
+            <input
+              id="view-toggle-switch"
+              type="checkbox"
+              name="view-toggle-switch"
+              value="grid"
+              className="peer absolute inline-block appearance-none"
+              defaultChecked={false}
+              onChange={() => setView(view === 'grid' ? 'chart' : 'grid')}
+            />
+            <label
+              htmlFor="view-toggle-switch"
+              className="absolute w-full h-full rounded-full text-bluegray-200 cursor-pointer peer-checked:text-bluegray-600 before:absolute before:top-1 before:left-4 before:w-20 before:h-8 before:bg-gradient-to-br before:from-bluegray-700 before:to-bluegray-900 before:rounded-full before:transition before:duration-500 before:peer-checked:translate-x-[80px]" /* after:absolute after:top-2 after:right-3 after:w-20 after:h-8 after:content-[''] after:bg-transparent after:rounded-full after:text-bluegray-600 after:transition after:peer-checked:text-bluegray-200 after:cursor-pointer"*/
+            >
+              <span className="absolute w-1/2 top-[5px] left-2 text-center transition">
+                <Grid className="inline" size={20} />
+              </span>
+            </label>
+            <label
+              htmlFor="view-toggle-switch"
+              className="absolute right-0 w-1/2 rounded-full text-bluegray-600 peer-checked:text-bluegray-200"
+            >
+              <span className="absolute w-full h-[70%] top-[5px] right-2 text-center transition curor-pointer">
+                <Calendar className="inline cursor-pointer" size={20} />
+              </span>
+            </label>
+          </div>
         </div>
       </div>
       {getView(view)}
