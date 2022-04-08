@@ -1,9 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient, Prisma } from '@prisma/client'
 
+import prisma from '@/lib/prisma'
 import { ManHourCalculator } from '@/utils/date'
-
-const prisma = new PrismaClient()
 
 export default async function projectsHandler(
   req: NextApiRequest,

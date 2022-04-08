@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { GetStaticPropsResult } from 'next'
-import { PrismaClient } from '@prisma/client'
 import useSWR from 'swr'
 
 import { Layout } from '@/components/layout'
@@ -8,6 +7,7 @@ import { ProjectsPage } from '@/components/project'
 import { useProjects } from '@/contexts/project'
 import { useTasks } from '@/contexts/task'
 import { useUsers } from '@/contexts/user'
+import prisma from '@/lib/prisma'
 import { strToDate } from '@/utils/date'
 import { fetcher, patchPropertyValues } from '@/utils/functions'
 
@@ -22,8 +22,6 @@ type Props = {
   tasks: TaskWithoutTechnicalColmuns[]
   users: Array<UserWithoutTechnicalColmuns & { id: number }>
 }
-
-const prisma = new PrismaClient()
 
 export default function IndexPage(props: Props): JSX.Element {
   const { data: projects, error: projectsError } = useSWR<

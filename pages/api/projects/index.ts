@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 
-const prisma = new PrismaClient()
+import prisma from '@/lib/prisma'
 
 export default async function projectsHandler(
   req: NextApiRequest,
