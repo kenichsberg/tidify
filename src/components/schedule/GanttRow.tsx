@@ -52,7 +52,9 @@ export function GanttRow({
         const planWidth =
           calc.getGrossDurationDays(startAt, endAt) * columnWidth
         const planGanttColor =
-          index % 2 === 0 ? ' fill-blue-300' : ' fill-emerald-300'
+          (previousRowsCount + index) % 2 === 0
+            ? ' fill-blue-300'
+            : ' fill-emerald-300'
 
         const startedAt = tmpEndedAt ?? projectStartDate
         const endedAt = calc.getEndDatetimeByManHour(
@@ -66,7 +68,9 @@ export function GanttRow({
         const resultWidth =
           calc.getGrossDurationDays(startedAt, endedAt) * columnWidth
         const resultGanttColor =
-          index % 2 === 0 ? ' fill-blue-700' : ' fill-emerald-700'
+          (previousRowsCount + index) % 2 === 0
+            ? ' fill-blue-700'
+            : ' fill-emerald-700'
 
         return (
           <g key={task.uuid}>
@@ -80,7 +84,9 @@ export function GanttRow({
               height={PLAN_GANTT_HEIGHT}
               stroke="#e0e0e0"
               fillOpacity="60%"
-              style={{ animationDelay: `${0.14 * index}s` }}
+              style={{
+                animationDelay: `${0.18 * (previousRowsCount + index)}s`,
+              }}
             ></rect>
             <rect
               className={`${resultGanttColor} transition-all duration-100 animate-slide-x hover:stroke-bluegray-800`}
@@ -93,7 +99,9 @@ export function GanttRow({
               width={resultWidth}
               height={RESULT_GANTT_HEIGHT}
               fillOpacity="80%"
-              style={{ animationDelay: `${0.14 * index + 0.04}s` }}
+              style={{
+                animationDelay: `${0.18 * (previousRowsCount + index) + 0.12}s`,
+              }}
             ></rect>
           </g>
         )
