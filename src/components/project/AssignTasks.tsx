@@ -90,7 +90,7 @@ export function AssignTasks({
     if (project?.tasks.length) {
       const uuid = uuidv4()
       setTasks([
-        ...project.tasks,
+        ...project.tasks.sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0)),
         { uuid, name: '', plannedDuration: 0, userId: undefined },
       ])
       setTaskUuids([...project.tasks.map((task) => task.uuid), uuid])

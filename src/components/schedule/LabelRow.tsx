@@ -6,9 +6,9 @@ import {
 } from '@/components/project/types'
 
 type Props = {
-  tasks: Partial<
+  tasks: Array<
     TaskWithoutTechnicalColmuns & { user: UserWithoutTechnicalColmuns }
-  >[]
+  >
   projectName: string
   previousRowsCount: number
 }
@@ -25,6 +25,8 @@ export function LabelRow({
   const rowHeight = _rowHeight ?? 0
 
   const offsetY = previousRowsCount * rowHeight
+
+  tasks.sort((a, b) => a.rank - b.rank)
 
   return (
     <>

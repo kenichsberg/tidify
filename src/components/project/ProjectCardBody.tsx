@@ -98,7 +98,7 @@ function getProgressPercentage(
     .reduce((total, current) => total + current)
   const tasksDone = tasks.filter((task) => task.status === 'DONE')
   const done = tasksDone
-    ?.map((task) => task.actualDuration)
+    ?.map((task) => task.plannedDuration)
     .reduce((total, current) => total + current, 0)
 
   if (total === 0) return undefined

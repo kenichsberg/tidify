@@ -29,6 +29,8 @@ export function GanttRow({
   const planGanttOffsetY = (rowHeight - PLAN_GANTT_HEIGHT) / 2
   const resultGanttOffsetY = rowHeight - planGanttOffsetY - RESULT_GANTT_HEIGHT
 
+  tasks.sort((a, b) => a.rank - b.rank)
+
   let tmpEndAt: Date | undefined
   let tmpEndedAt: Date | undefined
   const calc = new ManHourCalculator()
