@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { GetStaticPropsResult } from 'next'
+import Head from 'next/head'
 import useSWR from 'swr'
 
 import { Layout } from '@/components/layout'
@@ -74,9 +75,18 @@ export default function IndexPage(props: Props): JSX.Element {
     return <div>error</div>
 
   return (
-    <Layout currentPageName="Home">
-      <ProjectsPage />
-    </Layout>
+    <>
+      <Head>
+        <title>Tidify Demo | Home</title>
+        <meta
+          name="description"
+          content="Task Manager Demo App built by Kenichi N. Frontend: React, Next.js / Backend: Prisma, PostgreSQL"
+        />
+      </Head>
+      <Layout currentPageName="Home">
+        <ProjectsPage />
+      </Layout>
+    </>
   )
 }
 
