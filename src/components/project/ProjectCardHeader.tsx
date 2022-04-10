@@ -100,7 +100,7 @@ const getCenterElement = (mode: Mode, isNew: boolean, dateStr: string) => {
       return <div>{isNew ? 'New Project' : 'Edit Project'}</div>
     default:
       return (
-        <div className="flex-4 flex text-left text-xs text-bluegray-400">
+        <div className="flex-4 flex text-left text-xs text-bluegray-500">
           <Clock className="self-center mr-2" size={16} />
           <span>{dateStr}</span>
         </div>
@@ -125,7 +125,7 @@ function getRightButton(mode: Mode) {
     case 'processing':
       return (
         <span className="focus:outline-none cursor-not-allowed">
-          <Spinner className="text-bluegray-400" />
+          <Spinner className="text-bluegray-500" />
         </span>
       )
   }

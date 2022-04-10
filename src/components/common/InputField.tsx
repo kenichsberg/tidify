@@ -29,7 +29,7 @@ export const InputField: FC<Props> = ({
       return (
         <>
           <fieldset className={fieldsetClass}>
-            <legend className="text-xs text-bluegray-400 font-normal leading-skinny px-1 py-1">
+            <legend className="text-xs text-bluegray-500 font-normal leading-skinny px-1 py-1">
               {label}
             </legend>
             <label>{children}</label>
