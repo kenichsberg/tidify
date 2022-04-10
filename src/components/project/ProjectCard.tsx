@@ -31,9 +31,6 @@ export function ProjectCard({ project, index }: Props) {
     throw new Error('context value undefined')
   }
 
-  //const { setState: setProject } = useProject()
-  //setProject && setProject(project)
-
   const projectFormRef = useRef<ProjectForm | undefined>()
 
   useEffect(() => {
