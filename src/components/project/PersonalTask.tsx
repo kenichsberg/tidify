@@ -80,11 +80,11 @@ export function PersonalTask({ task, index = 0 }: Props): JSX.Element {
           <div className="flex-shrink w-48 flex flex-col items-center">
             <InputField
               label="actual:"
-              className="w-24 bg-bluegray-100 border-0"
+              className="w-24 bg-bluegray-50 border-0"
             >
               <RhfInput
                 type="number"
-                className="w-full text-center bg-bluegray-100"
+                className="w-full text-center bg-bluegray-50"
                 name="actualDuration"
                 rules={{ required: true }}
                 control={control}
@@ -101,10 +101,11 @@ export function PersonalTask({ task, index = 0 }: Props): JSX.Element {
           </div>
         </div>
         <button
+          aria-label="submitPersonalTask"
           type="submit"
           form="personalTask"
           //@TODO className="w-1/6 self-stretch flex flex-col items-stretch text-bluegray-400 cursor-pointer focus:outline-none hover:text-emerald-600 active:text-bluegray-800"
-          className="w-1/6 self-stretch flex flex-col items-stretch text-bluegray-400 focus:outline-none cursor-not-allowed"
+          className="w-1/6 self-stretch flex flex-col items-stretch text-bluegray-400 focus:outline-none cursor-not-allowed hover:text-emerald-600 active:text-bluegray-300"
         >
           <span className="pb-8 flex-grow flex items-end justify-start transition">
             <Check size={30} />

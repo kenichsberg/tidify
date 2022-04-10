@@ -43,17 +43,17 @@ function getFilledColor(targetDate: Date | undefined) {
 function getTextColor(targetDate: Date | undefined) {
   const hours = getRemainingHours(targetDate)
   if (hours === undefined) {
-    return ' text-gray-400'
+    return ' text-gray-600'
   }
   switch (true) {
     case hours < REMAINING_NONE:
-      return ' text-rose-400'
+      return ' text-rose-700'
     case hours < REMAINING_LITTLE:
-      return ' text-orange-400'
+      return ' text-orange-700'
     case hours < REMAINING_MUCH:
-      return ' text-sky-400'
+      return ' text-sky-700'
     default:
-      return ' text-emerald-400'
+      return ' text-emerald-700'
   }
 }
 
