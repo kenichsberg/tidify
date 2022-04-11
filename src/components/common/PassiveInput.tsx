@@ -1,10 +1,11 @@
-import { FocusEvent, Ref } from 'react'
+import { FocusEvent, MouseEvent, Ref } from 'react'
 
 type Props = {
   name: string
   className?: string
   size?: 'sm' | 'md'
   value: string
+  onClick?: (arg0?: MouseEvent<HTMLInputElement>) => void
   onFocus?: (arg0?: FocusEvent<HTMLInputElement>) => void
   onBlur?: (arg0?: FocusEvent<HTMLInputElement>) => void
   inputRef?: Ref<HTMLInputElement>
@@ -15,6 +16,7 @@ export function PassiveInput({
   className = '',
   size = 'md',
   value,
+  onClick,
   onFocus,
   onBlur,
   inputRef,
@@ -28,8 +30,9 @@ export function PassiveInput({
       } ${sizeClass}`}
       name={name}
       value={value}
-      onFocus={(event) => !!onFocus && onFocus(event)}
-      onBlur={(event) => !!onBlur && onBlur(event)}
+      onClick={(event) => onClick?.(event)}
+      onFocus={(event) => onFocus?.(event)}
+      onBlur={(event) => onBlur?.(event)}
       onInput={(event) => event.preventDefault()}
       ref={inputRef ? inputRef : undefined}
     />
