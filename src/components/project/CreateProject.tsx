@@ -69,6 +69,7 @@ export function CreateProject({
     setValue('startAt', modalState.project?.startAt)
   }, [project])
 
+  /*
   const onSubmit: SubmitHandler<CreateProjectFormProps> = async (input) => {
     const record: ProjectWithoutTechnicalColmuns = {
       ...input,
@@ -106,6 +107,20 @@ export function CreateProject({
 
     setPage('next')
   }
+*/
+  const onSubmit: SubmitHandler<CreateProjectFormProps> = async (input) => {
+    console.log('submit')
+    const data: ProjectWithoutTechnicalColmuns = {
+      ...input,
+      uuid: project?.uuid ?? uuidv4(),
+      endAt: project?.endAt ?? null,
+      users: project?.users ?? [],
+      tasks: project?.tasks ?? [],
+    }
+    dispatchModalState({ type: 'setNewProject', data })
+
+    setPage('next')
+  }
 
   const onError: SubmitErrorHandler<CreateProjectFormProps> = (errors) =>
     console.log(errors)
@@ -122,8 +137,7 @@ export function CreateProject({
           id="createProject"
           onSubmit={(event) => {
             event.preventDefault()
-            //@TODO handleSubmit(onSubmit, onError)()
-            setPage('next') //@TODO delete
+            handleSubmit(onSubmit, onError)()
           }}
         >
           <div className="flex flex-col items-stretch">
@@ -152,7 +166,7 @@ export function CreateProject({
                 </div>
                 <div className="flex-1">
                   <div className="w-11/12 max-w-xs mx-auto">
-                    <InputField label="Start Date" className="">
+                    <InputField label="Start Date" omitLabelTag={true}>
                       <Controller
                         control={control}
                         rules={{ required: true }}
@@ -186,7 +200,6 @@ export function CreateProject({
           </div>
         </form>
       </ModalBody>
-      <DevTool control={control} />
       <ModalFooter className="sticky flex-1 flex justify-between items-start text-bluegray-600 border-t border-solid border-bluegray-300 p-5">
         <button type="button" className="invisible"></button>
         <button
