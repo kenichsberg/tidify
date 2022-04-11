@@ -55,7 +55,7 @@ export function DatetimePicker({
       datetimeRef.current.minute
     )
     setDate(selectedDate)
-    _onChange && _onChange(selectedDate)
+    _onChange?.(selectedDate)
     setShow(false)
     onClose()
   }, [page])
