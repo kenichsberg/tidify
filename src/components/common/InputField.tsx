@@ -6,6 +6,7 @@ type Props = {
   size?: 'sm' | 'md'
   className?: string
   disableDefaultClass?: boolean
+  omitLabelTag?: boolean
   children: ReactNode | ReactNode[]
 }
 
@@ -15,6 +16,7 @@ export const InputField: FC<Props> = ({
   size = 'md',
   className = '',
   disableDefaultClass = false,
+  omitLabelTag = false,
   children,
 }) => {
   switch (fieldStyle) {
@@ -27,14 +29,12 @@ export const InputField: FC<Props> = ({
           }${sizeClass}`
 
       return (
-        <>
-          <fieldset className={fieldsetClass}>
-            <legend className="text-xs text-bluegray-500 font-normal leading-skinny px-1 py-1">
-              {label}
-            </legend>
-            <label>{children}</label>
-          </fieldset>
-        </>
+        <fieldset className={fieldsetClass}>
+          <legend className="text-xs text-bluegray-500 font-normal leading-skinny px-1 py-1">
+            {label}
+          </legend>
+          {omitLabelTag ? children : <label>{children}</label>}
+        </fieldset>
       )
     }
     case 'filled': {
@@ -50,7 +50,7 @@ export const InputField: FC<Props> = ({
             <legend className="text-xs text-bluegray-400 leading-skinny px-1">
               {label}
             </legend>
-            {children}
+            {omitLabelTag ? children : <label>{children}</label>}
           </fieldset>
         </>
       )
