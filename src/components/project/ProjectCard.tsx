@@ -43,7 +43,7 @@ export function ProjectCard({ project, index }: Props) {
 
   return (
     <button
-      className="flex flex-col items-stretch font-mono text-sm text-center text-bluegray-700 bg-gradient-to-br from-bluegray-100/90 to-bluegray-200 shadow rounded-xl h-56 my-2 px-5 py-3 cursor-pointer group transform-gpu transition duration-500 ease-out animate-slide-up hover:shadow-2xl hover:scale-[108%] hover:z-[2] hover:-translate-y-1 active:shadow-sm active:scale-[95%] active:translate-y-[0.2rem] md:active:shadow-xl md:active:scale-[103%] md:active:translate-y-[0.15rem]"
+      className="flex flex-col items-stretch font-mono text-sm text-center text-bluegray-700 bg-gradient-to-br from-bluegray-100/90 to-bluegray-200 shadow rounded-xl h-56 my-2 px-5 py-3 cursor-pointer group transform-gpu transition duration-500 ease-out animate-slide-up md:hover:shadow-2xl md:hover:scale-[108%] md:hover:z-[2] md:hover:-translate-y-1 active:shadow-sm active:scale-[95%] active:translate-y-[0.4rem] md:active:shadow md:active:scale-[97%] md:active:translate-y-[0.6rem]"
       style={{ animationDelay: `${0.14 * index}s` }}
       onClick={() => dispatchModalState({ type: 'open', data: { ...project } })}
     >
