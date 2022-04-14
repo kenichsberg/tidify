@@ -11,5 +11,6 @@ module.exports = {
         'custom-properties': false,
       },
     },
+    ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {}),
   },
 }
