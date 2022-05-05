@@ -190,8 +190,8 @@ export function ProjectFormTaskBlock({
           className={`flex-1 flex flex-col items-stretch text-bluegray-400 ${
             isDummy
               ? 'invisible'
-              : 'invisible group-hover:visible group-focus:visible'
-          } cursor-pointer hover:text-red-600 active:text-red-400`}
+              : 'sm:invisible group-hover:visible group-focus:visible'
+          } cursor-pointer focus:outline-none hover:text-red-600 active:text-red-400`}
           onClick={() => {
             setTasks([...tasks.slice(0, index), ...tasks.slice(index + 1)])
             unregister(fieldName)

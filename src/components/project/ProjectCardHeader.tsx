@@ -43,7 +43,7 @@ export function ProjectCardHeader({
         formatDatetimeDisplay(project.endAt?.toISOString())
       )}
       <div
-        className="w-16 flex-shrink self-stretch flex justify-end min-w-max truncate transition group invisible group-hover:visible cursor-pointer hover:opacity-100 hover:text-red-700 active:text-red-400"
+        className="w-16 flex-shrink self-stretch flex justify-end min-w-max truncate transition group lg:invisible lg:group-hover:visible cursor-pointer hover:opacity-100 hover:text-red-700 active:text-red-400"
         onClick={
           (event) => {
             onClick(event, project.uuid)
