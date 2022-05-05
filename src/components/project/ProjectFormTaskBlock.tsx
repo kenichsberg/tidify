@@ -84,9 +84,9 @@ export function ProjectFormTaskBlock({
   }, [isDummy])
 
   return (
-    <div className="flex flex-row justify-between items-center font-mono text-sm text-bluegray-700">
+    <div className="relative flex flex-col sm:flex-row justify-between items-center font-mono text-sm text-bluegray-700">
       <div
-        className="flex-shrink flex justify-center items-center flex bg-gradient-to-br from-bluegray-50  via-bluegray-50 to-bluegray-100 shadow rounded-full w-16 h-16 animate-popup"
+        className="absolute translate-x-[2.2rem] translate-y-[0.6rem] z-[5] sm:static sm:translate-x-0 sm:translate-y-0 flex-shrink self-start sm:self-auto flex justify-center items-center bg-gradient-to-br from-white  via-white to-bluegray-50 sm:from-bluegray-50  sm:via-bluegray-50 sm:to-bluegray-100 sm:text-black shadow rounded-full w-12 h-12 sm:w-16 sm:h-16 mb-2 sm:mb-0 sm:mr-2 animate-popup"
         style={{ animationDelay: `${0.2 * index}s` }}
       >
         <div className="flex items-center text-bluegray-500">
@@ -96,7 +96,7 @@ export function ProjectFormTaskBlock({
       <fieldset
         name={fieldName}
         ref={isDummy ? undefined : drag}
-        className={`group flex-glow w-11/12 pt-6 flex justify-evenly bg-gradient-to-br from-bluegray-50/90 to-bluegray-100 shadow rounded-xl text-center pr-4 py-3 ${
+        className={`group flex-glow w-11/12 flex flex-col sm:flex-row justify-evenly items-center bg-gradient-to-br from-bluegray-50/90 to-bluegray-100 shadow rounded-xl text-center px-4 pt-6 pb-3 ${
           isDragging ? 'opacity-50' : ''
         } ${
           isDummy ? '' : 'cursor-move'

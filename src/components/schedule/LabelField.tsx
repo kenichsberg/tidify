@@ -66,4 +66,4 @@ export function LabelField(): JSX.Element {
   )
 }
 
-const LABEL_FIELD_WIDTH = 250
+const LABEL_FIELD_WIDTH = 190
