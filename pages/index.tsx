@@ -133,6 +133,6 @@ export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
 
   return {
     props: { projects, tasks, users },
-    revalidate: 10,
+    //revalidate: 10,
   }
 }
