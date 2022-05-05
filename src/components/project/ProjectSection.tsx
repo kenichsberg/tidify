@@ -65,7 +65,7 @@ export function ProjectSection(): JSX.Element {
       <button
         type="button"
         title="Create New Project"
-        className="z-15 fixed right-10 lg:right-2/5 lg:-translate-x-1/2 xl:translate-x-0 bottom-10 lg:bottom-20 flex-shrink-0 rounded-full shadow-xl h-20 w-20 flex items-center justify-center bg-cyan-500 bg-opacity-90 text-bluegray-100 transition focus:outline-none hover:bg-cyan-400 hover:text-bluegray-200 hover:shadow-2xl hover:-translate-y-1 hover:scale-[103%] active:shadow-lg active:translate-y-2 active:scale-[97%] active:bg-cyan-600 active:text-bluegray-100"
+        className="z-[20] fixed right-10 lg:right-2/5 lg:-translate-x-1/2 xl:translate-x-0 bottom-10 lg:bottom-20 flex-shrink-0 rounded-full shadow-xl h-20 w-20 flex items-center justify-center bg-cyan-500 bg-opacity-90 text-bluegray-100 transition focus:outline-none hover:bg-cyan-400 hover:text-bluegray-200 hover:shadow-2xl hover:-translate-y-1 hover:scale-[103%] active:shadow-lg active:translate-y-2 active:scale-[97%] active:bg-cyan-600 active:text-bluegray-100"
         onClick={() => dispatchModalState({ type: 'open', data: null })}
       >
         <Plus size={32} />
