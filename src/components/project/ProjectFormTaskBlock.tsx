@@ -169,7 +169,7 @@ export function ProjectFormTaskBlock({
         <div className="flex-shrink w-48">
           <InputField label="Executor" className="">
             <RhfSelect
-              className="w-full text-center"
+              className="w-full bg-white text-center"
               name={`${fieldName}.userId`}
               onFocus={onFocus}
               rules={{ required: !isDummy }}
