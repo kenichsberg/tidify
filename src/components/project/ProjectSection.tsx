@@ -20,7 +20,7 @@ export function ProjectSection(): JSX.Element {
     view === 'grid' ? ' lg:w-[97%] xl:w-[98%]' : 'lg:w-[163%] 2xl:w-[164%]'
   return (
     <section
-      className={`w-full h-full bg-gradient-to-b from-bluegray-50 to-bluegray-100 rounded-[60px] overflow-auto px-4 sm:px-10 py-10 transition-[width,z-index,box-shadow] duration-[.5s,2s,.25s] ease-out z-[2] shadow lg:absolute lg:z-[5] lg:hover:shadow-2xl ${viewWidth}`}
+      className={`w-full h-full bg-gradient-to-b from-bluegray-50 to-bluegray-100 rounded-[60px] overflow-auto px-4 lg:px-10 py-10 transition-[width,z-index,box-shadow] duration-[.5s,2s,.25s] ease-out z-[2] shadow lg:absolute lg:z-[5] lg:hover:shadow-2xl ${viewWidth}`}
     >
       <div className="flex flex-row justify-stretch items-center mt-1 mb-7">
         <h2
@@ -29,7 +29,7 @@ export function ProjectSection(): JSX.Element {
         >
           Projects
         </h2>
-        <div className="absolute left-[200px] lg:fixed lg:left-3/5 lg:z-[10] lg:-translate-x-[250px] group w-48 h-10 bg-gradient-to-br from-bluegray-100/90 to-bluegray-200 rounded-full shadow">
+        <div className="absolute right-[20px] sm:left-[200px] lg:fixed lg:left-3/5 lg:z-[10] lg:-translate-x-[250px] group w-36 sm:w-48 h-10 bg-gradient-to-br from-bluegray-100/90 to-bluegray-200 rounded-full shadow">
           <div className="relative">
             <input
               id="toggleView"
@@ -43,7 +43,7 @@ export function ProjectSection(): JSX.Element {
             />
             <label
               htmlFor="toggleView"
-              className="absolute w-full h-full rounded-full text-bluegray-200 cursor-pointer peer-checked:text-bluegray-600 before:absolute before:top-1 before:left-4 before:w-20 before:h-8 before:bg-gradient-to-br before:from-bluegray-700 before:to-bluegray-900 before:rounded-full before:transition before:duration-500 before:peer-checked:translate-x-[80px]" /* after:absolute after:top-2 after:right-3 after:w-20 after:h-8 after:content-[''] after:bg-transparent after:rounded-full after:text-bluegray-600 after:transition after:peer-checked:text-bluegray-200 after:cursor-pointer"*/
+              className="absolute w-full h-full rounded-full text-bluegray-200 cursor-pointer peer-checked:text-bluegray-600 before:absolute before:top-1 before:left-4 before:w-[56px] before:sm:w-20 before:h-8 before:bg-gradient-to-br before:from-bluegray-700 before:to-bluegray-900 before:rounded-full before:transition before:duration-500 before:peer-checked:translate-x-[56px] before:sm:peer-checked:translate-x-[80px]" /* after:absolute after:top-2 after:right-3 after:w-20 after:h-8 after:content-[''] after:bg-transparent after:rounded-full after:text-bluegray-600 after:transition after:peer-checked:text-bluegray-200 after:cursor-pointer"*/
             >
               <span className="hidden">toggle view</span>
               <span className="absolute w-1/2 top-[5px] left-2 text-center transition">
