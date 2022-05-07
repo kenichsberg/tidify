@@ -581,6 +581,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .mr-1 {
   margin-right: 0.25rem;
 }
+.mb-8 {
+  margin-bottom: 2rem;
+}
 .block {
   display: block;
 }
@@ -2197,6 +2200,10 @@ Ensure the default browser behavior of the `hidden` attribute.
     display: flex;
   }
 
+  .md\:max-w-xs {
+    max-width: 20rem;
+  }
+
   .md\:px-6 {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
@@ -2358,6 +2365,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
   .lg\:w-2\/5 {
     width: 40%;
+  }
+
+  .lg\:max-w-xs {
+    max-width: 20rem;
   }
 
   .lg\:flex-1 {

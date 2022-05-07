@@ -142,8 +142,8 @@ export function CreateProject({
         >
           <div className="flex flex-col items-stretch">
             <div className="w-full xl:w-11/12 max-w-5xl mx-auto">
-              <div className="flex flex-row text-center mb-10">
-                <div className="flex-1">
+              <div className="flex flex-col sm:flex-row text-center">
+                <div className="flex-1 mb-8">
                   <div className="w-11/12 max-w-lg mx-auto">
                     <InputField label="Project Name">
                       <RhfInput
@@ -164,8 +164,8 @@ export function CreateProject({
                     </span>
                   </div>
                 </div>
-                <div className="flex-1">
-                  <div className="w-11/12 max-w-xs mx-auto">
+                <div className="flex-1 mb-8">
+                  <div className="w-11/12 max-w-lg md:max-w-xs mx-auto">
                     <InputField label="Start Date" omitLabelTag={true}>
                       <Controller
                         control={control}
