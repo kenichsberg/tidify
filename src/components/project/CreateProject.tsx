@@ -109,7 +109,7 @@ export function CreateProject({
   }
 */
   const onSubmit: SubmitHandler<CreateProjectFormProps> = async (input) => {
-    console.log('submit')
+    //console.log('submit')
     const data: ProjectWithoutTechnicalColmuns = {
       ...input,
       uuid: project?.uuid ?? uuidv4(),
@@ -120,6 +120,7 @@ export function CreateProject({
     dispatchModalState({ type: 'setNewProject', data })
 
     setPage('next')
+    console.log('alive')
   }
 
   const onError: SubmitErrorHandler<CreateProjectFormProps> = (errors) =>
