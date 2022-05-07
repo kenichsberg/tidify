@@ -41,7 +41,7 @@ export function ChartView(): JSX.Element {
   const chartEndDate = getMaxDate(projectEndDates)
 
   return (
-    <div className="md:px-6 py-4">
+    <div className="xl:px-6 py-4">
       <Chart chartStartDate={chartStartDate} chartEndDate={chartEndDate} />
     </div>
   )
