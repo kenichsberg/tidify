@@ -36,7 +36,7 @@ export function SelectPicker({
   return (
     <div className="flex w-full relative">
       <select
-        className={`appearance-none focus:outline-none w-full ${
+        className={`appearance-none focus:outline-none ${
           className === '' ? '' : ' ' + className
         } ${sizeClass}`}
         name={name}
