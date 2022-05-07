@@ -24,7 +24,7 @@ export const InputField: FC<Props> = ({
       const sizeClass = size === 'sm' ? ' h-9 px-2 py-1' : ' px-2 py-3'
       const fieldsetClass = disableDefaultClass
         ? className
-        : `border border-gray-300 focus-within:border-teal-400 rounded-lg bg-white cursor-text${
+        : `border border-gray-300 focus-within:border-teal-400 rounded-lg bg-white cursor-text ${
             className === '' ? '' : ' ' + className
           }${sizeClass}`
 
