@@ -110,7 +110,9 @@ export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
       startAt: true,
       endAt: true,
       users: true,
-      tasks: true,
+      tasks: {
+        include: { user: true },
+      },
     },
     orderBy: [{ id: 'asc' }],
   })
@@ -133,6 +135,7 @@ export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
 
   const _users = await prisma.user.findMany({
     select: {
+      id: true,
       uuid: true,
       name: true,
       role: true,
