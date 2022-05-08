@@ -28,7 +28,7 @@ export function ProjectFormModal({
   setClose,
 }: Props): JSX.Element {
   const [pageNo, setPageNo] = useState<number>(0)
-  const { state: modalState } = useProjectModal()
+  //const { state: modalState } = useProjectModal()
   return (
     <Modal show={show}>
       <ModalOverlay
