@@ -66,7 +66,8 @@ export function BetweenTasks({ index }: Props): JSX.Element {
     >
       <button
         type="button"
-        className="absolute -top-2/3 sm:-top-1/3 sm:left-1/2 sm:opacity-0 group-hover:opacity-100 flex-shrink-0 rounded-full h-12 w-12 flex items-center justify-center bg-cyan-500 text-bluegray-100 focus:outline-none z-[3] transition"
+        className="absolute -top-2/3 sm:-top-1/3 sm:left-1/2 lg:opacity-0 group-hover:opacity-100 flex-shrink-0 rounded-full h-12 w-12 flex items-center justify-center bg-cyan-500 text-bluegray-100 focus:outline-none z-[3] transition animate-popup"
+        style={{ animationDelay: `${0.2 * index - 0.8}s` }}
         onClick={onClick}
       >
         <Plus size={24} />

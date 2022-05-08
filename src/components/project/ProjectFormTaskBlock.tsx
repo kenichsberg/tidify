@@ -86,7 +86,7 @@ export function ProjectFormTaskBlock({
   return (
     <div className="relative flex flex-col sm:flex-row justify-between items-center font-mono text-sm text-bluegray-700">
       <div
-        className="absolute translate-x-[2.2rem] translate-y-[0.6rem] z-[5] sm:static sm:translate-x-0 sm:translate-y-0 flex-shrink self-start sm:self-auto flex justify-center items-center bg-gradient-to-br from-white  via-white to-bluegray-50 sm:from-bluegray-50  sm:via-bluegray-50 sm:to-bluegray-100 sm:text-black shadow rounded-full w-12 h-12 sm:w-16 sm:h-16 mb-2 sm:mb-0 sm:mr-2 animate-popup"
+        className="absolute translate-x-[2.2rem] translate-y-[0.6rem] z-[5] sm:static sm:translate-x-0 sm:translate-y-0 flex-shrink self-start sm:self-auto flex justify-center items-center bg-gradient-to-br from-white via-white to-bluegray-50 sm:from-bluegray-50 sm:via-bluegray-50 sm:to-bluegray-100 sm:text-black shadow rounded-full w-12 h-12 sm:w-16 sm:h-16 mb-2 sm:mb-0 sm:mr-2 animate-popup"
         style={{ animationDelay: `${0.2 * index}s` }}
       >
         <div className="flex items-center text-bluegray-500">
@@ -100,7 +100,7 @@ export function ProjectFormTaskBlock({
           isDragging ? 'opacity-50' : ''
         } ${
           isDummy ? '' : 'cursor-move'
-        } transition  transform transition duration-500 animate-popup hover:shadow-2xl hover:scale-[103%] hover:-translate-y-1`}
+        } transition  transform transition duration-500 animate-popup lg:hover:shadow-2xl lg:hover:scale-[103%] lg:hover:-translate-y-1`}
         style={{ animationDelay: `${0.2 * index}s` }}
       >
         <div className="flex-1 flex justify-center items-center pb-5 transition">
@@ -108,7 +108,7 @@ export function ProjectFormTaskBlock({
             className={`text-bluegray-400 ${
               isDummy
                 ? 'invisible'
-                : 'invisible group-hover:visible text-cyan-500'
+                : 'invisible lg:group-hover:visible text-cyan-500'
             }`}
             size={16}
           />
@@ -187,10 +187,10 @@ export function ProjectFormTaskBlock({
           </span>
         </div>
         <button
-          className={`flex-1 flex flex-col items-stretch text-bluegray-400 ${
+          className={`flex-1 flex flex-col items-stretch ${
             isDummy
               ? 'invisible'
-              : 'sm:invisible group-hover:visible group-focus:visible'
+              : 'text-red-600 lg:text-bluegray-400 lg:invisible group-hover:visible group-focus:visible'
           } cursor-pointer focus:outline-none hover:text-red-600 active:text-red-400`}
           onClick={() => {
             setTasks([...tasks.slice(0, index), ...tasks.slice(index + 1)])

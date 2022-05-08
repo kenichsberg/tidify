@@ -43,7 +43,7 @@ export function ProjectCardHeader({
         formatDatetimeDisplay(project.endAt?.toISOString())
       )}
       <div
-        className="w-16 flex-shrink self-stretch flex justify-end min-w-max truncate transition group lg:invisible lg:group-hover:visible cursor-pointer hover:opacity-100 hover:text-red-700 active:text-red-400"
+        className="w-16 flex-shrink self-stretch flex justify-end min-w-max truncate transition group text-red-700 lg:text-bluegray-500 lg:invisible lg:group-hover:visible cursor-pointer hover:opacity-100 hover:text-red-700 lg:active:text-red-400"
         onClick={
           (event) => {
             onClick(event, project.uuid)
@@ -135,6 +135,10 @@ async function onClick(event: MouseEvent<HTMLDivElement>, uuid: string) {
   event.stopPropagation()
 
   if (!window.confirm('delete this project?')) return
+
+  //@TODO [DEMO version] disabled deleting
+  alert("You don't have permission to delete projects.")
+  return
 
   mutate(
     '/api/projects',
